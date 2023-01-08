@@ -9,17 +9,27 @@ import React from "react";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { database } from "../Firebase/firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 const LoginView = () => {
   const [username, setUsername] = useState();
+  const [password, setPassword] = useState();
   const navigate = useNavigation();
 
-  function login() {
-    console.log(database);
+  async function login() {
     setUsername("");
+    const docRef = doc(database, "OrgUsers", username);
+    const docSnap = await getDoc(docRef);
 
-    if (username == "Admin") {
-        navigate.navigate("HomeAdmin")
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+      if (password === docSnap.data().Password) {
+        navigate.navigate("HomeAdmin");
+      }
+    } else {
+      setPassword("");
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
     }
   }
   return (
@@ -32,9 +42,14 @@ const LoginView = () => {
           onChangeText={(userName) => setUsername(userName)}
           value={username}
         />
-        <TextInput placeholder={"Password"} style={styles.input} />
+        <TextInput
+          placeholder={"Password"}
+          style={styles.input}
+          onChangeText={(password) => setPassword(password)}
+          value={password}
+        />
         <TouchableOpacity style={styles.login} onPress={login}>
-            <Text>Login</Text>
+          <Text>Login</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -74,6 +89,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: "#e8e8e8",
     justifyContent: "center",
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });
