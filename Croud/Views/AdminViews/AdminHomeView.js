@@ -9,7 +9,7 @@ const AdminHomeView = () => {
 
   return (
     <View>
-        <TouchableOpacity onPress={() => navigate.replace("login")}>
+        <TouchableOpacity onPress={() => navigate.replace("")}>
             <Text>tillbaka</Text>
         </TouchableOpacity>
     </View>
