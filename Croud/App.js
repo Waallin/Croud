@@ -4,7 +4,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginView from "./Views/LoginView";
 import AdminHomeView from "./Views/AdminViews/AdminHomeView";
-
+import AdminContainer from "./Views/AdminViews/AdminContainer";
+import CreateEventView from "./Views/AdminViews/CreateEventView";
 export default function App() {
   const Stack = createNativeStackNavigator();
 
@@ -34,8 +35,35 @@ export default function App() {
               fontWeight: "700",
             },
           }}
+          name="AdminContainer"
+          component={AdminContainer}
+        />
+
+        <Stack.Screen
+          options={{
+            headerStyle: {
+              backgroundColor: "#0E70A7",
+            },
+            headerTintColor: "white",
+            headerTitleStyle: {
+              fontWeight: "700",
+            },
+          }}
           name="HomeAdmin"
           component={AdminHomeView}
+        />
+                <Stack.Screen
+          options={{
+            headerStyle: {
+              backgroundColor: "#0E70A7",
+            },
+            headerTintColor: "white",
+            headerTitleStyle: {
+              fontWeight: "700",
+            },
+          }}
+          name="CreateEvent"
+          component={CreateEventView}
         />
       </Stack.Navigator>
     </NavigationContainer>

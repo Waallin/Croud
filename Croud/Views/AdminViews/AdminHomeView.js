@@ -1,21 +1,25 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import CreateEventView from "./CreateEventView";
+import React from "react";
 
 import { useNavigation } from "@react-navigation/native";
 
 const AdminHomeView = () => {
-
-    const navigate = useNavigation();
+  const navigate = useNavigation();
+  const Tab = createBottomTabNavigator();
 
   return (
-    <View>
-        <TouchableOpacity onPress={() => navigate.replace("")}>
-            <Text>tillbaka</Text>
-        </TouchableOpacity>
+    <View style={styles.container}>
+      <Text>home</Text>
     </View>
-  )
-}
+  );
+};
 
-export default AdminHomeView
+export default AdminHomeView;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  }
+});

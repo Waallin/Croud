@@ -24,7 +24,7 @@ const LoginView = () => {
     if (docSnap.exists()) {
       console.log("Document data:", docSnap.data());
       if (password === docSnap.data().Password) {
-        navigate.navigate("HomeAdmin");
+        navigate.navigate("AdminContainer");
       }
     } else {
       setPassword("");
