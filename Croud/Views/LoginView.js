@@ -4,6 +4,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Image
 } from "react-native";
 import React from "react";
 import { useState } from "react";
@@ -22,9 +23,11 @@ const LoginView = () => {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
+      //console.log("Document data:", docSnap.data());
       if (password === docSnap.data().Password) {
-        navigate.navigate("AdminContainer");
+        navigate.navigate("AdminContainer", {
+          orgData: docSnap.data()
+        });
       }
     } else {
       setPassword("");
@@ -34,7 +37,11 @@ const LoginView = () => {
   }
   return (
     <View style={styles.container}>
-      <View style={styles.topWrapper}></View>
+      <View style={styles.topWrapper}>
+      <Image source={require('../assets/croud.png')}
+   style = {{ width: 800, height: 200 }}
+   />
+      </View>
       <View style={styles.botWrapper}>
         <TextInput
           placeholder={"UserName"}
@@ -65,6 +72,8 @@ const styles = StyleSheet.create({
 
   topWrapper: {
     flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 
   botWrapper: {
