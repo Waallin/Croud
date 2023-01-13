@@ -14,26 +14,14 @@ export default function App() {
       <Stack.Navigator>
         <Stack.Screen
           options={{
-            headerStyle: {
-              backgroundColor: "#0E70A7",
-            },
-            headerTintColor: "white",
-            headerTitleStyle: {
-              fontWeight: "700",
-            },
+            headerShown: false
           }}
           name="login"
           component={LoginView}
         />
         <Stack.Screen
           options={{
-            headerStyle: {
-              backgroundColor: "#0E70A7",
-            },
-            headerTintColor: "white",
-            headerTitleStyle: {
-              fontWeight: "700",
-            },
+            headerShown: false
           }}
           name="AdminContainer"
           component={AdminContainer}
@@ -41,26 +29,14 @@ export default function App() {
 
         <Stack.Screen
           options={{
-            headerStyle: {
-              backgroundColor: "#0E70A7",
-            },
-            headerTintColor: "white",
-            headerTitleStyle: {
-              fontWeight: "700",
-            },
+            headerShown: false
           }}
           name="HomeAdmin"
           component={AdminHomeView}
         />
                 <Stack.Screen
           options={{
-            headerStyle: {
-              backgroundColor: "#0E70A7",
-            },
-            headerTintColor: "white",
-            headerTitleStyle: {
-              fontWeight: "700",
-            },
+            headerShown: false
           }}
           name="CreateEvent"
           component={CreateEventView}
