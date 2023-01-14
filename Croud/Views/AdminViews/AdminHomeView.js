@@ -5,38 +5,48 @@ import {
   View,
   TextInput,
   ScrollView,
-  Switch,
-  StatusBar,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import {
   BottomSheetModal,
   BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
 import "react-native-gesture-handler";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import CreateEventView from "./CreateEventView";
 import React, { useEffect } from "react";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { useState, useRef } from "react";
-import { useNavigation } from "@react-navigation/native";
 import { database } from "../../Firebase/firebase";
 import { SafeAreaView } from "react-native-safe-area-context";
 import EventComponent from "./Components/EventComponent";
 import { Ionicons } from "@expo/vector-icons";
-import SwitchSelector from "react-native-switch-selector";
 import { Calendar } from "react-native-calendars";
+import moment from "moment"; // 2.20.1
+import { uuidv4 } from "@firebase/util";
 
-const AdminHomeView = () => {
+//firebase
+import { doc, setDoc } from "firebase/firestore";
+
+const AdminHomeView = ({ orgData }) => {
   const [events, setEvents] = useState([]);
+  const [selectedDay, setSelectedDay] = useState();
+  const [sessionData, setSessionData] = useState();
 
   useEffect(() => {
+    setSessionData(orgData);
     data();
   }, []);
 
+  //Gather all info
+  const [opponent, setOpponent] = useState();
+  const [location, setLocation] = useState();
+  const [hour, setHour] = useState();
+  const [min, setMin] = useState();
+  const [day, setDay] = useState();
   async function data() {
     const q = query(
       collection(database, "Games"),
-      where("orgName", "==", "Admin Ik")
+      where("orgName", "==", "Admin")
     );
 
     const querySnapshot = await getDocs(q);
@@ -50,7 +60,7 @@ const AdminHomeView = () => {
         opponent: doc.data().opponent,
         time: doc.data().time,
         day: doc.data().day,
-        place: doc.data().Place,
+        location: doc.data().location,
       };
       x.push(obj);
     });
@@ -58,12 +68,34 @@ const AdminHomeView = () => {
   }
 
   /*Bottom-Modal*/
-  const bottomSheetModalRef = useRef(null);
 
+  //function to push data to firebase
+  async function pushData() {
+    // Add a new document in collection "cities"
+    await setDoc(doc(database, "Games", uuidv4()), {
+      active: false,
+      orgName: sessionData.OrgData,
+      opponent: opponent,
+      location: location,
+      day: day,
+      time: hour + '.' + min
+    });  
+  }
+
+  /*calendar*/
+  const bottomSheetModalRef = useRef(null);
   const snapPoints = ["85%"];
   function handlePresentModal() {
     bottomSheetModalRef.current?.present();
   }
+  const format = "YYYY-MM-DD";
+  const today = moment().format(format);
+  function onDaySelect(day) {
+    setDay(today);
+    const datepicked = moment(day.dateString).format(format);
+    setSelectedDay({ [datepicked]: { selected: true } });
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topWrapper}>
@@ -81,44 +113,86 @@ const AdminHomeView = () => {
                 opponent={event.opponent}
                 time={event.time}
                 day={event.day}
-                place={event.place}
+                location={event.location}
               />
             );
           })}
         </View>
       </ScrollView>
-
       {/*Bottom-Modal*/}
       <BottomSheetModalProvider>
         <BottomSheetModal
           ref={bottomSheetModalRef}
           index={0}
           snapPoints={snapPoints}
-          backgroundStyle={{ borderRadius: 30, backgroundColor: "lightgrey" }}
+          backgroundStyle={{ borderRadius: 30, backgroundColor: "#e1e1e1" }}
         >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalTopWrapper}>
-              <TouchableOpacity>
-                <Text style={styles.modalExitBtn}>Avbryt</Text>
-              </TouchableOpacity>
-              <Text style={styles.modalTitle}>Ny Aktivitet</Text>
-              <TouchableOpacity>
-                <Text style={styles.modalAddBtn}>Lägg till</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.modalMidWrapper}>
-              <View style={styles.modalinputsOne}>
-                <TextInput style={styles.input1} placeholder="Motståndare" />
-                <TextInput style={styles.input2} placeholder="Plats" />
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalTopWrapper}>
+                <TouchableOpacity onPress={(() => console.log(events))}>
+                  <Text style={styles.modalExitBtn}>Avbryt</Text>
+                </TouchableOpacity>
+                <Text style={styles.modalTitle}>Ny Aktivitet</Text>
+                <TouchableOpacity onPress={pushData}>
+                  <Text style={styles.modalAddBtn}>Lägg till</Text>
+                </TouchableOpacity>
               </View>
-              <View style={styles.modalinputsTwo}>
-                <View style={styles.calendar}>
-                  <Calendar style={{ borderRadius: 10 }} />
+              <View style={styles.modalMidWrapper}>
+                <View style={styles.modalinputsOne}>
+                  <TextInput
+                    style={styles.input1}
+                    onChangeText={(opponent) => setOpponent(opponent)}
+                    value={opponent}
+                    placeholder="Motståndare"
+                  />
+                  <TextInput
+                    style={styles.input2}
+                    placeholder="Plats"
+                    onChangeText={(location) => setLocation(location)}
+                    value={location}
+                  />
+                  <View style={styles.timeWrapper}>
+                    <TextInput
+                      style={styles.hourInput}
+                      maxLength={2}
+                      placeholder="16"
+                      numeric
+                      keyboardType={"numeric"}
+                      onChangeText={(hour) => setHour(hour)}
+                      value={hour}
+                    />
+                    <TextInput
+                      style={styles.minInput}
+                      maxLength={2}
+                      placeholder="00"
+                      maxValue={24}
+                      numeric
+                      keyboardType={"numeric"}
+                      onChangeText={(min) => setMin(min)}
+                      value={min}
+                    />
+                  </View>
                 </View>
+                <View style={styles.modalinputsTwo}>
+                  <View style={styles.calendarWrapper}>
+                    <Calendar
+                      style={styles.calendar}
+                      theme={{
+                        dotColor: "black",
+                        selectedColor: "#0891B2",
+                      }}
+                      // we use moment.js to give the minimum and maximum dates.
+                      minDate={today}
+                      onDayPress={onDaySelect}
+                      markedDates={selectedDay}
+                    />
+                  </View>
+                </View>
+                <View style={styles.modalinputsThree}></View>
               </View>
-              <View style={styles.modalinputsThree}></View>
             </View>
-          </View>
+          </TouchableWithoutFeedback>
         </BottomSheetModal>
       </BottomSheetModalProvider>
     </SafeAreaView>
@@ -198,7 +272,7 @@ const styles = StyleSheet.create({
   input1: {
     backgroundColor: "white",
     fontSize: "15px",
-    fontWeight: "600",
+    fontWeight: "400",
     height: 40,
     width: "80%",
     paddingLeft: 15,
@@ -210,7 +284,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     height: 40,
     fontSize: "15px",
-    fontWeight: "600",
+    fontWeight: "400",
     width: "80%",
     paddingLeft: 15,
     borderTopWidth: 0.4,
@@ -221,10 +295,41 @@ const styles = StyleSheet.create({
 
   modalinputsTwo: {
     alignItems: "center",
-    marginTop: 40,
+    marginTop: 20,
+  },
+
+  calendarWrapper: {
+    width: "80%",
   },
 
   calendar: {
-    width: "80%",
+    borderRadius: 10,
+    padding: 10,
+  },
+
+  //timepicker
+  timeWrapper: {
+    width: "100%",
+    justifyContent: "center",
+    marginTop: 20,
+    flexDirection: "row",
+  },
+  hourInput: {
+    backgroundColor: "white",
+    height: 40,
+    width: 80,
+    textAlign: "center",
+    borderTopLeftRadius: 10,
+    borderBottomLeftRadius: 10,
+  },
+  minInput: {
+    backgroundColor: "white",
+    borderLeftWidth: 0.4,
+    borderColor: "grey",
+    height: 40,
+    width: 80,
+    borderTopRightRadius: 10,
+    borderBottomRightRadius: 10,
+    textAlign: "center",
   },
 });
