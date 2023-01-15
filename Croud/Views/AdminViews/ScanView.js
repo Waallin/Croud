@@ -1,12 +1,18 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Button,
+  Animated,
+} from "react-native";
 import React from "react";
 import { useState, useEffect } from "react";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { database } from "../../Firebase/firebase";
+import { Ionicons } from '@expo/vector-icons'; 
 
 import { doc, getDoc } from "firebase/firestore";
-
-
 
 const ScanView = () => {
   const [hasPermission, setHasPermission] = useState(null);
@@ -25,33 +31,23 @@ const ScanView = () => {
   }, []);
 
   //what happen when we scan barcode
-
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
     setText(data);
     console.log("type " + type + " data " + data);
   };
 
-  function abc() {
-    setText("3cf168df-e9ad-4903-b45d-32f6bc272975");
-  }
-  async function getdb() {
+  const [showToast, setShowToats] = useState(false);
 
-    console.log(text);
-    
-    const docRef = doc(database, "Games", text);
-    const docSnap = await getDoc(docRef);
-  
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
-    } else {
-      // doc.data() will be undefined in this case
-      console.log("No such document!");
-    }
+
+  function toastFade() {
+    setShowToats(true);
+    setTimeout(() => {
+      setShowToats(false);
+    }, 2500);
   }
 
   //check permission and return the screen
-
   if (hasPermission == null) {
     return <Text>requesting for camera permission</Text>;
   }
@@ -70,16 +66,17 @@ const ScanView = () => {
   return (
     <View style={styles.container}>
       <BarCodeScanner
-        onBarCodeScanned={scanned ? getdb : handleBarCodeScanned}
-        style={{ height: 400, width: 400 }}
+        onBarCodeScanned={scanned ? toastFade : handleBarCodeScanned}
+        style={{ height: "100%", width: "100%" }}
       />
-      <Text style={styles.text}>{text}</Text>
-      <TouchableOpacity onPress={getdb}>
-        <Text>Console db</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={abc}>
-        <Text>abc</Text>
-      </TouchableOpacity>
+
+      <View style={styles.box}></View>
+      {showToast ? (
+        <View style={styles.toast}>
+          <View style={styles.toastSuccessText}><Ionicons name="checkmark-circle" size={52} color="#4BB543" /></View>
+          <Text style={styles.toastInfoText}>3 biljetter</Text>
+        </View>
+      ) : null}
     </View>
   );
 };
@@ -93,7 +90,35 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  text: {
-    fontSize: "30px",
+  box: {
+    borderWidth: 3,
+    borderRadius: 20,
+    borderColor: "rgba(255,255,255, 0.3)",
+    position: "absolute",
+    backgroundColor: "rgba(255,255,255, 0.01)",
+    height: 200,
+    width: 200,
+  },
+
+  toast: {
+    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
+    bottom: 40,
+    padding: 50,
+    borderRadius: 10,
+    backgroundColor: "rgba(255,255,255, 1)",
+  },
+
+
+  toastInfoText: {
+    color: "#4BB543",
+    fontSize: "50px",
+    fontWeight: "400"
+  },
+
+  test: {
+    position: "absolute",
+    backgroundColor: "red",
   },
 });

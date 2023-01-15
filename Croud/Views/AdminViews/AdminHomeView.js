@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
+  RefreshControl,
 } from "react-native";
 import {
   BottomSheetModal,
@@ -64,36 +65,66 @@ const AdminHomeView = ({ orgData }) => {
       };
       x.push(obj);
     });
-    setEvents(x);
+
+    //filter on dates 
+    let dateFilter = x.sort(function (a, b) {
+      return new Date(a.day) - new Date(b.day);
+    });
+    setEvents(dateFilter);
   }
 
-  /*Bottom-Modal*/
+  //Update db when scroll down
+  const [refreshing, setRefreshing] = React.useState(false);
 
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+      data();
+    }, 2000);
+  }, []);
+
+  /*Bottom-Modal*/
   //function to push data to firebase
   async function pushData() {
-    // Add a new document in collection "cities"
+    // Add a new document in collection 
     await setDoc(doc(database, "Games", uuidv4()), {
       active: false,
       orgName: sessionData.OrgData,
       opponent: opponent,
       location: location,
       day: day,
-      time: hour + '.' + min
-    });  
+      time: hour + "." + min,
+    });
+
+    let obj = {
+      active: false,
+      orgName: sessionData.OrgData,
+      opponent: opponent,
+      location: location,
+      day: day,
+      time: hour + "." + min
+    }
+    console.log("test")
+    closeModal();
   }
 
-  /*calendar*/
-  const bottomSheetModalRef = useRef(null);
+  let bottomSheetModalRef = useRef(null);
   const snapPoints = ["85%"];
   function handlePresentModal() {
     bottomSheetModalRef.current?.present();
   }
+
+  //close bottomsheetmodal
+  function closeModal() {
+    bottomSheetModalRef.current?.close();
+  }
   const format = "YYYY-MM-DD";
   const today = moment().format(format);
   function onDaySelect(day) {
-    setDay(today);
     const datepicked = moment(day.dateString).format(format);
     setSelectedDay({ [datepicked]: { selected: true } });
+    setDay(datepicked);
   }
 
   return (
@@ -104,7 +135,12 @@ const AdminHomeView = ({ orgData }) => {
           <Ionicons name="add-outline" size={32} color="black" />
         </TouchableOpacity>
       </View>
-      <ScrollView style={styles.botWrapper}>
+      <ScrollView
+        style={styles.botWrapper}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <View>
           {events.map((event) => {
             return (
@@ -130,7 +166,7 @@ const AdminHomeView = ({ orgData }) => {
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.modalContainer}>
               <View style={styles.modalTopWrapper}>
-                <TouchableOpacity onPress={(() => console.log(events))}>
+                <TouchableOpacity onPress={closeModal}>
                   <Text style={styles.modalExitBtn}>Avbryt</Text>
                 </TouchableOpacity>
                 <Text style={styles.modalTitle}>Ny Aktivitet</Text>
@@ -143,14 +179,12 @@ const AdminHomeView = ({ orgData }) => {
                   <TextInput
                     style={styles.input1}
                     onChangeText={(opponent) => setOpponent(opponent)}
-                    value={opponent}
                     placeholder="Motståndare"
                   />
                   <TextInput
                     style={styles.input2}
                     placeholder="Plats"
                     onChangeText={(location) => setLocation(location)}
-                    value={location}
                   />
                   <View style={styles.timeWrapper}>
                     <TextInput
