@@ -4,35 +4,25 @@ import { useNavigation } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useEffect, useState } from "react";
 
-//icons
+
 import { AntDesign } from '@expo/vector-icons';
 
-//firebase
-
-import { doc, getDoc } from "firebase/firestore";
-import { database } from "../../Firebase/firebase";
-
-//Views
-import CreateEventView from "./CreateEventView";
 import AdminHomeView from "./AdminHomeView";
-import ProfileView from "./ProfileView";
 import ScanView from "./ScanView";
 import SettingsView from "./SettingsView";
-import { SafeAreaView } from "react-native-safe-area-context";
-const AdminContainer = ({ route, navigation }) => {
+
+const AdminContainer = ({ route }) => {
   const navigate = useNavigation();
   const Tab = createBottomTabNavigator();
 
   const [orgData, setOrgData] = useState([]);
-  const { itemId, otherParam } = route.params;
-  useEffect(() => {
-    getOrgData();
-  }, []);
 
-  async function getOrgData() {
-    setOrgData(route.params.orgData);
-    console.log(orgData);
-  }
+  useEffect(() => {
+    setOrgData(route.params.orgData)
+
+  }, [route.params]);
+
+  
   return (
     <View style={styles.container}>
       <Tab.Navigator>

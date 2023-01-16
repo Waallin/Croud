@@ -26,8 +26,9 @@ const LoginView = () => {
       //console.log("Document data:", docSnap.data());
       if (password === docSnap.data().Password) {
         navigate.navigate("AdminContainer", {
-          orgData: docSnap.data()
+         orgData: docSnap.data()
         });
+
       }
     } else {
       setPassword("");
