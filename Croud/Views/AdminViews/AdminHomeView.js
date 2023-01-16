@@ -34,7 +34,6 @@ const AdminHomeView = ({ orgData }) => {
   const [sessionData, setSessionData] = useState();
 
   useEffect(() => {
-    setSessionData(orgData);
     data();
   }, []);
 
@@ -45,6 +44,7 @@ const AdminHomeView = ({ orgData }) => {
   const [min, setMin] = useState();
   const [day, setDay] = useState();
   async function data() {
+
     const q = query(
       collection(database, "Games"),
       where("orgName", "==", "Admin")
@@ -54,7 +54,7 @@ const AdminHomeView = ({ orgData }) => {
     let x = [];
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
+      //console.log(doc.id, " => ", doc.data());
 
       let obj = {
         id: doc.id,
@@ -64,15 +64,16 @@ const AdminHomeView = ({ orgData }) => {
         location: doc.data().location,
       };
       x.push(obj);
+
     });
 
-    //filter on dates 
+
+    //filter on dates
     let dateFilter = x.sort(function (a, b) {
       return new Date(a.day) - new Date(b.day);
     });
     setEvents(dateFilter);
   }
-
   //Update db when scroll down
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -87,25 +88,18 @@ const AdminHomeView = ({ orgData }) => {
   /*Bottom-Modal*/
   //function to push data to firebase
   async function pushData() {
-    // Add a new document in collection 
+    // Add a new document in collection
+    
+    
     await setDoc(doc(database, "Games", uuidv4()), {
       active: false,
-      orgName: sessionData.OrgData,
+      orgName: orgData.OrgData,
       opponent: opponent,
       location: location,
       day: day,
       time: hour + "." + min,
     });
 
-    let obj = {
-      active: false,
-      orgName: sessionData.OrgData,
-      opponent: opponent,
-      location: location,
-      day: day,
-      time: hour + "." + min
-    }
-    console.log("test")
     closeModal();
   }
 
