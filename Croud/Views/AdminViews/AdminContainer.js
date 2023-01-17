@@ -19,7 +19,6 @@ const AdminContainer = ({ route }) => {
 
   useEffect(() => {
     setOrgData(route.params.orgData)
-
   }, [route.params]);
 
   
