@@ -6,6 +6,7 @@ import LoginView from "./Views/LoginView";
 import AdminHomeView from "./Views/AdminViews/AdminHomeView";
 import AdminContainer from "./Views/AdminViews/AdminContainer";
 import CreateEventView from "./Views/AdminViews/CreateEventView";
+import UserContainer from "./Views/UserViews/UserContainer";
 export default function App() {
   const Stack = createNativeStackNavigator();
 
@@ -14,14 +15,14 @@ export default function App() {
       <Stack.Navigator>
         <Stack.Screen
           options={{
-            headerShown: false
+            headerShown: false,
           }}
           name="login"
           component={LoginView}
         />
         <Stack.Screen
           options={{
-            headerShown: false
+            headerShown: false,
           }}
           name="AdminContainer"
           component={AdminContainer}
@@ -29,17 +30,24 @@ export default function App() {
 
         <Stack.Screen
           options={{
-            headerShown: false
+            headerShown: false,
           }}
           name="HomeAdmin"
           component={AdminHomeView}
         />
-                <Stack.Screen
+        <Stack.Screen
           options={{
-            headerShown: false
+            headerShown: false,
           }}
           name="CreateEvent"
           component={CreateEventView}
+        />
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="UserContainer"
+          component={UserContainer}
         />
       </Stack.Navigator>
     </NavigationContainer>

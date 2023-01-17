@@ -19,7 +19,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { useState, useRef } from "react";
 import { database } from "../../Firebase/firebase";
 import { SafeAreaView } from "react-native-safe-area-context";
-import EventComponent from "./Components/EventComponent";
+import EventComponent from "./AdminComponents/EventComponent";
 import { Ionicons } from "@expo/vector-icons";
 import { Calendar } from "react-native-calendars";
 import moment from "moment"; // 2.20.1
@@ -43,13 +43,14 @@ const AdminHomeView = ({ orgData }) => {
   const [hour, setHour] = useState();
   const [min, setMin] = useState();
   const [day, setDay] = useState();
-  async function data() {
 
+
+  async function data() {
     const q = query(
       collection(database, "Games"),
-      where("orgName", "==", "Admin")
+      where("Hometeam", "==", orgData.Name)
     );
-
+    
     const querySnapshot = await getDocs(q);
     let x = [];
     querySnapshot.forEach((doc) => {
@@ -57,11 +58,11 @@ const AdminHomeView = ({ orgData }) => {
       //console.log(doc.id, " => ", doc.data());
 
       let obj = {
-        id: doc.id,
-        opponent: doc.data().opponent,
-        time: doc.data().time,
-        day: doc.data().day,
-        location: doc.data().location,
+        Id: doc.id,
+        Opponent: doc.data().Opponent,
+        Time: doc.data().Time,
+        Day: doc.data().Day,
+        Location: doc.data().Location,
       };
       x.push(obj);
 
@@ -89,15 +90,15 @@ const AdminHomeView = ({ orgData }) => {
   //function to push data to firebase
   async function pushData() {
     // Add a new document in collection
-    
-    
+
     await setDoc(doc(database, "Games", uuidv4()), {
-      active: false,
-      orgName: orgData.OrgData,
-      opponent: opponent,
-      location: location,
-      day: day,
-      time: hour + "." + min,
+      Active: false,
+      Hometeam: orgData.Name,
+      Opponent: opponent,
+      Location: location,
+      Day: day,
+      Time: hour + "." + min,
+      Sport: orgData.Sport
     });
 
     closeModal();
@@ -139,11 +140,11 @@ const AdminHomeView = ({ orgData }) => {
           {events.map((event) => {
             return (
               <EventComponent
-                key={event.id}
-                opponent={event.opponent}
-                time={event.time}
-                day={event.day}
-                location={event.location}
+                Key={event.id}
+                Opponent={event.Opponent}
+                Time={event.Time}
+                Day={event.Day}
+                Location={event.Location}
               />
             );
           })}

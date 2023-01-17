@@ -19,14 +19,35 @@ const LoginView = () => {
 
   async function login() {
     setUsername("");
-    const docRef = doc(database, "OrgUsers", username);
-    const docSnap = await getDoc(docRef);
 
-    if (docSnap.exists()) {
+
+    //Om användare är kund
+    const userRef = doc(database, "Users", username);
+    const userSnap = await getDoc(userRef);
+
+    if (userSnap.exists()) {
       //console.log("Document data:", docSnap.data());
-      if (password === docSnap.data().Password) {
+      if (password === userSnap.data().Password) {
+        navigate.navigate("UserContainer", {
+         userData: userSnap.data()
+        });
+
+      }
+    } else {
+      setPassword("");
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+    }
+
+    //Om användare är admin
+    const orgRef = doc(database, "Organisations", username);
+    const orgSnap = await getDoc(orgRef);
+
+    if (orgSnap.exists()) {
+      //console.log("Document data:", docSnap.data());
+      if (password === orgSnap.data().Password) {
         navigate.navigate("AdminContainer", {
-         orgData: docSnap.data()
+         orgData: orgSnap.data()
         });
 
       }

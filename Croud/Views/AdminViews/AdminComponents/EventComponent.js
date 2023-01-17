@@ -2,16 +2,16 @@ import { StyleSheet, Text, View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 
-const EventComponent = ({opponent, time, location, day}) => {
+const EventComponent = ({Opponent, Time, Location, Day}) => {
   return (
     <View style={styles.container}>
       <View style={styles.text}>
-        <Text style={styles.title}>{opponent}</Text>
-        <Text style={styles.extraInfo}>{time}</Text>
-        <Text style={styles.extraInfo}>{location}</Text>
+        <Text style={styles.title}>{Opponent}</Text>
+        <Text style={styles.extraInfo}>{Time}</Text>
+        <Text style={styles.extraInfo}>{Location}</Text>
       </View>
       <View style={styles.dateWrapper}>
-        <Text style={styles.date}>{day}</Text>
+        <Text style={styles.date}>{Day}</Text>
         <MaterialIcons name="keyboard-arrow-right" size={24} color="grey" />
       </View>
     </View>
