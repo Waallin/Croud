@@ -28,14 +28,14 @@ import { uuidv4 } from "@firebase/util";
 //firebase
 import { doc, setDoc } from "firebase/firestore";
 
-const AdminHomeView = ({ orgData }) => {
+const AdminHomeView = ({ orgData, route }) => {
   const [events, setEvents] = useState([]);
   const [selectedDay, setSelectedDay] = useState();
   const [sessionData, setSessionData] = useState();
 
   useEffect(() => {
     data();
-  }, []);
+  }, [route.params]);
 
   //Gather all info
   const [opponent, setOpponent] = useState();
@@ -48,12 +48,13 @@ const AdminHomeView = ({ orgData }) => {
   async function data() {
     const q = query(
       collection(database, "Games"),
-      where("Hometeam", "==", orgData.Name)
+      where("Hometeam", "==", route.params.orgData.Name)
     );
     
     const querySnapshot = await getDocs(q);
     let x = [];
     querySnapshot.forEach((doc) => {
+      console.log(doc.data())
       // doc.data() is never undefined for query doc snapshots
       //console.log(doc.id, " => ", doc.data());
 
