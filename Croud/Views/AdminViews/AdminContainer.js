@@ -35,7 +35,7 @@ const AdminContainer = ({ route }) => {
             <AntDesign name="calendar" size={24} color="black" />
           ),
         }}
-          name="Skapa Event"
+          name="Favoriter"
           children={() => <AdminHomeView orgData={orgData} />}
         />
         <Tab.Screen
