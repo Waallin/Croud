@@ -8,6 +8,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import FavouritesView from "./FavouritesView";
 import SearchView from "./SearchView";
+import TeamView from "./TeamView";
 
 const UserContainer = ({ route }) => {
   const navigate = useNavigation();
@@ -16,6 +17,7 @@ const UserContainer = ({ route }) => {
   const [userData, setUserData] = useState([]);
 
   useEffect(() => {
+    console.log(route.params.userData)
     setUserData(route.params.userData);
   }, [route.params]);
 
@@ -44,9 +46,10 @@ const UserContainer = ({ route }) => {
             ),
           }}
           name="Skapa Event"
-          children={() => <FavouritesView orgData={userData} />}
+          children={() => <FavouritesView userData={userData} />}
         />
       </Tab.Navigator>
+      
     </View>
   );
 };

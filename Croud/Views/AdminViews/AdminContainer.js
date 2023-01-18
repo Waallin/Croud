@@ -18,7 +18,7 @@ const AdminContainer = ({ route }) => {
   const [orgData, setOrgData] = useState([]);
 
   useEffect(() => {
-    setOrgData(route.params.orgData)
+    setOrgData(route.params.orgData);
   }, [route.params]);
 
   
@@ -35,7 +35,7 @@ const AdminContainer = ({ route }) => {
           ),
         }}
           name="Favoriter"
-          children={() => <AdminHomeView orgData={orgData} />}
+          children={() => <AdminHomeView orgData={orgData} route={route} />}
         />
         <Tab.Screen
          options={{
