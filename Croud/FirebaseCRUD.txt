@@ -41,3 +41,10 @@ async function data() {
       x.push(obj);
 
     });
+
+
+
+      //filter on dates
+     let dateFilter = x.sort(function (a, b) {
+      return new Date(a.day) - new Date(b.day);
+    });

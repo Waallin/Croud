@@ -2,23 +2,25 @@ import { StyleSheet, Text, View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
 const OrgComponent = ({ Name, Sport, org }) => {
 
+  const navigate = useNavigation();
 
-  function addToFavourite() {
-    console.log(org);
+
+  function goToTeamView() {
+    navigate.navigate("TeamView", {
+      org: org
+     });
   }
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={goToTeamView}>
       <View style={styles.text}>
         <Text style={styles.title}>{Name}</Text>
         <Text style={styles.extraInfo}>{Sport}</Text>
       </View>
-      <TouchableOpacity style={styles.like} onPress={addToFavourite}>
-        <MaterialIcons name="favorite" size={32} color="#0891B2" />
-      </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   );
 };
 
