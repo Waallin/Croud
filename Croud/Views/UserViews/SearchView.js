@@ -6,16 +6,18 @@ import { database } from '../../Firebase/firebase'
 import { collection, query, getDocs } from 'firebase/firestore'
 
 const SearchView = ( { userData } ) => {
+
+  const [activeTab, setActiveTab] = useState('searchView');
+
 const [orgs, setOrgs] = useState([]);
 
 useEffect(() => {
-
   data();
-}, [userData])
+  console.log("hej från sökview")
+}, [activeTab])
 
 
   async function data() {
-    console.log("updated")
     const q = query(
       collection(database, "Organisations"),
     );

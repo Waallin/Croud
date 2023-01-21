@@ -14,7 +14,8 @@ import {
   getDocs,
   updateDoc,
   arrayUnion,
-  arrayRemove
+  arrayRemove,
+  getDoc,
 } from "firebase/firestore";
 import GamesComponent from "./UserComponents/GamesComponent";
 
@@ -23,11 +24,33 @@ const TeamView = ({ route }) => {
 
   //check if team is in favourites or not
   const [favOrNot, setFavOrNot] = useState(false);
+  const [userInfo, setUserInfo] = useState([]);
 
   useEffect(() => {
-    getGames();
-    checkFavOrNot();
+    updateUser();
+    getGames(userInfo);
   }, [route.params]);
+
+  async function updateUser() {
+    const docRef = doc(
+      database,
+      "Users",
+      route.params.userData.userData.Username
+    );
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      setUserInfo(docSnap.data());
+      if (
+        docSnap.data() &&
+        docSnap.data().Favourites.includes(route.params.org.Name)
+      ) {
+        setFavOrNot(true);
+      } else {
+        setFavOrNot(false);
+      }
+    }
+  }
 
   async function getGames() {
     const q = query(
@@ -53,31 +76,22 @@ const TeamView = ({ route }) => {
 
     setGames(dateFilter);
   }
-  function checkFavOrNot() {
-    if (
-      route.params.userData.userData.Favourites.includes(route.params.org.Name)
-    ) {
-      setFavOrNot(true);
-    } else {
-      setFavOrNot(false);
-    }
-  }
+
   //add to favourite or remove if we click again
   async function addOrg() {
-    console.log(favOrNot)
-
-    if (favOrNot == false)
-    {
-      const washingtonRef = doc(database, "Users", "Lars");
-      await updateDoc(washingtonRef, {
+    if (userInfo != null && userInfo.Favourites.includes("Håsta IBK")) {
+    }
+    if (favOrNot == false) {
+      const ref = doc(database, "Users", "Lars");
+      await updateDoc(ref, {
         Favourites: arrayUnion(route.params.org.Name),
       });
-      setFavOrNot(true); 
+      setFavOrNot(true);
     } else {
-      const washingtonRef = doc(database, "Users", "Lars");
-      await updateDoc(washingtonRef, {
-        Favourites: arrayRemove(route.params.org.Name)
-    });
+      const ref = doc(database, "Users", "Lars");
+      await updateDoc(ref, {
+        Favourites: arrayRemove(route.params.org.Name),
+      });
       setFavOrNot(false);
     }
   }
