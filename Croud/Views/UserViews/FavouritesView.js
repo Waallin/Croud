@@ -7,11 +7,6 @@ const FavouritesView = ({userData}) => {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Favoriter</Text>
-      {userData.Favourites.map((team) => {
-            return (
-              <Text style={styles.t}>{team}</Text>
-              );
-            })}
     </SafeAreaView>
   )
 }

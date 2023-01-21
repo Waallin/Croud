@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     },
 
     t: {
-        color: "white",
+        color: "black",
         fontSize: "20px"
 
     }

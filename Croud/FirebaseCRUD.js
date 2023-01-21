@@ -1,4 +1,4 @@
-PUSH TO DB//////////
+/*PUSH TO DB//////////
 
   async function pushData() {
     
@@ -74,3 +74,4 @@ async function data() {
   }
 
 
+*/
