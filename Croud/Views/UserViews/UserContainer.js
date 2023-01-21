@@ -11,15 +11,8 @@ import SearchView from "./SearchView";
 import TeamView from "./TeamView";
 
 const UserContainer = ({ route }) => {
-  const navigate = useNavigation();
   const Tab = createBottomTabNavigator();
 
-  const [userData, setUserData] = useState([]);
-
-  useEffect(() => {
-    console.log(route.params.userData)
-    setUserData(route.params.userData);
-  }, [route.params]);
 
   return (
     <View style={styles.container}>
@@ -34,7 +27,7 @@ const UserContainer = ({ route }) => {
             ),
           }}
           name="Sök förening"
-          children={() => <SearchView orgData={userData} />}
+          children={() => <SearchView userData={route.params} />}
         />
         <Tab.Screen
           options={{
@@ -46,7 +39,7 @@ const UserContainer = ({ route }) => {
             ),
           }}
           name="Skapa Event"
-          children={() => <FavouritesView userData={userData} />}
+          children={() => <FavouritesView userData={route.params} />}
         />
       </Tab.Navigator>
       

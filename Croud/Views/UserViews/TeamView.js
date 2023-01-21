@@ -13,18 +13,21 @@ import {
   where,
   getDocs,
   updateDoc,
-  arrayUnion
+  arrayUnion,
+  arrayRemove
 } from "firebase/firestore";
 import GamesComponent from "./UserComponents/GamesComponent";
 
 const TeamView = ({ route }) => {
-  const [teamData, setTeamData] = useState();
-
   const [games, setGames] = useState([]);
+
+  //check if team is in favourites or not
+  const [favOrNot, setFavOrNot] = useState(false);
 
   useEffect(() => {
     getGames();
-  }, []);
+    checkFavOrNot();
+  }, [route.params]);
 
   async function getGames() {
     const q = query(
@@ -50,13 +53,33 @@ const TeamView = ({ route }) => {
 
     setGames(dateFilter);
   }
-
-  //add to favourite
+  function checkFavOrNot() {
+    if (
+      route.params.userData.userData.Favourites.includes(route.params.org.Name)
+    ) {
+      setFavOrNot(true);
+    } else {
+      setFavOrNot(false);
+    }
+  }
+  //add to favourite or remove if we click again
   async function addOrg() {
-    const washingtonRef = doc(database, "Users", "Lars");
-    await updateDoc(washingtonRef, {
-      Favourites: arrayUnion(route.params.org.Name)
-  });
+    console.log(favOrNot)
+
+    if (favOrNot == false)
+    {
+      const washingtonRef = doc(database, "Users", "Lars");
+      await updateDoc(washingtonRef, {
+        Favourites: arrayUnion(route.params.org.Name),
+      });
+      setFavOrNot(true); 
+    } else {
+      const washingtonRef = doc(database, "Users", "Lars");
+      await updateDoc(washingtonRef, {
+        Favourites: arrayRemove(route.params.org.Name)
+    });
+      setFavOrNot(false);
+    }
   }
 
   return (
@@ -66,7 +89,11 @@ const TeamView = ({ route }) => {
       <Text style={styles.t}>{route.params.org.Place}</Text>
       <Text style={styles.t}>{route.params.org.City}</Text>
       <TouchableOpacity style={styles.h} onPress={addOrg}>
-        <AntDesign name="hearto" size={70} color="white" />
+        <AntDesign
+          name={favOrNot ? "heart" : "hearto"}
+          size={70}
+          color="lightgreen"
+        />
       </TouchableOpacity>
       <ScrollView style={styles.botWrapper}>
         {games.map((game) => {

@@ -3,15 +3,17 @@ import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
-const OrgComponent = ({ Name, Sport, org }) => {
+const OrgComponent = ({ Name, Sport, org, userData }) => {
 
   const navigate = useNavigation();
 
 
   function goToTeamView() {
+    
     navigate.navigate("TeamView", {
-      org: org
-     });
+      org: org,
+      userData: userData
+     });   
   }
 
   return (

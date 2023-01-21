@@ -5,14 +5,17 @@ import OrgComponent from './UserComponents/OrgComponent'
 import { database } from '../../Firebase/firebase'
 import { collection, query, getDocs } from 'firebase/firestore'
 
-const SearchView = () => {
+const SearchView = ( { userData } ) => {
 const [orgs, setOrgs] = useState([]);
+
 useEffect(() => {
+
   data();
-}, [])
+}, [userData])
 
 
   async function data() {
+    console.log("updated")
     const q = query(
       collection(database, "Organisations"),
     );
@@ -45,6 +48,7 @@ useEffect(() => {
               Name={org.Name}
               Sport={org.Sport}
               org={org}
+              userData={userData}
               />
               );
             })}
