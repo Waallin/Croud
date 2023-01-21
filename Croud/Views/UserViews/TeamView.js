@@ -68,14 +68,14 @@ const TeamView = ({ route }) => {
 
     if (favOrNot == false)
     {
-      const washingtonRef = doc(database, "Users", "Lars");
-      await updateDoc(washingtonRef, {
+      const ref = doc(database, "Users", "Lars");
+      await updateDoc(ref, {
         Favourites: arrayUnion(route.params.org.Name),
       });
       setFavOrNot(true); 
     } else {
-      const washingtonRef = doc(database, "Users", "Lars");
-      await updateDoc(washingtonRef, {
+      const ref = doc(database, "Users", "Lars");
+      await updateDoc(ref, {
         Favourites: arrayRemove(route.params.org.Name)
     });
       setFavOrNot(false);
