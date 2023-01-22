@@ -8,6 +8,7 @@ import AdminContainer from "./Views/AdminViews/AdminContainer";
 import CreateEventView from "./Views/AdminViews/CreateEventView";
 import UserContainer from "./Views/UserViews/UserContainer";
 import TeamView from "./Views/UserViews/TeamView";
+import TicketView from "./Views/UserViews/TicketView";
 export default function App() {
   const Stack = createNativeStackNavigator();
 
@@ -56,6 +57,13 @@ export default function App() {
           }}
           name="TeamView"
           component={TeamView}
+        />
+                <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="TicketView"
+          component={TicketView}
         />
       </Stack.Navigator>
     </NavigationContainer>

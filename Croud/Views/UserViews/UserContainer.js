@@ -12,6 +12,10 @@ import TeamView from "./TeamView";
 import UserHomeView from "./UserHomeView";
 
 const UserContainer = ({ route }) => {
+
+
+
+
   const Tab = createBottomTabNavigator();
   console.log("test");
   return (

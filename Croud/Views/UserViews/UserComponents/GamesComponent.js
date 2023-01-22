@@ -1,14 +1,28 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
+import { useNavigation } from "@react-navigation/native";
 
-const GamesComponent = ({opponent, time, day, location}) => {
+
+const GamesComponent = ({opponent, time, day, location, id}) => {
+
+  const navigate = useNavigation();
+
+
+  function goToTicketView() {
+
+    
+    navigate.navigate("TicketView", {
+      id: id
+     });   
+  }
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={goToTicketView}>
       <Text style={styles.t}>{opponent}</Text>
       <Text style={styles.t}>{day}</Text>
       <Text style={styles.t}>{time}</Text>
       <Text style={styles.t}>{location}</Text>
-    </View>
+    </TouchableOpacity>
   )
 }
 

@@ -5,15 +5,13 @@ import OrgComponent from './UserComponents/OrgComponent'
 import { database } from '../../Firebase/firebase'
 import { collection, query, getDocs } from 'firebase/firestore'
 
-const SearchView = ( { userData } ) => {
+const SearchView = ( { userData, activeTab } ) => {
 
-  const [activeTab, setActiveTab] = useState('searchView');
 
 const [orgs, setOrgs] = useState([]);
 
 useEffect(() => {
   data();
-  console.log("hej från sökview")
 }, [activeTab])
 
 
