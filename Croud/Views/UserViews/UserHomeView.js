@@ -96,6 +96,7 @@ const UserHomeView = ({ route }) => {
           return (
             <GamesComponent
               key={game.id}
+              id={game.id}
               opponent={game.opponent}
               day={game.day}
               time={game.time}
