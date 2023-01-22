@@ -17,6 +17,7 @@
     "@react-navigation/stack": "^6.3.10",
     "expo": "~47.0.9",
     "expo-barcode-scanner": "~12.1.0",
+    "expo-camera": "^13.1.0",
     "expo-status-bar": "~1.4.2",
     "firebase": "^9.15.0",
     "firebase-tools": "^11.20.0",

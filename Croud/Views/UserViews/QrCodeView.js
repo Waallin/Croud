@@ -3,11 +3,20 @@ import React from 'react'
 import QRCode from 'react-native-qrcode-svg';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { database } from "../../Firebase/firebase";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 const QrCodeView = (route) => {
 
 
-  function testing() {
+  async function testing() {
     console.log(route.route.params.uuid)
+
+    const washingtonRef = doc(database, "Tickets", route.route.params.uuid);
+
+    // Set the "capital" field of the city 'DC'
+    await updateDoc(washingtonRef, {
+      Scanned: true
+    });
   }
 
 
