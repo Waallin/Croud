@@ -3,21 +3,23 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Button,
-  Animated,
 } from "react-native";
 import React from "react";
 import { useState, useEffect } from "react";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { database } from "../../Firebase/firebase";
-import { Ionicons } from '@expo/vector-icons'; 
+import { Ionicons } from "@expo/vector-icons";
+import { useIsFocused } from "@react-navigation/native";
 
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 const ScanView = () => {
+  const isFocused = useIsFocused();
+
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [text, setText] = useState();
+
 
   const askCameraPermission = () => {
     (async () => {
@@ -32,13 +34,24 @@ const ScanView = () => {
 
   //what happen when we scan barcode
   const handleBarCodeScanned = ({ type, data }) => {
-    setScanned(true);
-    setText(data);
-    console.log("type " + type + " data " + data);
+    setScanned(false);
+    setText("scan");
+
+    //function to set the qr-code to true
+    checkTicket(data);
   };
 
-  const [showToast, setShowToats] = useState(false);
 
+  //TODO - skriva regler. 
+  async function checkTicket(data) {
+    const washingtonRef = doc(database, "Tickets", data);
+    // Set the "capital" field of the city 'DC'
+    await updateDoc(washingtonRef, {
+      Scanned: true,
+    });
+  }
+
+  const [showToast, setShowToats] = useState(false);
 
   function toastFade() {
     setShowToats(true);
@@ -65,16 +78,20 @@ const ScanView = () => {
 
   return (
     <View style={styles.container}>
-      <BarCodeScanner
-        onBarCodeScanned={scanned ? toastFade : handleBarCodeScanned}
-        style={{ height: "100%", width: "100%" }}
-      />
+      {isFocused && (
+        <BarCodeScanner
+          onBarCodeScanned={scanned ? toastFade : handleBarCodeScanned}
+          style={{ height: "100%", width: "100%" }}
+        />
+      )}
 
       <View style={styles.box}></View>
       {showToast ? (
         <View style={styles.toast}>
-          <View style={styles.toastSuccessText}><Ionicons name="checkmark-circle" size={52} color="#4BB543" /></View>
-          <Text style={styles.toastInfoText}>3 biljetter</Text>
+          <View style={styles.toastSuccessText}>
+            <Ionicons name="checkmark-circle" size={52} color="#4BB543" />
+          </View>
+          <Text style={styles.toastInfoText}>{text}</Text>
         </View>
       ) : null}
     </View>
@@ -110,11 +127,10 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255,255,255, 1)",
   },
 
-
   toastInfoText: {
     color: "#4BB543",
     fontSize: "50px",
-    fontWeight: "400"
+    fontWeight: "400",
   },
 
   test: {
