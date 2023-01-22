@@ -1,28 +1,33 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { useNavigation } from "@react-navigation/native";
+import { FontAwesome } from '@expo/vector-icons'; 
 
 
-const GamesComponent = ({opponent, time, day, location, id}) => {
+const GamesComponent = ({opponent, time, day, location, id, hometeam, game}) => {
 
   const navigate = useNavigation();
 
 
   function goToTicketView() {
-
-    
     navigate.navigate("TicketView", {
-      id: id
+      game: game
      });   
   }
 
   return (
-    <TouchableOpacity style={styles.container} onPress={goToTicketView}>
-      <Text style={styles.t}>{opponent}</Text>
-      <Text style={styles.t}>{day}</Text>
-      <Text style={styles.t}>{time}</Text>
-      <Text style={styles.t}>{location}</Text>
-    </TouchableOpacity>
+    <View style={styles.container} onPress={goToTicketView}>
+
+      <View style={styles.info}>
+      <Text>{hometeam} - {opponent}</Text>
+      <Text>{location}</Text>
+      <Text>{day}</Text>
+      <Text>{time}</Text>
+      </View>
+      <TouchableOpacity onPress={goToTicketView}>
+      <FontAwesome name="ticket" size={42} color="#0891B2" style={styles.icon} />
+      </TouchableOpacity>
+    </View>
   )
 }
 
@@ -33,13 +38,17 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         borderWidth: 0.3,
-        padding: 10,
+        borderRadius: 10,
+        marginVertical: 3,
+        marginHorizontal: 10,
+        padding: 15,
+        flexDirection: "row",
         alignItems: "center",
+        justifyContent: "space-between"
+
     },
 
-    t: {
-        color: "black",
-        fontSize: "20px"
-
+    icon: {
+      marginRight: 15
     }
 })
