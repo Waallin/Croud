@@ -14,18 +14,13 @@ export default FavouritesComponent
 const styles = StyleSheet.create({
 
   container: {
-    width: "100%",
-    borderWidth: 0.5,
-    borderColor: "red",
-    height: 70,
-    marginTop: 10,
-    borderRadius: 20,
-    alignItems: "center",
-    justifyContent: "center",
-  },
+    flex: 1,
+    borderWidth: 0.3,
+    borderRadius: 10,
+    marginVertical: 3,
+    marginHorizontal: 10,
+    padding: 15,
+    alignItems: "center"
 
-  text: {
-    fontSize: "25px",
-    fontWeight: "600"
-  }
+},
 })

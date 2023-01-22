@@ -9,6 +9,7 @@ import CreateEventView from "./Views/AdminViews/CreateEventView";
 import UserContainer from "./Views/UserViews/UserContainer";
 import TeamView from "./Views/UserViews/TeamView";
 import TicketView from "./Views/UserViews/TicketView";
+import QrCodeView from "./Views/UserViews/QrCodeView";
 export default function App() {
   const Stack = createNativeStackNavigator();
 
@@ -58,12 +59,19 @@ export default function App() {
           name="TeamView"
           component={TeamView}
         />
-                <Stack.Screen
+        <Stack.Screen
           options={{
             headerShown: false,
           }}
           name="TicketView"
           component={TicketView}
+        />
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="QrCodeView"
+          component={QrCodeView}
         />
       </Stack.Navigator>
     </NavigationContainer>
