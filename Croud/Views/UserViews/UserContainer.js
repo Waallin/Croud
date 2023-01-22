@@ -54,8 +54,8 @@ const UserContainer = ({ route }) => {
               <MaterialIcons name="favorite-outline" size={24} color="black" />
             ),
           }}
-          name="Skapa Event"
-          children={() => <FavouritesView />}
+          name="Favoriter"
+          children={() => <FavouritesView userData={route.params}  />}
         />
       </Tab.Navigator>
     </View>
