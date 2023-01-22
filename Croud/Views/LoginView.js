@@ -24,6 +24,7 @@ const LoginView = () => {
     //Om användare är kund
     const userRef = doc(database, "Users", username);
     const userSnap = await getDoc(userRef);
+    console.log(userSnap.data())
 
     if (userSnap.exists()) {
       //console.log("Document data:", docSnap.data());
