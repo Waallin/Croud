@@ -4,11 +4,13 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import OrgComponent from './UserComponents/OrgComponent'
 import { database } from '../../Firebase/firebase'
 import { collection, query, getDocs } from 'firebase/firestore'
+import SearchbarComponent from './UserComponents/SearchbarComponent'
 
 const SearchView = ( { userData, activeTab } ) => {
 
 
 const [orgs, setOrgs] = useState([]);
+const [filteredOrgs, setFilteredOrgs] = useState([]);
 
 useEffect(() => {
   data();
@@ -34,14 +36,18 @@ useEffect(() => {
       x.push(obj);
     })
     setOrgs(x);
+    setFilteredOrgs(x);
   }
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topWrapper}>
         <Text style={styles.title}>Sök</Text>
       </View>
+      <View>
+        <SearchbarComponent orgs={orgs} setOrgs={setOrgs} setFilteredOrgs={setFilteredOrgs}/>
+      </View>
       <ScrollView style={styles.botWrapper}>
-      {orgs.map((org) => {
+      {filteredOrgs.map((org) => {
             return (
               <OrgComponent
               key={org.Name}
