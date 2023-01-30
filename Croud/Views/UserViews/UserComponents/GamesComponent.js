@@ -30,14 +30,6 @@ const GamesComponent = ({
         <Text>{day}</Text>
         <Text>{time}</Text>
       </View>
-      <TouchableOpacity onPress={goToTicketView}>
-        <FontAwesome
-          name="ticket"
-          size={42}
-          color="#0891B2"
-          style={styles.icon}
-        />
-      </TouchableOpacity>
     </View>
   );
 };
