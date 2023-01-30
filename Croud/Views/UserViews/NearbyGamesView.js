@@ -16,22 +16,27 @@ import {
 import GamesComponent from "./UserComponents/GamesComponent";
 import * as Location from "expo-location";
 
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import FavGamesView from "./FavGamesView";
-import NearbyGamesView from "./NearbyGamesView";
+const NearbyGamesView = () => {
+  const [games, setGames] = useState([]);
+  useEffect(() => {
+    console.log("ey")
+    test();
+  }, []);
 
-const UserHomeView = ({ route }) => {
+  const [refreshing, setRefreshing] = React.useState(false);
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
-
-  const Tab = createMaterialTopTabNavigator();
-
-
-  
   //function from gpt to get the distance between two points with the Haversine-formel
   async function test() {
     // const point1 = { latitude: location.coords.latitude, longitude: location.coords.longitude};
     ///////
     const nTeams = [];
+    const allGames = [];
     const q = query(collection(database, "Organisations"));
     const querySnapshot = await getDocs(q);
     let teams = [];
@@ -52,6 +57,7 @@ const UserHomeView = ({ route }) => {
     /////////
 
     teams.forEach((team) => {
+
       const R = 6371; // jordens radie i km
       const point1 = {
         latitude: 61.71945463793123,
@@ -77,56 +83,71 @@ const UserHomeView = ({ route }) => {
       if (distance < 50) {
         nTeams.push(team);
       }
-      setNearbyTeams(nTeams);
     });
-    nearbyTeams.forEach((team) => {
-      getNearbyMatches(team);
-    });
-  }
 
-  //get nearby matches after function above
-  async function getNearbyMatches(team) {
-    const q = query(
-      collection(database, "Games"),
-      where("Hometeam", "==", team.Name)
-    );
-    const querySnapshot = await getDocs(q);
-    let x = [];
-    querySnapshot.forEach((doc) => {
-      let obj = {
-        id: doc.id,
-        hometeam: doc.data().Hometeam,
-        opponent: doc.data().Opponent,
-        time: doc.data().Time,
-        day: doc.data().Day,
-        location: doc.data().Location,
-        sport: doc.data().sport,
-      };
-      x.push(obj);
+    nTeams.forEach((team) => {
+      getNearbyMatches(team, allGames);
     });
-    setGames(x);
+
+    //get nearby matches after function above
+    async function getNearbyMatches(team, allGames) {
+      const q = query(
+        collection(database, "Games"),
+        where("Hometeam", "==", team.Name)
+      );
+      const querySnapshot = await getDocs(q);
+      let x = [];
+      querySnapshot.forEach((doc) => {
+        let obj = {
+          id: doc.id,
+          hometeam: doc.data().Hometeam,
+          opponent: doc.data().Opponent,
+          time: doc.data().Time,
+          day: doc.data().Day,
+          location: doc.data().Location,
+          sport: doc.data().sport,
+        };
+        allGames.push(obj);
+      });
+      setGames(allGames)
+    }
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Tab.Navigator>
-      <Tab.Screen
-          options={{
-            tabBarActiveBackgroundColor: "#0891B2",
-          }}
-          name="Favoriter"
-          children={() => <FavGamesView route={route} />}
-        />
-        <Tab.Screen name="Närheten" component={NearbyGamesView} />
-      </Tab.Navigator>
-    </SafeAreaView>
+    <View style={styles.container}> 
+      <ScrollView
+        style={styles.gamesContainer}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        {games.map((game) => {
+          return (
+            <GamesComponent
+              key={game.id}
+              game={game}
+              hometeam={game.hometeam}
+              id={game.id}
+              opponent={game.opponent}
+              day={game.day}
+              time={game.time}
+              location={game.location}
+            />
+          );
+        })}
+      </ScrollView>
+    </View>
   );
 };
 
-export default UserHomeView;
+export default NearbyGamesView;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+
+  gamesContainer: {
+    marginTop: 10
   }
 });
