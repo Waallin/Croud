@@ -31,9 +31,9 @@ import { setDoc, doc } from "firebase/firestore";
 const AdminHomeView = ({ orgData, route }) => {
   const [events, setEvents] = useState([]);
   const [selectedDay, setSelectedDay] = useState();
-  const [sessionData, setSessionData] = useState();
 
   useEffect(() => {
+    //get data from firebase
     data();
   }, [route]);
 
@@ -44,9 +44,8 @@ const AdminHomeView = ({ orgData, route }) => {
   const [min, setMin] = useState();
   const [day, setDay] = useState();
 
-
   async function data() {
-    console.log(route.params)
+    console.log(route.params);
     const q = query(
       collection(database, "Games"),
       where("Hometeam", "==", route.params.orgData.Name)
@@ -54,9 +53,6 @@ const AdminHomeView = ({ orgData, route }) => {
     const querySnapshot = await getDocs(q);
     let x = [];
     querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      //console.log(doc.id, " => ", doc.data());
-
       let obj = {
         Key: doc.id,
         Opponent: doc.data().Opponent,
@@ -65,9 +61,7 @@ const AdminHomeView = ({ orgData, route }) => {
         Location: doc.data().Location,
       };
       x.push(obj);
-
     });
-
 
     //filter on dates
     let dateFilter = x.sort(function (a, b) {
@@ -98,7 +92,7 @@ const AdminHomeView = ({ orgData, route }) => {
       Location: location,
       Day: day,
       Time: hour + "." + min,
-      Sport: orgData.Sport
+      Sport: orgData.Sport,
     });
 
     closeModal();
@@ -140,6 +134,7 @@ const AdminHomeView = ({ orgData, route }) => {
           {events.map((event) => {
             return (
               <EventComponent
+                id={event.id}
                 Key={event.id}
                 Opponent={event.Opponent}
                 Time={event.Time}

@@ -5,7 +5,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginView from "./Views/LoginView";
 import AdminHomeView from "./Views/AdminViews/AdminHomeView";
 import AdminContainer from "./Views/AdminViews/AdminContainer";
-import CreateEventView from "./Views/AdminViews/CreateEventView";
 import UserContainer from "./Views/UserViews/UserContainer";
 import TeamView from "./Views/UserViews/TeamView";
 import TicketView from "./Views/UserViews/TicketView";
@@ -37,13 +36,6 @@ export default function App() {
           }}
           name="HomeAdmin"
           component={AdminHomeView}
-        />
-        <Stack.Screen
-          options={{
-            headerShown: false,
-          }}
-          name="CreateEvent"
-          component={CreateEventView}
         />
         <Stack.Screen
           options={{

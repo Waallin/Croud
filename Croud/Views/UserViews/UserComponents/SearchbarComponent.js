@@ -1,19 +1,15 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { useState } from "react";
 import SearchBar from "react-native-dynamic-search-bar";
 
-const SearchbarComponent = ({orgs, setOrgs, setFilteredOrgs}) => {
+const SearchbarComponent = ({ orgs, setOrgs, setFilteredOrgs }) => {
+  function filterOrgs(text) {
+    setFilteredOrgs(orgs);
+    const result = orgs.filter((word) => word.Name.includes(text));
+    setFilteredOrgs(result);
+    console.log(result);
+  }
 
-
-    function filterOrgs(text) {
-
-        setFilteredOrgs(orgs)
-        const result = orgs.filter(word => word.Name.includes(text));
-        setFilteredOrgs(result)
-        console.log(result)
-    }
-    
   return (
     <View style={styles.container}>
       <SearchBar
@@ -21,9 +17,8 @@ const SearchbarComponent = ({orgs, setOrgs, setFilteredOrgs}) => {
         iconColor="#c6c6c6"
         placeholder="Sök förening"
         cancelIconColor="#c6c6c6"
-        onClearPress={(text => filterOrgs(""))}
-        onChangeText={(text => filterOrgs(text))}
-        
+        onClearPress={(text) => filterOrgs("")}
+        onChangeText={(text) => filterOrgs(text)}
         style={styles.s}
       />
     </View>
@@ -33,11 +28,9 @@ const SearchbarComponent = ({orgs, setOrgs, setFilteredOrgs}) => {
 export default SearchbarComponent;
 
 const styles = StyleSheet.create({
-
-
-    s: {
+  s: {
     width: "100%",
     height: 50,
-    borderRadius: 0
-    }
+    borderRadius: 0,
+  },
 });

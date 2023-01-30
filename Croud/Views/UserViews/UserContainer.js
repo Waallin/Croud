@@ -1,21 +1,14 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-import { useNavigation } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useEffect, useState } from "react";
 
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import FavouritesView from "./FavouritesView";
 import SearchView from "./SearchView";
-import TeamView from "./TeamView";
 import UserHomeView from "./UserHomeView";
 
 const UserContainer = ({ route }) => {
-
-
-
-
   const Tab = createBottomTabNavigator();
   console.log("test");
   return (
@@ -55,7 +48,7 @@ const UserContainer = ({ route }) => {
             ),
           }}
           name="Favoriter"
-          children={() => <FavouritesView userData={route.params}  />}
+          children={() => <FavouritesView userData={route.params} />}
         />
       </Tab.Navigator>
     </View>

@@ -6,7 +6,7 @@ import { database } from "../../Firebase/firebase";
 import { Ionicons } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
 
-import { doc, getDoc, updateDoc, docSnap } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 const ScanView = (route) => {
   const isFocused = useIsFocused();
@@ -15,6 +15,7 @@ const ScanView = (route) => {
   const [scanned, setScanned] = useState(false);
   const [text, setText] = useState();
 
+//ask permission for camera
   const askCameraPermission = () => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
