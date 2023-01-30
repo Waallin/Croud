@@ -3,20 +3,14 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect, useState } from "react";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import { AntDesign } from "@expo/vector-icons";
 import { database } from "../../Firebase/firebase";
 import { Entypo } from "@expo/vector-icons";
 import {
   doc,
-  setDoc,
   query,
   collection,
   where,
   getDocs,
-  updateDoc,
-  arrayUnion,
-  arrayRemove,
-  querySnapshot,
   getDoc,
 } from "firebase/firestore";
 import GamesComponent from "./UserComponents/GamesComponent";
@@ -103,7 +97,6 @@ const UserHomeView = ({ route }) => {
 
   //function from gpt to get the distance between two points with the Haversine-formel
   async function test() {
-
     // const point1 = { latitude: location.coords.latitude, longitude: location.coords.longitude};
     ///////
     const nTeams = [];

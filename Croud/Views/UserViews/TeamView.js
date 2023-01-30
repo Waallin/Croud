@@ -98,22 +98,18 @@ const TeamView = ({ route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-
-
       <View style={styles.topWrapper}>
         <Text style={styles.title}>{route.params.org.Name}</Text>
-      <TouchableOpacity style={styles.h} onPress={addOrg}>
-        <AntDesign
-          name={favOrNot ? "heart" : "hearto"}
-          size={32}
-          color="red"
-        />
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.h} onPress={addOrg}>
+          <AntDesign
+            name={favOrNot ? "heart" : "hearto"}
+            size={32}
+            color="red"
+          />
+        </TouchableOpacity>
       </View>
       <View>
-        <Text style={styles.cominggamestext}>
-          Kommande matcher
-        </Text>
+        <Text style={styles.cominggamestext}>Kommande matcher</Text>
       </View>
       <ScrollView style={styles.botWrapper}>
         {games.map((game) => {
@@ -144,20 +140,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 20,
-    alignItems: "center"
+    alignItems: "center",
   },
 
   title: {
     fontSize: "32px",
-    fontWeight: "700"
+    fontWeight: "700",
   },
 
   cominggamestext: {
     width: "100%",
     textAlign: "center",
     fontSize: "23px",
-    fontWeight: "600"
-
-  }
-
+    fontWeight: "600",
+  },
 });

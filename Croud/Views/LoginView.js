@@ -4,7 +4,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  Image
+  Image,
 } from "react-native";
 import React from "react";
 import { useState } from "react";
@@ -20,7 +20,6 @@ const LoginView = () => {
   async function login() {
     setUsername("");
 
-
     //Om användare är kund
     const userRef = doc(database, "Users", username);
     const userSnap = await getDoc(userRef);
@@ -29,9 +28,8 @@ const LoginView = () => {
       //console.log("Document data:", docSnap.data());
       if (password === userSnap.data().Password) {
         navigate.navigate("UserContainer", {
-         userData: userSnap.data()
+          userData: userSnap.data(),
         });
-
       }
     } else {
       setPassword("");
@@ -47,9 +45,8 @@ const LoginView = () => {
       //console.log("Document data:", docSnap.data());
       if (password === orgSnap.data().Password) {
         navigate.navigate("AdminContainer", {
-         orgData: orgSnap.data()
+          orgData: orgSnap.data(),
         });
-
       }
     } else {
       setPassword("");
@@ -60,9 +57,10 @@ const LoginView = () => {
   return (
     <View style={styles.container}>
       <View style={styles.topWrapper}>
-      <Image source={require('../assets/croud.png')}
-   style = {{ width: 800, height: 200 }}
-   />
+        <Image
+          source={require("../assets/croud.png")}
+          style={{ width: 800, height: 200 }}
+        />
       </View>
       <View style={styles.botWrapper}>
         <TextInput
@@ -94,8 +92,8 @@ const styles = StyleSheet.create({
 
   topWrapper: {
     flex: 2,
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   botWrapper: {

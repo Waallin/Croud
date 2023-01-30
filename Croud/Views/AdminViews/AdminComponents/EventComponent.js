@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 
-const EventComponent = ({Opponent, Time, Location, Day}) => {
+const EventComponent = ({ Opponent, Time, Location, Day }) => {
   return (
     <View style={styles.container}>
       <View style={styles.text}>
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 20,
     borderBottomWidth: 0.3,
-    borderBottomColor: "#b1b1b1"
+    borderBottomColor: "#b1b1b1",
   },
 
   text: {
@@ -36,14 +36,14 @@ const styles = StyleSheet.create({
 
   title: {
     fontWeight: "700",
-    fontSize: "20px"
+    fontSize: "20px",
   },
 
   extraInfo: {
     color: "grey",
     paddingTop: 5,
     fontSize: "15px",
-    fontWeight: "500"
+    fontWeight: "500",
   },
 
   dateWrapper: {
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
 
   date: {

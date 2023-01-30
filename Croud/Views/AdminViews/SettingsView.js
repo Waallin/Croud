@@ -12,7 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 const SettingsView = () => {
   const navigate = useNavigation();
   function logout() {
-    console.log(navigate.navigate("login"))
+    console.log(navigate.navigate("login"));
   }
   return (
     <SafeAreaView style={styles.container}>
@@ -62,12 +62,12 @@ const styles = StyleSheet.create({
 
   botWrapper: {
     alignItems: "center",
-    marginTop: 30
+    marginTop: 30,
   },
 
   logoutText: {
     fontSize: "20px",
-    fontWeight: "500"
+    fontWeight: "500",
   },
   logoutBtn: {
     borderWidth: 1,
@@ -77,6 +77,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",
-    padding: 10
-  }
+    padding: 10,
+  },
 });
