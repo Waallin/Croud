@@ -1,9 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { useState, useEffect } from "react";
 import { BarCodeScanner } from "expo-barcode-scanner";
@@ -11,15 +6,14 @@ import { database } from "../../Firebase/firebase";
 import { Ionicons } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
 
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, docSnap } from "firebase/firestore";
 
-const ScanView = () => {
+const ScanView = (route) => {
   const isFocused = useIsFocused();
 
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [text, setText] = useState();
-
 
   const askCameraPermission = () => {
     (async () => {
@@ -34,21 +28,29 @@ const ScanView = () => {
 
   //what happen when we scan barcode
   const handleBarCodeScanned = ({ type, data }) => {
-    setScanned(false);
-    setText("scan");
-
     //function to set the qr-code to true
     checkTicket(data);
   };
 
-
-  //TODO - skriva regler. 
+  //function for scanning the tickets
   async function checkTicket(data) {
-    const washingtonRef = doc(database, "Tickets", data);
-    // Set the "capital" field of the city 'DC'
-    await updateDoc(washingtonRef, {
-      Scanned: true,
-    });
+    const docRef = doc(database, "Tickets", data);
+    const docSnap = await getDoc(docRef);
+
+    //Check if the ticket is on the right organisation.
+    const rightOrg = docSnap.data().Hometeam == route.orgData.Name;
+
+    if (rightOrg) {
+      //SCAN SUCCESS
+      setScanned(false);
+      setText("scan");
+      toastFade();
+
+      // Set the "capital" field of the city 'DC'
+      await updateDoc(docRef, {
+        Scanned: true,
+      });
+    }
   }
 
   const [showToast, setShowToats] = useState(false);
@@ -84,7 +86,9 @@ const ScanView = () => {
           style={{ height: "100%", width: "100%" }}
         />
       )}
-
+      <TouchableOpacity onPress={toastFade}>
+        <Text>rtesefsleflks</Text>
+      </TouchableOpacity>
       <View style={styles.box}></View>
       {showToast ? (
         <View style={styles.toast}>

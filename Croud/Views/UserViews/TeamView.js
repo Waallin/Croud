@@ -98,17 +98,23 @@ const TeamView = ({ route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.t}>{route.params.org.Name}</Text>
-      <Text style={styles.t}>{route.params.org.Sport}</Text>
-      <Text style={styles.t}>{route.params.org.Place}</Text>
-      <Text style={styles.t}>{route.params.org.City}</Text>
+
+
+      <View style={styles.topWrapper}>
+        <Text style={styles.title}>{route.params.org.Name}</Text>
       <TouchableOpacity style={styles.h} onPress={addOrg}>
         <AntDesign
           name={favOrNot ? "heart" : "hearto"}
-          size={70}
-          color="lightgreen"
+          size={32}
+          color="red"
         />
       </TouchableOpacity>
+      </View>
+      <View>
+        <Text style={styles.cominggamestext}>
+          Kommande matcher
+        </Text>
+      </View>
       <ScrollView style={styles.botWrapper}>
         {games.map((game) => {
           return (
@@ -131,24 +137,27 @@ export default TeamView;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    backgroundColor: "#0891B2",
   },
 
-  t: {
+  topWrapper: {
+    height: 100,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 20,
+    alignItems: "center"
+  },
+
+  title: {
     fontSize: "32px",
-    fontWeight: "600",
-    padding: 5,
+    fontWeight: "700"
   },
 
-  h: {
-    marginTop: 20,
-  },
-
-  botWrapper: {
-    marginTop: 20,
+  cominggamestext: {
     width: "100%",
-    flex: 1,
-    height: "100%",
-  },
+    textAlign: "center",
+    fontSize: "23px",
+    fontWeight: "600"
+
+  }
+
 });
