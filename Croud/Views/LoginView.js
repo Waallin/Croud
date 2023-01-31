@@ -7,53 +7,61 @@ import {
   Image,
 } from "react-native";
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { database } from "../Firebase/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { auth, database } from "../Firebase/firebase";
+import { doc, getDoc, setDoc, docSnap } from "firebase/firestore";
+import { createUserWithEmailAndPassword,signInWithEmailAndPassword, getAuth } from "firebase/auth";
 
 const LoginView = () => {
-  const [username, setUsername] = useState();
+  const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const navigate = useNavigation();
 
-  async function login() {
-    setUsername("");
+  useEffect(() => {
+    const auth = getAuth();
+    auth.onAuthStateChanged((authUser) => {
+      if (authUser) {
+        autoLogin(authUser);
+
+        //navigate.replace("UserContainer")
+      }
+    });
+  }, [auth]);
+
+  async function autoLogin(authUser) {
+
 
     //Om användare är kund
-    const userRef = doc(database, "Users", username);
+    const userRef = doc(database, "Users", authUser.email);
     const userSnap = await getDoc(userRef);
 
     if (userSnap.exists()) {
       //console.log("Document data:", docSnap.data());
-      if (password === userSnap.data().Password) {
-        navigate.navigate("UserContainer", {
-          userData: userSnap.data(),
-        });
-      }
-    } else {
-      setPassword("");
-      // doc.data() will be undefined in this case
-      //console.log("No such document!");
-    }
-
-    //Om användare är admin
-    const orgRef = doc(database, "Organisations", username);
-    const orgSnap = await getDoc(orgRef);
-
-    if (orgSnap.exists()) {
-      //console.log("Document data:", docSnap.data());
-      if (password === orgSnap.data().Password) {
-        navigate.navigate("AdminContainer", {
-          orgData: orgSnap.data(),
-        });
-      }
-    } else {
-      setPassword("");
-      // doc.data() will be undefined in this case
-      //console.log("No such document!");
+      navigate.replace("UserContainer", {
+        userData: userSnap.data(),
+      });
     }
   }
+  function createAccount() {
+    navigate.replace("CreateAccount");
+  }
+
+  async function login() {
+    const auth = getAuth();
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        // ...
+      })
+      .catch((err) => {
+        console.log(err.code);
+        console.log(err.message);
+      });
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.topWrapper}>
@@ -64,10 +72,10 @@ const LoginView = () => {
       </View>
       <View style={styles.botWrapper}>
         <TextInput
-          placeholder={"UserName"}
+          placeholder={"Email"}
           style={styles.input}
-          onChangeText={(userName) => setUsername(userName)}
-          value={username}
+          onChangeText={(email) => setEmail(email)}
+          value={email}
         />
         <TextInput
           placeholder={"Password"}
@@ -76,7 +84,10 @@ const LoginView = () => {
           value={password}
         />
         <TouchableOpacity style={styles.login} onPress={login}>
-          <Text>Login</Text>
+          <Text>Logga in</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.login} onPress={createAccount}>
+          <Text>Skapa konto</Text>
         </TouchableOpacity>
       </View>
     </View>

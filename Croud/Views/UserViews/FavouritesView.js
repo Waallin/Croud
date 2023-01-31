@@ -19,14 +19,15 @@ const FavouritesView = ({ userData }) => {
   const [refreshing, setRefreshing] = React.useState(false);
 
   useEffect(() => {
+
     //get data from firebase
     getData();
   }, []);
 
   //get all favteams and putting them in state 'favTeams'
   async function getData() {
-    console.log(userData.userData);
-    const docRef = doc(database, "Users", userData.userData.Username);
+    console.log(userData)
+    const docRef = doc(database, "Users", userData.userData.Email);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {

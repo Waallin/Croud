@@ -20,7 +20,7 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import NearbyGamesView from "./NearbyGamesView";
 
 
-const FavGamesView = ({route}) => {
+const FavGamesView = (route) => {
     const [games, setGames] = useState([]);
     const [FavouriteGames, setFavouriteGames] = useState([]);
     const [nearbyGames, setNearbyGames] = useState([]);
@@ -51,7 +51,7 @@ const FavGamesView = ({route}) => {
     async function getGames() {
       setGames([]);
       let favs = "";
-      const docRef = doc(database, "Users", route.userData.Username);
+      const docRef = doc(database, "Users", route.userData.userData.Email);
       const docSnap = await getDoc(docRef);
 
       console.log(docSnap.data())

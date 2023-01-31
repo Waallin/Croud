@@ -9,9 +9,13 @@ import UserContainer from "./Views/UserViews/UserContainer";
 import TeamView from "./Views/UserViews/TeamView";
 import TicketView from "./Views/UserViews/TicketView";
 import QrCodeView from "./Views/UserViews/QrCodeView";
+import CreateAccountView from "./Views/CreateAccountView";
+import { LogBox } from 'react-native';
+import UserHomeView from "./Views/UserViews/UserHomeView";
 export default function App() {
   const Stack = createNativeStackNavigator();
-
+  //Ignore some errors
+  LogBox.ignoreLogs(['Warning: Async Storage has been extracted from react-native core']);
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -21,6 +25,13 @@ export default function App() {
           }}
           name="login"
           component={LoginView}
+        />
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="CreateAccount"
+          component={CreateAccountView}
         />
         <Stack.Screen
           options={{
@@ -64,6 +75,13 @@ export default function App() {
           }}
           name="QrCodeView"
           component={QrCodeView}
+        />
+              <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="UserHome"
+          component={UserHomeView}
         />
       </Stack.Navigator>
     </NavigationContainer>
