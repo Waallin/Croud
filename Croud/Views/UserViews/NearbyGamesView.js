@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View, RefreshControl } from "react-native";
 import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect, useState } from "react";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { database } from "../../Firebase/firebase";
-import { Entypo } from "@expo/vector-icons";
+import {Location, Permissions } from 'expo'
+import OrgComponent from "./UserComponents/OrgComponent";
 import {
   doc,
   query,
@@ -14,29 +14,34 @@ import {
   getDoc,
 } from "firebase/firestore";
 import GamesComponent from "./UserComponents/GamesComponent";
-import * as Location from "expo-location";
+import NearbyTeamsComponent from "./UserComponents/NearbyTeamsComponent";
 
-const NearbyGamesView = () => {
-  const [games, setGames] = useState([]);
+
+const NearbyGamesView = (route) => {
+  const [teams, setTeams] = useState([]);
   useEffect(() => {
-    console.log("ey")
-    test();
-  }, []);
+    getData();
+    if (route.location) {
+      getData();
+    }
+  }, [route.location]);
+
 
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
+      getData();
       setRefreshing(false);
     }, 2000);
   }, []);
 
   //function from gpt to get the distance between two points with the Haversine-formel
-  async function test() {
+    async function getData() {
     // const point1 = { latitude: location.coords.latitude, longitude: location.coords.longitude};
     ///////
-    const nTeams = [];
-    const allGames = [];
+    
+   const nTeams = [];
     const q = query(collection(database, "Organisations"));
     const querySnapshot = await getDocs(q);
     let teams = [];
@@ -55,15 +60,22 @@ const NearbyGamesView = () => {
       teams.push(obj);
     });
     /////////
-
+    if (route != null) {
     teams.forEach((team) => {
 
-      const R = 6371; // jordens radie i km
+      const R = 6371;
       const point1 = {
-        latitude: 61.71945463793123,
-        longitude: 17.096468516866626,
-      };
+        //users coordinates
 
+        //vallvägen: 
+        latitude: 61.71954853271528,
+        longitude: 17.09635300806849
+
+        /*
+        latitude: route.location.coords.latitude,
+        longitude: route.location.coords.longitude
+        */
+      };
       const point2 = { latitude: team.Latitude, longitude: team.Longitude };
       const lat1 = point1.latitude;
       const lon1 = point1.longitude;
@@ -84,33 +96,9 @@ const NearbyGamesView = () => {
         nTeams.push(team);
       }
     });
-
-    nTeams.forEach((team) => {
-      getNearbyMatches(team, allGames);
-    });
-
-    //get nearby matches after function above
-    async function getNearbyMatches(team, allGames) {
-      const q = query(
-        collection(database, "Games"),
-        where("Hometeam", "==", team.Name)
-      );
-      const querySnapshot = await getDocs(q);
-      let x = [];
-      querySnapshot.forEach((doc) => {
-        let obj = {
-          id: doc.id,
-          hometeam: doc.data().Hometeam,
-          opponent: doc.data().Opponent,
-          time: doc.data().Time,
-          day: doc.data().Day,
-          location: doc.data().Location,
-          sport: doc.data().sport,
-        };
-        allGames.push(obj);
-      });
-      setGames(allGames)
-    }
+    setTeams(nTeams);
+    console.log(nTeams)
+  }
   }
 
   return (
@@ -121,19 +109,16 @@ const NearbyGamesView = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        {games.map((game) => {
+        {teams.map((org) => {
           return (
-            <GamesComponent
-              key={game.id}
-              game={game}
-              hometeam={game.hometeam}
-              id={game.id}
-              opponent={game.opponent}
-              day={game.day}
-              time={game.time}
-              location={game.location}
-            />
-          );
+            <OrgComponent
+            key={org.Name}
+            Name={org.Name}
+            Sport={org.Sport}
+            org={org}
+            userData={route.userData}
+             />
+          )
         })}
       </ScrollView>
     </View>
