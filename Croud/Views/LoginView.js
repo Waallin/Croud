@@ -31,7 +31,6 @@ const LoginView = () => {
 
   async function autoLogin(authUser) {
 
-
     //Om användare är kund
     const userRef = doc(database, "Users", authUser.email);
     const userSnap = await getDoc(userRef);
@@ -48,8 +47,24 @@ const LoginView = () => {
   }
 
   async function login() {
-    const auth = getAuth();
 
+    const docRef = doc(database, "Organisations", email);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      //console.log("Document data:", docSnap.data());
+      if (password === docSnap.data().Password) {
+        navigate.navigate("AdminContainer", {
+          orgData: docSnap.data()
+        });
+      }
+    } else {
+      setPassword("");
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+    }
+
+    const auth = getAuth();
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in

@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
   },
 
   botWrapper: {
+    marginTop: 5,
     flex: 1,
   },
 });

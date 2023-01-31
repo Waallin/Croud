@@ -48,3 +48,11 @@ async function data() {
      let dateFilter = x.sort(function (a, b) {
       return new Date(a.day) - new Date(b.day);
     });
+
+
+
+        //filter on dates
+    let dateFilter = x.sort(function (a, b) {
+      return new Date(a.Day) - new Date(b.Day);
+    });
+    setEvents(dateFilter);
