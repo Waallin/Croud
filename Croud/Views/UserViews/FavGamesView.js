@@ -77,12 +77,12 @@ const FavGamesView = (route) => {
     }, []);
   
     async function data(team) {
+      let x = [];
       const q = query(
         collection(database, "Games"),
         where("Hometeam", "==", team)
       );
       const querySnapshot = await getDocs(q);
-      let x = [];
       querySnapshot.forEach((doc) => {
         let obj = {
           id: doc.id,
@@ -93,15 +93,14 @@ const FavGamesView = (route) => {
           location: doc.data().Location,
           sport: doc.data().sport,
         };
+        x.push(obj);
         setGames((oldGames) => [...oldGames, obj]);
-        setFavouriteGames((oldGames) => [...oldGames, obj]);
-      });
-      /*
+
+      }
+      );
       let dateFilter = games.sort(function (a, b) {
           return new Date(a.day) - new Date(b.day);
         });
-        setGames(dateFilter);    
-        */
     }
   return (
     <View style={styles.container}> 
@@ -135,9 +134,9 @@ export default FavGamesView
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor:"lightgrey",
+        marginTop: 3
       },
 
-      gamesContainer: {
-        marginTop: 10
-      }
+
 })

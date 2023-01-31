@@ -20,11 +20,13 @@ const GamesComponent = ({
 
   return (
     <View style={styles.container} onPress={goToTicketView}>
-      <View style={styles.info}>
-        <Text>
+      <View style={styles.leftInfo}>
+        <Text style={styles.teams}>
           {hometeam} - {opponent}
         </Text>
         <Text>{location}</Text>
+        </View>
+        <View style={styles.rightInfo}>
         <Text>{day}</Text>
         <Text>{time}</Text>
       </View>
@@ -37,17 +39,22 @@ export default GamesComponent;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    borderWidth: 0.3,
-    borderRadius: 10,
-    marginVertical: 3,
-    marginHorizontal: 10,
     padding: 15,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    height: 100,
+    backgroundColor: "white",
+    marginBottom: 5
   },
 
-  icon: {
-    marginRight: 15,
+  teams: {
+    fontSize: "15px",
+    fontWeight: "700"
   },
+  rightInfo: {
+    justifyContent: "center",
+    alignItems: "center"
+  }
+
 });

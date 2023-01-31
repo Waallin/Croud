@@ -12,6 +12,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { useState } from "react";
 import { useEffect } from "react";
 import FavouritesComponent from "./UserComponents/FavouritesComponent";
+import OrgComponent from "./UserComponents/OrgComponent";
 
 const FavouritesView = ({ userData }) => {
   const [favTeams, setFavTeams] = useState([]);
@@ -60,7 +61,7 @@ const FavouritesView = ({ userData }) => {
         }
       >
         {favTeams.map((team) => {
-          return <FavouritesComponent key={team} team={team} />;
+          return <OrgComponent key={team} Name={team} />;
         })}
       </ScrollView>
     </SafeAreaView>
@@ -78,4 +79,5 @@ const styles = StyleSheet.create({
     fontSize: "52px",
     fontWeight: "700",
   },
+
 });

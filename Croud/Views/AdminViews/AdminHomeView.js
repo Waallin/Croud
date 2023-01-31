@@ -65,7 +65,7 @@ const AdminHomeView = ({ orgData, route }) => {
 
     //filter on dates
     let dateFilter = x.sort(function (a, b) {
-      return new Date(a.day) - new Date(b.day);
+      return new Date(a.Day) - new Date(b.Day);
     });
     setEvents(dateFilter);
   }
@@ -135,7 +135,7 @@ const AdminHomeView = ({ orgData, route }) => {
             return (
               <EventComponent
                 id={event.id}
-                Key={event.id}
+                key={event.id}
                 Opponent={event.Opponent}
                 Time={event.Time}
                 Day={event.Day}

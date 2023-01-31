@@ -62,6 +62,7 @@ const TeamView = ({ route }) => {
     querySnapshot.forEach((doc) => {
       let obj = {
         id: doc.id,
+        hometeam: doc.data().Hometeam,
         opponent: doc.data().Opponent,
         time: doc.data().Time,
         day: doc.data().Day,
@@ -73,7 +74,7 @@ const TeamView = ({ route }) => {
     let dateFilter = x.sort(function (a, b) {
       return new Date(a.day) - new Date(b.day);
     });
-
+    console.log(dateFilter)
     setGames(dateFilter);
   }
 
@@ -116,6 +117,7 @@ const TeamView = ({ route }) => {
           return (
             <GamesComponent
               key={game.id}
+              hometeam={game.hometeam}
               opponent={game.opponent}
               day={game.day}
               time={game.time}

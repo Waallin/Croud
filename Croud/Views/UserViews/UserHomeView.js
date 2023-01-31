@@ -26,7 +26,7 @@ const UserHomeView = ({ userData, location }) => {
 
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView edges={['top']} style={styles.container}>
       <Tab.Navigator>
       <Tab.Screen
           options={{
