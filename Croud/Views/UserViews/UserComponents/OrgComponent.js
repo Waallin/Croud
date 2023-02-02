@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
-const OrgComponent = ({ Name, Sport, org, userData }) => {
+const OrgComponent = ({ Name, Sport, org, userData, date }) => {
   const navigate = useNavigation();
 
   function goToTeamView() {
@@ -17,6 +17,11 @@ const OrgComponent = ({ Name, Sport, org, userData }) => {
       <View style={styles.text}>
         <Text style={styles.title}>{Name}</Text>
         <Text style={styles.extraInfo}>{Sport}</Text>
+      </View>
+      <View>
+        <Text>
+          {date}
+        </Text>
       </View>
     </TouchableOpacity>
   );

@@ -17,17 +17,19 @@ const UserContainer = ({ route }) => {
   const [errorMsg, setErrorMsg] = useState(null);
 
   useEffect(() => {
-  
-    getLocation();
-  }, []);
-
-  async function getLocation() {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      setErrorMsg('Permission to access location was denied');
-      return;
+    const getPermissions = async () => {
+      
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
     }
-  }
+      let currentLocation = await Location.getCurrentPositionAsync({});
+      setLocation(currentLocation);
+      console.log(currentLocation)
+  };
+  getPermissions();
+  }, []);
 
   return (
     <View style={styles.container}>

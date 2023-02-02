@@ -26,7 +26,7 @@ import moment from "moment"; // 2.20.1
 import { uuidv4 } from "@firebase/util";
 
 //firebase
-import { setDoc, doc } from "firebase/firestore";
+import { setDoc, doc,updateDoc, arrayUnion} from "firebase/firestore";
 
 const AdminHomeView = ({ orgData, route }) => {
   const [events, setEvents] = useState([]);
@@ -54,7 +54,7 @@ const AdminHomeView = ({ orgData, route }) => {
     let x = [];
     querySnapshot.forEach((doc) => {
       let obj = {
-        Key: doc.id,
+        key: doc.id,
         Opponent: doc.data().Opponent,
         Time: doc.data().Time,
         Day: doc.data().Day,
@@ -94,6 +94,13 @@ const AdminHomeView = ({ orgData, route }) => {
       Time: hour + "." + min,
       Sport: orgData.Sport,
     });
+
+      //add to favourite or remove if we click again
+
+      const ref = doc(database, "Organisations", orgData.Name);
+      await updateDoc(ref, {
+        Gamedays: arrayUnion(day),
+      });
 
     closeModal();
   }
