@@ -26,35 +26,23 @@ const FavGamesView = (route) => {
     const [nearbyGames, setNearbyGames] = useState([]);
     const [nearby, setNearby] = useState(false);
     const [nearbyTeams, setNearbyTeams] = useState([]);
+    const [location, setLocation] = useState();
   
     const Tab = createMaterialTopTabNavigator();
   
     useEffect(() => {
-      getPermissions();
       getGames();
     }, [database]);
   
-    async function getPermissions() {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-
-        return;
-      }
-      let currentLocation = await Location.getCurrentPositionAsync({});
-      setLocation(currentLocation);
-      //console.log(currentLocation);
-    }
+  
     //Update db when scroll down
     const [refreshing, setRefreshing] = React.useState(false);
-    const [location, setLocation] = useState();
 
     async function getGames() {
       setGames([]);
       let favs = "";
       const docRef = doc(database, "Users", route.userData.userData.Email);
       const docSnap = await getDoc(docRef);
-
-      console.log(docSnap.data())
   
       if (docSnap.exists()) {
         favs = docSnap.data().Favourites;
