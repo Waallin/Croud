@@ -24,6 +24,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Calendar } from "react-native-calendars";
 import moment from "moment"; // 2.20.1
 import { uuidv4 } from "@firebase/util";
+import { useNavigation } from "@react-navigation/native";
 
 //firebase
 import { setDoc, doc,updateDoc, arrayUnion} from "firebase/firestore";
@@ -31,11 +32,14 @@ import { setDoc, doc,updateDoc, arrayUnion} from "firebase/firestore";
 const AdminHomeView = ({ orgData, route }) => {
   const [events, setEvents] = useState([]);
   const [selectedDay, setSelectedDay] = useState();
-
+  const navigate = useNavigation();
   useEffect(() => {
     //get data from firebase
     data();
   }, [route]);
+
+
+
 
   //Gather all info
   const [opponent, setOpponent] = useState();
@@ -53,9 +57,12 @@ const AdminHomeView = ({ orgData, route }) => {
     const querySnapshot = await getDocs(q);
     let x = [];
     querySnapshot.forEach((doc) => {
+
       let obj = {
         key: doc.id,
+        Active: doc.data().Active,
         Opponent: doc.data().Opponent,
+        Hometeam: doc.data().Hometeam,
         Time: doc.data().Time,
         Day: doc.data().Day,
         Location: doc.data().Location,
@@ -141,9 +148,10 @@ const AdminHomeView = ({ orgData, route }) => {
           {events.map((event) => {
             return (
               <EventComponent
-                id={event.id}
                 key={event.id}
+                event={event}
                 Opponent={event.Opponent}
+                Hometeam={event.Hometeam}
                 Time={event.Time}
                 Day={event.Day}
                 Location={event.Location}

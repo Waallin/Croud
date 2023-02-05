@@ -13,7 +13,16 @@ PUSH TO DB//////////
   }
 
 
+import { useNavigation } from "@react-navigation/native";
+  const navigate = useNavigation();
+  function logout() {
+    console.log(navigate.navigate("login"));
+  }
 
+        navigate.navigate("AdminContainer", {
+          orgData: docSnap.data()
+        });
+      }
 
 
 GET FROM DB////////////
@@ -56,3 +65,33 @@ async function data() {
       return new Date(a.Day) - new Date(b.Day);
     });
     setEvents(dateFilter);
+
+
+
+
+    //admin => {
+      starta match när man ställer sig i entre för att ta emot biljett
+      starta egen match-view
+
+      skicka notiser => {
+
+        köpa lotter
+        rösta matchens lirare
+        }
+
+        match-view => {
+        visa antal åsådare
+        matchprogram?
+        }
+    }
+
+
+    //användare => {
+
+      visa att en match är igång (pulserande? ikon?)
+      gå in i match
+      köpa olika sorters biljetter och antal. exempelvis 2 vuxna
+      få qr-kod (biljett)
+
+      komma in egen i match-view
+    }
