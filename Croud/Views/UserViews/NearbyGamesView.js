@@ -86,11 +86,11 @@ const NearbyGamesView = (route) => {
           //users coordinates
 
           //vallvägen:
-          //latitude: 61.71954853271528,
-          //longitude: 17.09635300806849
+          latitude: 61.71954853271528,
+          longitude: 17.09635300806849
 
-          latitude: route.location.coords.latitude,
-          longitude: route.location.coords.longitude,
+          //latitude: route.location.coords.latitude,
+          //longitude: route.location.coords.longitude,
         };
         const point2 = { latitude: team.Latitude, longitude: team.Longitude };
         const lat1 = point1.latitude;

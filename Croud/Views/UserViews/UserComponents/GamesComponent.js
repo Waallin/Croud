@@ -9,28 +9,30 @@ const GamesComponent = ({
   location,
   hometeam,
   game,
+  active,
 }) => {
   const navigate = useNavigation();
 
   function goToTicketView() {
     navigate.navigate("TicketView", {
       game: game,
+      active: active
     });
   }
 
   return (
-    <View style={styles.container} onPress={goToTicketView}>
+    <TouchableOpacity style={active ? styles.activeContainer : styles.container}  onPress={active ? goToTicketView : () => {}}>
       <View style={styles.leftInfo}>
         <Text style={styles.teams}>
           {hometeam} - {opponent}
         </Text>
         <Text>{location}</Text>
-        </View>
-        <View style={styles.rightInfo}>
+      </View>
+      <View style={styles.rightInfo}>
         <Text>{day}</Text>
         <Text>{time}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -45,16 +47,26 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     height: 100,
     backgroundColor: "white",
-    marginBottom: 5
+    marginBottom: 5,
+  },
+
+  activeContainer: {
+    flex: 1,
+    padding: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "lightgreen",
+    justifyContent: "space-between",
+    height: 100,
+    marginBottom: 5,
   },
 
   teams: {
     fontSize: "15px",
-    fontWeight: "700"
+    fontWeight: "700",
   },
   rightInfo: {
     justifyContent: "center",
-    alignItems: "center"
-  }
-
+    alignItems: "center",
+  },
 });

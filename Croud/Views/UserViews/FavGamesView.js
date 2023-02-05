@@ -14,84 +14,74 @@ import {
   getDoc,
 } from "firebase/firestore";
 import GamesComponent from "./UserComponents/GamesComponent";
-import * as Location from "expo-location";
-
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import NearbyGamesView from "./NearbyGamesView";
-
 
 const FavGamesView = (route) => {
-    const [games, setGames] = useState([]);
-    const [FavouriteGames, setFavouriteGames] = useState([]);
-    const [nearbyGames, setNearbyGames] = useState([]);
-    const [nearby, setNearby] = useState(false);
-    const [nearbyTeams, setNearbyTeams] = useState([]);
-    const [location, setLocation] = useState();
-  
-    const Tab = createMaterialTopTabNavigator();
-  
-    useEffect(() => {
+  const [games, setGames] = useState([]);
+  const [filterGames, setFilterGame] = useState([]);
+
+  const Tab = createMaterialTopTabNavigator();
+
+  useEffect(() => {
+    getGames();
+  }, [database]);
+
+  //Update db when scroll down
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  async function getGames() {
+    setGames([]);
+    let favs = "";
+    const docRef = doc(database, "Users", route.userData.userData.Email);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      favs = docSnap.data().Favourites;
+    } else {
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+    }
+
+    favs.forEach((team) => {
+      data(team);
+    });
+  }
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
       getGames();
-    }, [database]);
-  
-  
-    //Update db when scroll down
-    const [refreshing, setRefreshing] = React.useState(false);
+    }, 2000);
+  }, []);
 
-    async function getGames() {
-      setGames([]);
-      let favs = "";
-      const docRef = doc(database, "Users", route.userData.userData.Email);
-      const docSnap = await getDoc(docRef);
-  
-      if (docSnap.exists()) {
-        favs = docSnap.data().Favourites;
-      } else {
-        // doc.data() will be undefined in this case
-        console.log("No such document!");
-      }
-  
-      favs.forEach((team) => {
-        data(team);
-      });
-    }
-  
-    const onRefresh = React.useCallback(() => {
-      setRefreshing(true);
-      setTimeout(() => {
-        setRefreshing(false);
-        getGames();
-      }, 2000);
-    }, []);
-  
-    async function data(team) {
-      let x = [];
-      const q = query(
-        collection(database, "Games"),
-        where("Hometeam", "==", team)
-      );
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        let obj = {
-          id: doc.id,
-          hometeam: doc.data().Hometeam,
-          opponent: doc.data().Opponent,
-          time: doc.data().Time,
-          day: doc.data().Day,
-          location: doc.data().Location,
-          sport: doc.data().sport,
-        };
-        x.push(obj);
-        setGames((oldGames) => [...oldGames, obj]);
-
-      }
-      );
-      let dateFilter = games.sort(function (a, b) {
-          return new Date(a.day) - new Date(b.day);
-        });
-    }
+  async function data(team) {
+    let x = [];
+    const q = query(
+      collection(database, "Games"),
+      where("Hometeam", "==", team)
+    );
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      let obj = {
+        id: doc.id,
+        hometeam: doc.data().Hometeam,
+        text: doc.data().Text,
+        adultTicket: doc.data().AdultTicket,
+        kidTicket: doc.data().KidTicket,
+        active: doc.data().Active,
+        opponent: doc.data().Opponent,
+        time: doc.data().Time,
+        day: doc.data().Day,
+        location: doc.data().Location,
+        sport: doc.data().sport,
+      };
+      x.push(obj);
+      setGames((oldGames) => [...oldGames, obj]);
+    });
+  }
   return (
-    <View style={styles.container}> 
+    <View style={styles.container}>
       <ScrollView
         style={styles.gamesContainer}
         refreshControl={
@@ -103,6 +93,7 @@ const FavGamesView = (route) => {
             <GamesComponent
               key={game.id}
               game={game}
+              active={game.active}
               hometeam={game.hometeam}
               id={game.id}
               opponent={game.opponent}
@@ -114,17 +105,15 @@ const FavGamesView = (route) => {
         })}
       </ScrollView>
     </View>
-  )
-}
+  );
+};
 
-export default FavGamesView
+export default FavGamesView;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor:"lightgrey",
-        marginTop: 3
-      },
-
-
-})
+  container: {
+    flex: 1,
+    backgroundColor: "lightgrey",
+    marginTop: 3,
+  },
+});

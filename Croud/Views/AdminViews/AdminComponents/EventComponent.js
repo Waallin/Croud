@@ -1,10 +1,27 @@
 import { StyleSheet, Text, View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
+const EventComponent = ({ Opponent, Time, Location, Day, event }) => {
 
-const EventComponent = ({ Opponent, Time, Location, Day }) => {
+
+  const navigate = useNavigation();
+
+  function nav() {
+    if (event.Active) {
+      navigate.navigate("ActiveGame", {
+        event: event
+     });
+    } else {
+      navigate.navigate("StartGame", {
+        event: event
+     });
+    }
+  }
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity onPress={nav} style={event.Active ? styles.activeContainer : styles.container}>
       <View style={styles.text}>
         <Text style={styles.title}>{Opponent}</Text>
         <Text style={styles.extraInfo}>{Time}</Text>
@@ -12,9 +29,9 @@ const EventComponent = ({ Opponent, Time, Location, Day }) => {
       </View>
       <View style={styles.dateWrapper}>
         <Text style={styles.date}>{Day}</Text>
-        <MaterialIcons name="keyboard-arrow-right" size={24} color="grey" />
+        {event.Active ? <MaterialIcons name="keyboard-arrow-right" size={24} color="grey" /> : ""}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -28,6 +45,16 @@ const styles = StyleSheet.create({
     padding: 20,
     borderBottomWidth: 0.3,
     borderBottomColor: "#b1b1b1",
+  },
+
+  activeContainer: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      padding: 20,
+      backgroundColor: "lightgreen",
+      borderBottomWidth: 0.3,
+      borderBottomColor: "#b1b1b1",
   },
 
   text: {

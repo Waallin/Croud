@@ -62,7 +62,11 @@ const TeamView = ({ route }) => {
     querySnapshot.forEach((doc) => {
       let obj = {
         id: doc.id,
+        active: doc.data().Active,
         hometeam: doc.data().Hometeam,
+        text: doc.data().Text,
+        adultTicket: doc.data().adultTicket,
+        kidTicket: doc.data().kidTicket,
         opponent: doc.data().Opponent,
         time: doc.data().Time,
         day: doc.data().Day,
@@ -117,6 +121,8 @@ const TeamView = ({ route }) => {
           return (
             <GamesComponent
               key={game.id}
+              active={game.active}
+              text={game.text}
               hometeam={game.hometeam}
               opponent={game.opponent}
               day={game.day}

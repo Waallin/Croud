@@ -3,18 +3,40 @@ import React from "react";
 import { useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { v4 as uuidv4 } from "uuid";
 import { doc, setDoc } from "firebase/firestore";
 import { database } from "../../Firebase/firebase";
+import { TextInput } from "react-native-gesture-handler";
 
 const TicketView = ({ route }) => {
   const navigate = useNavigation();
+  const gameInfo = route.params.game;
 
-  function testing() {
-    console.log(route.params.game);
+  const [adultTickets, setAdultTickets] = useState();
+  const [kidTickets, setKidTickets] = useState();
+
+  const [totalPrice, setTotalPrice] = useState(
+    adultTickets * gameInfo.adultTicket
+  );
+
+  console.log(route.params.game);
+
+  function totalTicketPrice() {
+    const adult = adultTickets * gameInfo.adultTicket;
+    const kid = kidTickets * gameInfo.kidTicket;
+    const sum = adult + kid;
+    if (sum) {
+      return sum;
+    } else if (adult) {
+      return adult;
+    } else if (kid) {
+      return kid;
+    } else {
+      return 0;
+    }
   }
-
   async function buyTicket() {
     const uuid = uuidv4();
     await setDoc(doc(database, "Tickets", uuid), {
@@ -23,6 +45,9 @@ const TicketView = ({ route }) => {
       Opponent: route.params.game.opponent,
       Location: route.params.game.location,
       Time: route.params.game.time,
+      AdultTickets: adultTickets,
+      KidTickets: kidTickets,
+      TotalPrice: totalTicketPrice(),
       Scanned: false,
       //Sport: route.params.game.id,
     });
@@ -34,22 +59,43 @@ const TicketView = ({ route }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topWrapper}>
-        <TouchableOpacity onPress={testing}>
-          <Text style={styles.title}>Köp biljett</Text>
-        </TouchableOpacity>
+        <Text>
+          {gameInfo.hometeam} - {gameInfo.opponent}
+        </Text>
+        <Text>{gameInfo.day}</Text>
+        <Text>{gameInfo.time}</Text>
+        <Text>{gameInfo.location}</Text>
       </View>
-      <View style={styles.botWrapper}>
-        <View styles={styles.gameInfo}>
-          <Text style={styles.teamsText}>
-            {route.params.game.hometeam} - {route.params.game.opponent}
-          </Text>
-          <Text style={styles.timeText}>{route.params.game.time}</Text>
-          <Text style={styles.dayText}>{route.params.game.day}</Text>
-          <Text style={styles.locationText}>{route.params.game.location}</Text>
+      <View style={styles.midWrapper}>
+        <Text>{gameInfo.text}</Text>
+        <View style={styles.ticketWrapper}>
+          <Text>Vuxen: ({gameInfo.adultTicket})</Text>
+          <TextInput
+            style={styles.input}
+            numeric
+            keyboardType={"numeric"}
+            onChangeText={(adultTickets) => setAdultTickets(adultTickets)}
+            value={adultTickets}
+            defaultValue="0"
+          />
         </View>
-        <TouchableOpacity onPress={buyTicket}>
-          <AntDesign name="qrcode" size={80} color="black" />
-        </TouchableOpacity>
+        <View style={styles.ticketWrapper}>
+          <Text>Barn/pensionär: ({gameInfo.kidTicket})</Text>
+          <TextInput
+            style={styles.input}
+            numeric
+            keyboardType={"numeric"}
+            onChangeText={(kidTickets) => setKidTickets(kidTickets)}
+            value={kidTickets}
+            defaultValue="0"
+          />
+        </View>
+      </View>
+      <Text>att betala: {totalTicketPrice()}</Text>
+      <View style={styles.botWrapper}>
+          <TouchableOpacity style={styles.buybtn} onPress={buyTicket}>
+            <Text>Köp</Text>
+          </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -60,48 +106,49 @@ export default TicketView;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   topWrapper: {
-    flex: 0.15,
-    borderBottomWidth: 1,
-    display: "flex",
-    flexDirection: "row",
-    borderBottomColor: "lightgrey",
-    paddingLeft: 20,
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
-    justifyContent: "space-between",
   },
-  title: {
-    fontSize: "52px",
-    fontWeight: "700",
-  },
-
   botWrapper: {
     flex: 1,
+    justifyContent: "center",
     alignItems: "center",
-    marginTop: 20,
   },
 
-  teamsText: {
-    fontSize: "32px",
-    marginTop: 20,
-  },
-  timeText: {
-    fontSize: "32px",
-    textAlign: "center",
-    marginTop: 20,
-  },
-  dayText: {
-    fontSize: "32px",
-    textAlign: "center",
-    marginTop: 20,
+  midWrapper: {
+    flex: 3,
+    justifyContent: "center",
+    alignItems: "center",
   },
 
-  locationText: {
-    fontSize: "32px",
+  input: {
+    width: 80,
+    borderBottomWidth: 0.5,
     textAlign: "center",
-    marginTop: 20,
+    height: 40,
+  },
+
+  ticketWrapper: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  buybtn: {
+    borderWidth: 0.5,
+    borderColor: "grey",
+    borderRadius: 5,
+    width: 150,
+    height: 60,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "lightgreen",
   },
 });
 
