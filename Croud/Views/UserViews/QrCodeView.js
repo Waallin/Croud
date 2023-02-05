@@ -6,6 +6,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { database } from "../../Firebase/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 const QrCodeView = (route) => {
+
+  
   async function testing() {
     console.log(route.route.params.uuid);
 
