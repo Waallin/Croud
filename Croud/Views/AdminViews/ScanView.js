@@ -14,6 +14,7 @@ const ScanView = (route) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [text, setText] = useState();
+  const [test, setTest] = useState()
 
 //ask permission for camera
   const askCameraPermission = () => {
@@ -28,23 +29,20 @@ const ScanView = (route) => {
   }, []);
 
   //what happen when we scan barcode
-  const handleBarCodeScanned = ({ type, data }) => {
+  async function handleBarCodeScanned({ type, data }) {
     //function to set the qr-code to true
-    checkTicket(data);
-  };
-
-  //function for scanning the tickets
-  async function checkTicket(data) {
     const docRef = doc(database, "Tickets", data);
     const docSnap = await getDoc(docRef);
 
+
+
+    setTest(docSnap.data().TotalPrice);
     //Check if the ticket is on the right organisation.
     const rightOrg = docSnap.data().Hometeam == route.orgData.Name;
-
+    
     if (rightOrg) {
       //SCAN SUCCESS
       setScanned(false);
-      setText("scan");
       toastFade();
 
       // Set the "capital" field of the city 'DC'
@@ -52,7 +50,8 @@ const ScanView = (route) => {
         Scanned: true,
       });
     }
-  }
+  };
+
 
   const [showToast, setShowToats] = useState(false);
 
@@ -96,7 +95,7 @@ const ScanView = (route) => {
           <View style={styles.toastSuccessText}>
             <Ionicons name="checkmark-circle" size={52} color="#4BB543" />
           </View>
-          <Text style={styles.toastInfoText}>{text}</Text>
+          <Text style={styles.toastInfoText}>{test}</Text>
         </View>
       ) : null}
     </View>

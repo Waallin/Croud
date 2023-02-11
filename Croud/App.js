@@ -13,16 +13,25 @@ import CreateAccountView from "./Views/CreateAccountView";
 import { LogBox } from "react-native";
 import UserHomeView from "./Views/UserViews/UserHomeView";
 import StartGameView from "./Views/AdminViews/StartGameView";
+import { globalStyles } from "./Styles/global";
 import ActiveGameView from "./Views/AdminViews/ActiveGameView";
 import IngameView from "./Views/UserViews/IngameView";
+import { useFonts } from 'expo-font';
+import { AppLoading } from 'expo';
+
 export default function App() {
   const Stack = createNativeStackNavigator();
+
+  let [fontsLoaded] = useFonts({
+    "Manrope" : require("././assets/fonts/Manrope-VariableFont_wght.ttf")
+  });
+
   //Ignore some errors
   LogBox.ignoreLogs([
     "Warning: Async Storage has been extracted from react-native core",
   ]);
   return (
-    <NavigationContainer>
+    <NavigationContainer styles={styles.container}>
       <Stack.Navigator>
         <Stack.Screen
           options={{
@@ -114,4 +123,9 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+
+    container: {
+    flex: 1,
+    },
+});
