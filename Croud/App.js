@@ -14,6 +14,7 @@ import { LogBox } from "react-native";
 import UserHomeView from "./Views/UserViews/UserHomeView";
 import StartGameView from "./Views/AdminViews/StartGameView";
 import ActiveGameView from "./Views/AdminViews/ActiveGameView";
+import IngameView from "./Views/UserViews/IngameView";
 export default function App() {
   const Stack = createNativeStackNavigator();
   //Ignore some errors
@@ -100,6 +101,13 @@ export default function App() {
           }}
           name="ActiveGame"
           component={ActiveGameView}
+        />
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="Ingame"
+          component={IngameView}
         />
       </Stack.Navigator>
     </NavigationContainer>
