@@ -21,7 +21,6 @@ const TicketView = ({ route }) => {
     adultTickets * gameInfo.adultTicket
   );
 
-  console.log(route.params.game);
 
   function totalTicketPrice() {
     const adult = adultTickets * gameInfo.adultTicket;
