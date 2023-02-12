@@ -33,7 +33,8 @@ const UserContainer = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <Tab.Navigator>
+      <Tab.Navigator
+            initialRouteName="Hemskärm">
         <Tab.Screen
           options={{
             headerShown: false,
