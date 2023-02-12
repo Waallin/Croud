@@ -17,45 +17,78 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
+import { set } from "react-native-reanimated";
 
 const CreateAccountView = () => {
-  const [email, setEmail] = useState();
   const [name, setName] = useState();
+  const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [rePassword, setRePassword] = useState();
+
+  const [dangerText, setDangerText] = useState();
   const navigate = useNavigation();
 
   async function createAccount() {
+    if (!name) {
+      setDangerText("Vänligen fyll i Namn");
+      return;
+    }
+
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+    } else {
+      setDangerText("E-postadressen är inte giltig");
+      return;
+    }
+
+    if (!password) {
+      setDangerText("Vänligen fyll i ett lösenord");
+      return;
+    } else if (
+      password.length >= 8 &&
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$/.test(password)
+    ) {
+    } else {
+      setDangerText(
+        "Lösenordet måste vara 8 tecken & innehålla både stor och liten bokstav"
+      );
+      return;
+    }
+
+    if (password != rePassword) {
+      setDangerText("Vänligen skriv samma lösenord");
+      setPassword("");
+      setRePassword("");
+      return;
+    }
+
     const auth = getAuth();
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in
         const user = userCredential.user;
         setDoc(doc(database, "Users", user.email), {
           Email: user.email,
           UserName: name,
+          Name: name,
           Favourites: [],
         });
-
         // ...
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        // ..
       });
-    navigate.replace("login");
+
   }
 
-  function login() {
-    navigate.goBack();
+  function navigateBack() {
+    navigate.navigate("login");
   }
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topWrapper}>
-        <TouchableOpacity onPress={login}>
-        <AntDesign name="left" size={20} color={globalStyles.primaryBlack} />
+        <TouchableOpacity onPress={navigateBack}>
+          <AntDesign name="left" size={20} color={globalStyles.primaryBlack} />
         </TouchableOpacity>
       </View>
       <View style={styles.midWrapper}>
@@ -74,11 +107,11 @@ const CreateAccountView = () => {
               style={globalStyles.primaryInputIcon}
             />
             <TextInput
-              style={{ marginLeft: 10 }}
+              style={globalStyles.primaryTextInput}
               placeholder={"Namn"}
               placeholderTextColor={globalStyles.secondaryGrey}
-              onChangeText={(password) => setPassword(password)}
-              value={password}
+              onChangeText={(name) => setName(name)}
+              value={name}
             />
           </View>
           <View style={globalStyles.primaryInput}>
@@ -89,11 +122,11 @@ const CreateAccountView = () => {
               style={globalStyles.primaryInputIcon}
             />
             <TextInput
-              style={{ marginLeft: 10 }}
+              style={globalStyles.primaryTextInput}
               placeholder={"Email"}
               placeholderTextColor={globalStyles.secondaryGrey}
-              onChangeText={(password) => setPassword(password)}
-              value={password}
+              onChangeText={(email) => setEmail(email)}
+              value={email}
             />
           </View>
           <View style={globalStyles.primaryInput}>
@@ -103,7 +136,8 @@ const CreateAccountView = () => {
               style={globalStyles.primaryInputIcon}
             />
             <TextInput
-              style={{ marginLeft: 10 }}
+              style={globalStyles.primaryTextInput}
+              secureTextEntry={true}
               placeholder={"Lösenord"}
               placeholderTextColor={globalStyles.secondaryGrey}
               onChangeText={(password) => setPassword(password)}
@@ -117,26 +151,25 @@ const CreateAccountView = () => {
               style={globalStyles.primaryInputIcon}
             />
             <TextInput
-              style={{ marginLeft: 10 }}
+              style={globalStyles.primaryTextInput}
+              secureTextEntry={true}
               placeholder={"Bekräfta lösenord"}
               placeholderTextColor={globalStyles.secondaryGrey}
-              onChangeText={(password) => setPassword(password)}
-              value={password}
+              onChangeText={(rePassword) => setRePassword(rePassword)}
+              value={rePassword}
             />
           </View>
         </View>
+        <Text style={globalStyles.dangerText}>{dangerText}</Text>
       </View>
       <View style={styles.botWrapper}>
         <TouchableOpacity
           style={globalStyles.primaryGreenBtn}
           onPress={createAccount}
         >
-          <Text style={globalStyles.primaryBtnText}>Logga in</Text>
+          <Text style={globalStyles.primaryBtnText}>Skapa konto</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={globalStyles.secondaryGreyBtn}
-          onPress={createAccount}
-        >
+        <TouchableOpacity style={globalStyles.secondaryGreyBtn} onPress={navigateBack}>
           <Text style={globalStyles.secondaryBtnText}>Avbryt</Text>
         </TouchableOpacity>
       </View>
@@ -158,7 +191,7 @@ const styles = StyleSheet.create({
   },
 
   midWrapper: {
-    flex: 8,
+    flex: 5,
   },
 
   botWrapper: {
@@ -174,6 +207,6 @@ const styles = StyleSheet.create({
   },
 
   textWrapper: {
-    paddingHorizontal: 18
-  }
+    paddingHorizontal: 18,
+  },
 });

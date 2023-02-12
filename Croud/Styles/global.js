@@ -22,6 +22,20 @@ export const globalStyles = StyleSheet.create({
         paddingHorizontal: 5
     },
 
+    primaryTextInput: {
+        height: "100%",
+        marginLeft: 10,
+        flex: 1,
+    },
+
+    dangerText: {
+        color:  "#20C997",
+        textAlign: "center",
+        fontFamily: "Manrope",
+        paddingHorizontal: 12,
+        fontSize: "14px",
+    },
+
     primaryTitle: {
         color:  "#263238",
         fontFamily: "Manrope",

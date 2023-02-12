@@ -5,6 +5,9 @@ import {
   TouchableOpacity,
   View,
   Image,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard
 } from "react-native";
 import React from "react";
 import { globalStyles } from "../Styles/global";
@@ -25,18 +28,18 @@ import {
 const LoginView = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [dangerText, setDangerText] = useState();
   const navigate = useNavigation();
+  const auth = getAuth();
 
   useEffect(() => {
-    const auth = getAuth();
     auth.onAuthStateChanged((authUser) => {
       if (authUser) {
         autoLogin(authUser);
-
-        //navigate.replace("UserContainer")
       }
     });
   }, [auth]);
+
 
   async function autoLogin(authUser) {
     //Om användare är kund
@@ -50,25 +53,25 @@ const LoginView = () => {
       });
     }
   }
+
   function createAccount() {
     navigate.navigate("CreateAccount");
   }
 
   async function login() {
+    if (!email || !password) {
+      return;
+    }
     const docRef = doc(database, "Organisations", email);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      //console.log("Document data:", docSnap.data());
+      console.log("Document data:", docSnap.data());
       if (password === docSnap.data().Password) {
         navigate.navigate("AdminContainer", {
           orgData: docSnap.data(),
         });
-      }
-    } else {
-      setPassword("");
-      // doc.data() will be undefined in this case
-      console.log("No such document!");
+      } 
     }
 
     const auth = getAuth();
@@ -79,9 +82,9 @@ const LoginView = () => {
         // ...
       })
       .catch((err) => {
-        console.log(err.code);
-        console.log(err.message);
+       // console.log(err.code);
       });
+
   }
 
   return (
@@ -111,11 +114,11 @@ const LoginView = () => {
               style={globalStyles.primaryInputIcon}
             />
             <TextInput
-              style={{ marginLeft: 10 }}
-              placeholder={"Namn"}
+              style={globalStyles.primaryTextInput}
+              placeholder={"Email"}
               placeholderTextColor={globalStyles.secondaryGrey}
-              onChangeText={(password) => setPassword(password)}
-              value={password}
+              onChangeText={(email) => setEmail(email)}
+              value={email}
             />
           </View>
           <View style={globalStyles.primaryInput}>
@@ -125,19 +128,23 @@ const LoginView = () => {
               style={globalStyles.primaryInputIcon}
             />
             <TextInput
-              style={{ marginLeft: 10 }}
+              style={globalStyles.primaryTextInput}
+              secureTextEntry={true}
               placeholder={"Lösenord"}
               placeholderTextColor={globalStyles.secondaryGrey}
               onChangeText={(password) => setPassword(password)}
               value={password}
             />
           </View>
+          <View>
+            <Text style={globalStyles.dangerText}>{dangerText}</Text>
+          </View>
           <View style={{width: "100%", alignItems: "flex-end", paddingHorizontal: 35}}>
           <Text style={globalStyles.darkerText}>Glömt lösenord?</Text>
           </View>
           <TouchableOpacity
           style={globalStyles.primaryGreenBtn}
-          onPress={createAccount}
+          onPress={login}
         >
           <Text style={globalStyles.primaryBtnText}>Logga in</Text>
         </TouchableOpacity>
@@ -166,7 +173,7 @@ const styles = StyleSheet.create({
   },
 
   textWrapper: {
-    marginTop: -80,
+    marginTop: -100,
     alignItems: "center",
   },
 
@@ -181,7 +188,7 @@ const styles = StyleSheet.create({
   },
 
   inputWrapper: {
-    marginTop: 40,
+    marginTop: 30,
     height: "60%",
     justifyContent: "space-around",
     alignItems: "center",
