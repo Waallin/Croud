@@ -2,6 +2,11 @@ import { StyleSheet } from "react-native";
 
 export const globalStyles = StyleSheet.create({
 
+    primaryContainer: {
+        flex: 1,
+        paddingHorizontal: 15
+    },
+    
     globalContainer: {
         fontFamily: 'manrope'
     },
@@ -14,7 +19,17 @@ export const globalStyles = StyleSheet.create({
         borderRadius: 10,
         paddingHorizontal: 12,
         paddingVertical: 8,
-        gap: 8
+    },
+
+    secondaryInput: {
+        backgroundColor: "#e8e8e8",  //"#ECEFF1",
+        flexDirection: "row",
+        alignItems: "center",
+        height: 48,
+        width: 160,
+        borderRadius: 10,
+        paddingHorizontal: 12,
+        paddingVertical: 8,
     },
 
     primaryInputIcon: {
@@ -52,6 +67,12 @@ export const globalStyles = StyleSheet.create({
         color:  "#263238",
         fontFamily: "Manrope",
         fontSize: "14px"
+    },
+
+    bigDarkText: {
+        color:  "#263238",
+        fontFamily: "Manrope",
+        fontSize: "20px"
     },
 
     primaryGreenBtn: {
