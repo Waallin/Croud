@@ -2,11 +2,12 @@ import { StyleSheet, View } from "react-native";
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useEffect, useState } from "react";
-
+import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
-
+import { globalStyles } from "../../Styles/global";
 import AdminHomeView from "./AdminHomeView";
 import ScanView from "./ScanView";
+import { Ionicons } from '@expo/vector-icons'; 
 import SettingsView from "./SettingsView";
 
 const AdminContainer = ({ route }) => {
@@ -25,10 +26,13 @@ const AdminContainer = ({ route }) => {
           options={{
             headerShown: false,
             tabBarShowLabel: false,
-            tabBarActiveBackgroundColor: "#0891B2",
-            tabBarIcon: ({ color, size }) => (
-              <AntDesign name="calendar" size={24} color="black" />
-            ),
+            tabBarIcon: ({ color, size, focused }) => (
+              <Ionicons 
+                name={focused ? "md-home" : "md-home-outline"}
+                size={24}
+                color={globalStyles.primaryGreen}
+              />
+            )
           }}
           name="Favoriter"
           children={() => <AdminHomeView orgData={orgData} route={route} />}
@@ -37,9 +41,12 @@ const AdminContainer = ({ route }) => {
           options={{
             headerShown: false,
             tabBarShowLabel: false,
-            tabBarActiveBackgroundColor: "#0891B2",
-            tabBarIcon: ({ color, size }) => (
-              <AntDesign name="scan1" size={24} color="black" />
+            tabBarIcon: ({ color, size, focused }) => (
+              <Ionicons
+                name="scan-outline"
+                size={focused ? 30 : 24}
+                color={globalStyles.primaryGreen}
+              />
             ),
           }}
           name="Skanna"
@@ -49,10 +56,13 @@ const AdminContainer = ({ route }) => {
           options={{
             headerShown: false,
             tabBarShowLabel: false,
-            tabBarActiveTintColor: "black",
-            tabBarActiveBackgroundColor: "#0891B2",
-            tabBarIcon: ({ color, size }) => (
-              <AntDesign name="setting" size={24} color="black" />
+            tabBarActiveTintColor: "red",
+            tabBarIcon: ({ color, size, focused }) => (
+              <Ionicons
+                name={focused ? "settings" : "settings-outline" } 
+                size={24}
+                color={globalStyles.primaryGreen}
+              />
             ),
           }}
           name="Inställningar"

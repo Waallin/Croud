@@ -2,9 +2,22 @@ import { StyleSheet } from "react-native";
 
 export const globalStyles = StyleSheet.create({
 
+    primaryContainer: {
+        flex: 1,
+        paddingHorizontal: 20,
+    },
+    
     globalContainer: {
         fontFamily: 'manrope'
     },
+
+    primaryTopWrapper: {
+        height: "10%",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+    },
+
     primaryInput: {
         backgroundColor: "#e8e8e8",  //"#ECEFF1",
         flexDirection: "row",
@@ -14,13 +27,25 @@ export const globalStyles = StyleSheet.create({
         borderRadius: 10,
         paddingHorizontal: 12,
         paddingVertical: 8,
-        gap: 8
+    },
+
+    secondaryInput: {
+        backgroundColor: "#e8e8e8",  //"#ECEFF1",
+        flexDirection: "row",
+        alignItems: "center",
+        height: 48,
+        width: 160,
+        borderRadius: 10,
+        paddingHorizontal: 12,
+        paddingVertical: 8,
     },
 
     primaryInputIcon: {
         color:  "#607D8B",
         paddingHorizontal: 5
     },
+
+
 
     primaryTextInput: {
         height: "100%",
@@ -54,12 +79,29 @@ export const globalStyles = StyleSheet.create({
         fontSize: "14px"
     },
 
+    bigDarkText: {
+        color:  "#263238",
+        fontFamily: "Manrope",
+        fontSize: "20px"
+    },
+
     primaryGreenBtn: {
         backgroundColor: "#20C997",
         height: 48,
         justifyContent: "center",
         alignItems: "center",
         width: 335,
+        borderRadius: 10,
+        paddingHorizontal: 13,
+    },
+
+
+    secondaryGreenBtn: {
+        backgroundColor: "#20C997",
+        height: 48,
+        justifyContent: "center",
+        alignItems: "center",
+        width: 150,
         borderRadius: 10,
         paddingHorizontal: 13,
     },
@@ -101,7 +143,7 @@ export const globalStyles = StyleSheet.create({
     secondaryGrey: "#78909C",
 
     lightGrey: "#ECEFF1",
-    primaryGreen: "#20C997",
+    primaryGreen: "#e8e8e8",
     
   });
   

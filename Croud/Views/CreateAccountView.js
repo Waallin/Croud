@@ -85,7 +85,7 @@ const CreateAccountView = () => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={globalStyles.primaryContainer}>
       <View style={styles.topWrapper}>
         <TouchableOpacity onPress={navigateBack}>
           <AntDesign name="left" size={20} color={globalStyles.primaryBlack} />
@@ -180,10 +180,7 @@ const CreateAccountView = () => {
 export default CreateAccountView;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 15,
-  },
+
 
   topWrapper: {
     flex: 1,
