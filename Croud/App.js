@@ -16,14 +16,15 @@ import StartGameView from "./Views/AdminViews/StartGameView";
 import { globalStyles } from "./Styles/global";
 import ActiveGameView from "./Views/AdminViews/ActiveGameView";
 import IngameView from "./Views/UserViews/IngameView";
-import { useFonts } from 'expo-font';
-import { AppLoading } from 'expo';
+import { useFonts } from "expo-font";
+import { AppLoading } from "expo";
+import NewPasswordView from "./Views/NewPasswordView";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
 
   let [fontsLoaded] = useFonts({
-    "Manrope" : require("././assets/fonts/Manrope-VariableFont_wght.ttf")
+    Manrope: require("././assets/fonts/Manrope-VariableFont_wght.ttf"),
   });
 
   //Ignore some errors
@@ -46,6 +47,13 @@ export default function App() {
           }}
           name="CreateAccount"
           component={CreateAccountView}
+        />
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="NewPassword"
+          component={NewPasswordView}
         />
         <Stack.Screen
           options={{
@@ -124,8 +132,7 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-
-    container: {
+  container: {
     flex: 1,
-    },
+  },
 });

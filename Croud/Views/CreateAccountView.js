@@ -86,7 +86,7 @@ const CreateAccountView = () => {
 
   return (
     <SafeAreaView style={globalStyles.primaryContainer}>
-      <View style={styles.topWrapper}>
+      <View style={globalStyles.primaryTopWrapper}>
         <TouchableOpacity onPress={navigateBack}>
           <AntDesign name="left" size={20} color={globalStyles.primaryBlack} />
         </TouchableOpacity>
@@ -181,11 +181,6 @@ export default CreateAccountView;
 
 const styles = StyleSheet.create({
 
-
-  topWrapper: {
-    flex: 1,
-    justifyContent: "center",
-  },
 
   midWrapper: {
     flex: 5,
