@@ -58,6 +58,11 @@ const LoginView = () => {
     navigate.navigate("CreateAccount");
   }
 
+  function newPassword() {
+    navigate.navigate("NewPassword");
+  }
+
+
   async function login() {
     if (!email || !password) {
       return;
@@ -140,7 +145,9 @@ const LoginView = () => {
             <Text style={globalStyles.dangerText}>{dangerText}</Text>
           </View>
           <View style={{width: "100%", alignItems: "flex-end", paddingHorizontal: 35}}>
-          <Text style={globalStyles.darkerText}>Glömt lösenord?</Text>
+            <TouchableOpacity onPress={newPassword}>
+            <Text style={globalStyles.darkerText}>Glömt lösenord?</Text>
+            </TouchableOpacity>
           </View>
           <TouchableOpacity
           style={globalStyles.primaryGreenBtn}
