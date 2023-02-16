@@ -27,7 +27,8 @@ import moment from "moment"; // 2.20.1
 import { uuidv4 } from "@firebase/util";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
-
+import WheelPicker from "react-native-wheely";
+import { Picker, DatePicker } from "react-native-wheel-pick";
 //firebase
 import { setDoc, doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { globalStyles } from "../../Styles/global";
@@ -44,12 +45,14 @@ const AdminHomeView = ({ orgData, route }) => {
   //Gather all info
   const [opponent, setOpponent] = useState();
   const [location, setLocation] = useState();
-  const [hour, setHour] = useState();
-  const [min, setMin] = useState();
+  const [hour, setHour] = useState("16");
+  const [min, setMin] = useState("30");
   const [day, setDay] = useState();
 
   const [showCalendar, setShowCalendar] = useState(false);
   const [showTime, setShowTime] = useState(true);
+
+  const [selectedTime, setSelectedTime] = useState(0);
 
   async function data() {
     console.log(route.params);
@@ -115,7 +118,7 @@ const AdminHomeView = ({ orgData, route }) => {
   }
 
   let bottomSheetModalRef = useRef(null);
-  const snapPoints = showCalendar || showTime ? ["85%"] : ["45"];
+  const snapPoints = showCalendar || showTime ? ["85%"] : ["80"];
   function handlePresentModal() {
     setShowCalendar(false);
     setShowTime(false);
@@ -126,15 +129,19 @@ const AdminHomeView = ({ orgData, route }) => {
   function closeModal() {
     bottomSheetModalRef.current?.close();
   }
+
   const format = "YYYY-MM-DD";
   const today = moment().format(format);
   function onDaySelect(day) {
+    setShowCalendar(!showCalendar);
+
     const datepicked = moment(day.dateString).format(format);
     setSelectedDay({ [datepicked]: { selected: true } });
     setDay(datepicked);
   }
 
   function showCalendarFunction() {
+    Keyboard.dismiss();
     showTime ? setShowTime(!showTime) : null;
     setShowCalendar(!showCalendar);
   }
@@ -144,9 +151,15 @@ const AdminHomeView = ({ orgData, route }) => {
     setShowTime(!showTime);
   }
 
+  function addTime() {
+    let time = hour + "." + min;
+    setSelectedTime(time)
+    setShowTime(!showTime)
+  }
+
   return (
     <SafeAreaView style={globalStyles.primaryContainer}>
-      <View style={styles.topWrapper}>
+      <View style={globalStyles.primaryTopWrapper}>
         <Text style={globalStyles.primaryTitle}>Evenemang</Text>
         <TouchableOpacity onPress={handlePresentModal}>
           <Ionicons
@@ -165,7 +178,7 @@ const AdminHomeView = ({ orgData, route }) => {
           {events.map((event) => {
             return (
               <EventComponent
-                key={event.id}
+                key={event.key}
                 event={event}
                 Opponent={event.Opponent}
                 Hometeam={event.Hometeam}
@@ -194,7 +207,6 @@ const AdminHomeView = ({ orgData, route }) => {
               <View style={styles.bMidWrapper}>
                 <View style={styles.inputWrapper}>
                   <Text style={globalStyles.darkerText}>Motståndare</Text>
-
                   <View style={globalStyles.primaryInput}>
                     <Ionicons
                       name="medal-outline"
@@ -204,6 +216,7 @@ const AdminHomeView = ({ orgData, route }) => {
                     <TextInput
                       style={globalStyles.primaryTextInput}
                       placeholderTextColor={globalStyles.secondaryGrey}
+                      onChangeText={(opponent) => setOpponent(opponent)}
                     />
                   </View>
                   <Text style={globalStyles.darkerText}>Plats</Text>
@@ -216,25 +229,32 @@ const AdminHomeView = ({ orgData, route }) => {
                     <TextInput
                       style={globalStyles.primaryTextInput}
                       placeholderTextColor={globalStyles.secondaryGrey}
+                      onChangeText={(location) => setLocation(location)}
                     />
                   </View>
                   <View style={styles.dayWrapper}>
                     <View>
                       <Text style={globalStyles.darkerText}>Plats</Text>
-                      <View style={globalStyles.secondaryInput}>
+                      <TouchableOpacity
+                        style={globalStyles.secondaryInput}
+                        onPress={showCalendarFunction}
+                      >
                         <AntDesign
                           name="calendar"
                           size={20}
                           style={globalStyles.primaryInputIcon}
                         />
-                        <TextInput
-                          style={globalStyles.primaryTextInput}
-                          placeholder={"Välj datum"}
-                          placeholderTextColor={globalStyles.secondaryGrey}
-                        />
-                      </View>
+                        <Text
+                          style={{
+                            ...globalStyles.primaryText,
+                            paddingHorizontal: 5,
+                          }}
+                        >
+                          {day ? day : "Välj dag"}
+                        </Text>
+                      </TouchableOpacity>
                     </View>
-                    <View>
+                    <TouchableOpacity onPress={showTimeFunction}>
                       <Text style={globalStyles.darkerText}>Plats</Text>
                       <View style={globalStyles.secondaryInput}>
                         <AntDesign
@@ -242,26 +262,98 @@ const AdminHomeView = ({ orgData, route }) => {
                           size={20}
                           style={globalStyles.primaryInputIcon}
                         />
-                        <TextInput
-                          style={globalStyles.primaryTextInput}
-                          placeholder={"Välj tid"}
-                          placeholderTextColor={globalStyles.secondaryGrey}
-                        />
+                        <Text
+                          style={{
+                            ...globalStyles.primaryText,
+                            paddingHorizontal: 5,
+                          }}
+                        >
+                          {selectedTime ? selectedTime : "Välj tid"}
+                        </Text>
                       </View>
-                    </View>
+                    </TouchableOpacity>
                   </View>
                 </View>
-                <TouchableOpacity style={globalStyles.primaryGreenBtn}>
-                <Text style={globalStyles.primaryBtnText}>Lägg till</Text>
-              </TouchableOpacity>
-              </View>
-              <View style={styles.bBotWrapper}>
                 {showCalendar ? (
-                  <Text style={styles.titleText}>kalender</Text>
-                ) : (
-                  ""
+                  <Calendar
+                    theme={{
+                      dotColor:  "#e8e8e8",
+                      selectedColor:  "#e8e8e8",
+                    }}
+                    // we use moment.js to give the minimum and maximum dates.
+                    minDate={today}
+                    onDayPress={onDaySelect}
+                    markedDates={selectedDay}
+                  />
+                ) : null}
+                {showTime ? (
+                  <View style={{alignItems: "center"}}>
+                    <View style={styles.timeWrapper}>
+                      <Picker
+                        style={{
+                          backgroundColor: "white",
+                          width: 100,
+                          height: 215,
+                        }}
+                        selectedValue={"16"}
+                        pickerData={[
+                          "06",
+                          "07",
+                          "08",
+                          "09",
+                          "10",
+                          "11",
+                          "12",
+                          "13",
+                          "14",
+                          "15",
+                          "16",
+                          "17",
+                          "18",
+                          "19",
+                          "20",
+                          "21",
+                          "22",
+                        ]}
+                        onValueChange={(value) => {setHour(value)}}
+                        itemSpace={30} // this only support in android
+                      />
+
+                      <Picker
+                        style={{
+                          backgroundColor: "white",
+                          width: 100,
+                          height: 215,
+                        }}
+                        selectedValue={"30"}
+                        pickerData={[
+                          "00",
+                          "05",
+                          "10",
+                          "15",
+                          "20",
+                          "25",
+                          "30",
+                          "35",
+                          "40",
+                          "45",
+                          "50",
+                          "55",
+                        ]}
+                        onValueChange={(value) => {setMin(value)}}
+                        itemSpace={30} // this only support in android
+                      />
+                    </View>
+                    <TouchableOpacity style={{...globalStyles.secondaryGreenBtn, marginTop: 20}} onPress={addTime}>
+                      <Text style={globalStyles.primaryBtnText}>Lägg till</Text>
+                    </TouchableOpacity>
+                  </View>
+                ) : null}
+                {showTime || showCalendar ? null : (
+                  <TouchableOpacity style={globalStyles.primaryGreenBtn} onPress={pushData}>
+                    <Text style={globalStyles.primaryBtnText}>Lägg till</Text>
+                  </TouchableOpacity>
                 )}
-                {showTime ? <Text style={styles.titleText}>tid</Text> : ""}
               </View>
             </View>
           </TouchableWithoutFeedback>
@@ -274,40 +366,53 @@ const AdminHomeView = ({ orgData, route }) => {
 export default AdminHomeView;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
 
-  topWrapper: {
-    height: "10%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
 
   bTopWrapper: {
     alignItems: "center",
     height: "10%",
-
   },
 
   inputWrapper: {
-    padding: 10
+    padding: 10,
   },
 
   bMidWrapper: {
     alignItems: "center",
-    height: "90%",
-    justifyContent: "space-around"
+    marginTop: 0,
+    height: "85%",
+    justifyContent: "space-around",
   },
 
   dayWrapper: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
+
+  timeWrapper: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
 });
 
 /*
+                        "06",
+                        "07",
+                        "08",
+                        "09",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
+                        "14",
+                        "15",
+                        "16",
+                        "17",
+                        "18",
+                        "19",
+                        "20",
+                        "21",
+                        "22",
 
       <View style={styles.topWrapper}>
         <Text style={globalStyles.primaryTitle}>Evenemang</Text>
