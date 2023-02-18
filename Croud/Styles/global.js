@@ -11,13 +11,6 @@ export const globalStyles = StyleSheet.create({
         fontFamily: 'manrope'
     },
 
-    primaryTopWrapper: {
-        height: "10%",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-    },
-
     primaryInput: {
         backgroundColor: "#e8e8e8",  //"#ECEFF1",
         flexDirection: "row",
@@ -27,6 +20,13 @@ export const globalStyles = StyleSheet.create({
         borderRadius: 10,
         paddingHorizontal: 12,
         paddingVertical: 8,
+    },
+
+    primaryTopWrapper: {
+        height: "10%",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
     },
 
     secondaryInput: {
@@ -44,8 +44,6 @@ export const globalStyles = StyleSheet.create({
         color:  "#607D8B",
         paddingHorizontal: 5
     },
-
-
 
     primaryTextInput: {
         height: "100%",
@@ -141,9 +139,9 @@ export const globalStyles = StyleSheet.create({
     primaryBlack: "#263238",
     primaryGrey: "#607D8B",
     secondaryGrey: "#78909C",
-
+    inputGrey: "#e8e8e8",
     lightGrey: "#ECEFF1",
-    primaryGreen: "#e8e8e8",
+    primaryGreen: "#20C997",
     
   });
   

@@ -3,6 +3,7 @@ import {
   Text,
   RefreshControl,
   ScrollView,
+  View
 } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -13,7 +14,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import FavouritesComponent from "./UserComponents/FavouritesComponent";
 import OrgComponent from "./UserComponents/OrgComponent";
-
+import { globalStyles } from "../../Styles/global";
 const FavouritesView = ({ userData }) => {
   const [favTeams, setFavTeams] = useState([]);
   //Update db when scroll down
@@ -27,7 +28,6 @@ const FavouritesView = ({ userData }) => {
 
   //get all favteams and putting them in state 'favTeams'
   async function getData() {
-    console.log(userData)
     const docRef = doc(database, "Users", userData.userData.Email);
     const docSnap = await getDoc(docRef);
 
@@ -44,24 +44,26 @@ const FavouritesView = ({ userData }) => {
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
+      console.log(favTeams)
       setRefreshing(false);
       getData();
     }, 2000);
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <TouchableOpacity>
-        <Text style={styles.title}>Favoriter</Text>
-      </TouchableOpacity>
+    <SafeAreaView edges={['top']} style={globalStyles.primaryContainer}>
+      <View style={globalStyles.primaryTopWrapper}>
+        <Text style={globalStyles.primaryTitle}>
+          Favoriter
+        </Text>
+      </View>
       <ScrollView
-        style={styles.botWrapper}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
         {favTeams.map((team) => {
-          return <OrgComponent key={team} Name={team} />;
+          return <OrgComponent key={team} Name={team}/>;
         })}
       </ScrollView>
     </SafeAreaView>
@@ -74,10 +76,4 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-
-  title: {
-    fontSize: "52px",
-    fontWeight: "700",
-  },
-
 });

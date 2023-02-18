@@ -1,15 +1,11 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-} from "react-native";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import OrgComponent from "./UserComponents/OrgComponent";
 import { database } from "../../Firebase/firebase";
 import { collection, query, getDocs } from "firebase/firestore";
 import SearchbarComponent from "./UserComponents/SearchbarComponent";
+import { globalStyles } from "../../Styles/global";
 
 const SearchView = ({ userData, activeTab }) => {
   const [orgs, setOrgs] = useState([]);
@@ -39,18 +35,16 @@ const SearchView = ({ userData, activeTab }) => {
     setFilteredOrgs(x);
   }
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.topWrapper}>
-        <Text style={styles.title}>Sök</Text>
+    <SafeAreaView edges={["top"]} style={globalStyles.primaryContainer}>
+      <View style={globalStyles.primaryTopWrapper}>
+        <Text style={globalStyles.primaryTitle}>Sök</Text>
       </View>
-      <View>
-        <SearchbarComponent
-          orgs={orgs}
-          setOrgs={setOrgs}
-          setFilteredOrgs={setFilteredOrgs}
-        />
-      </View>
-      <ScrollView style={styles.botWrapper}>
+      <SearchbarComponent
+        orgs={orgs}
+        setOrgs={setOrgs}
+        setFilteredOrgs={setFilteredOrgs}
+      />
+      <ScrollView>
         {filteredOrgs.map((org) => {
           return (
             <OrgComponent
@@ -66,32 +60,6 @@ const SearchView = ({ userData, activeTab }) => {
     </SafeAreaView>
   );
 };
-
 export default SearchView;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  topWrapper: {
-    flex: 0.15,
-    borderBottomWidth: 1,
-    display: "flex",
-    flexDirection: "row",
-    borderBottomColor: "lightgrey",
-    paddingLeft: 20,
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-
-  title: {
-    fontSize: "40px",
-    paddingBottom: 15,
-    fontWeight: "700",
-  },
-
-  botWrapper: {
-    marginTop: 5,
-    flex: 1,
-  },
-});
+const styles = StyleSheet.create({});

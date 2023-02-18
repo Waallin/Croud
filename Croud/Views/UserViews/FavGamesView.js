@@ -15,6 +15,7 @@ import {
 } from "firebase/firestore";
 import GamesComponent from "./UserComponents/GamesComponent";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { globalStyles } from "../../Styles/global";
 
 const FavGamesView = (route) => {
   const [games, setGames] = useState([]);
@@ -81,9 +82,8 @@ const FavGamesView = (route) => {
     });
   }
   return (
-    <View style={styles.container}>
+    <View style={globalStyles.primaryContainer}>
       <ScrollView
-        style={styles.gamesContainer}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
@@ -111,9 +111,4 @@ const FavGamesView = (route) => {
 export default FavGamesView;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "lightgrey",
-    marginTop: 3,
-  },
 });

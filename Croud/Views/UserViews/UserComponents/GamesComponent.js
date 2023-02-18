@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
-
+import { globalStyles } from "../../../Styles/global";
 const GamesComponent = ({
   opponent,
   time,
@@ -21,16 +21,14 @@ const GamesComponent = ({
   }
 
   return (
-    <TouchableOpacity style={active ? styles.activeContainer : styles.container}  onPress={active ? goToTicketView : () => {}}>
-      <View style={styles.leftInfo}>
-        <Text style={styles.teams}>
-          {hometeam} - {opponent}
-        </Text>
-        <Text>{location}</Text>
+    <TouchableOpacity style={styles.wrapper}>
+      <View style={styles.leftWrapper}>
+        <Text style={styles.opponenText}>{hometeam} - {opponent}</Text>
+        <Text style={styles.placeText}>{location}</Text>
       </View>
-      <View style={styles.rightInfo}>
-        <Text>{day}</Text>
-        <Text>{time}</Text>
+      <View style={styles.rightWrapper}>
+        <Text style={globalStyles.darkerText}>{day}</Text>
+        <Text style={globalStyles.darkerText}>{time}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -39,34 +37,27 @@ const GamesComponent = ({
 export default GamesComponent;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 15,
+  wrapper: {
+    marginTop: 10,
     flexDirection: "row",
-    alignItems: "center",
     justifyContent: "space-between",
-    height: 100,
-    backgroundColor: "white",
-    marginBottom: 5,
+  },
+  
+  opponenText: {
+    fontFamily: "Manrope",
+    fontSize: "20px",
+    paddingVertical: 3
   },
 
-  activeContainer: {
-    flex: 1,
-    padding: 15,
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "lightgreen",
-    justifyContent: "space-between",
-    height: 100,
-    marginBottom: 5,
+  placeText: {
+    fontFamily: "Manrope",
+    fontSize: "14px",
+    paddingVertical: 3
   },
 
-  teams: {
-    fontSize: "15px",
-    fontWeight: "700",
-  },
-  rightInfo: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
+  rightWrapper: {
+    alignItems: "flex-end",
+    justifyContent: "center"
+  }
+
 });
