@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
+import { globalStyles } from "../../../Styles/global";
 const OrgComponent = ({ Name, Sport, org, userData, date }) => {
   const navigate = useNavigation();
 
@@ -13,15 +14,13 @@ const OrgComponent = ({ Name, Sport, org, userData, date }) => {
   }
 
   return (
-    <TouchableOpacity style={styles.container} onPress={goToTeamView}>
-      <View style={styles.text}>
-        <Text style={styles.title}>{Name}</Text>
-        <Text style={styles.extraInfo}>{Sport}</Text>
+    <TouchableOpacity style={styles.wrapper}>
+      <View style={styles.leftWrapper}>
+        <Text style={styles.opponenText}>{Name}</Text>
+        <Text style={styles.placeText}>{Sport}</Text>
       </View>
-      <View>
-        <Text>
-          {date}
-        </Text>
+      <View style={styles.rightWrapper}>
+        <Text style={globalStyles.darkerText}>{date}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -30,34 +29,26 @@ const OrgComponent = ({ Name, Sport, org, userData, date }) => {
 export default OrgComponent;
 
 const styles = StyleSheet.create({
-  container: {
-    display: "flex",
+  wrapper: {
+    marginTop: 10,
     flexDirection: "row",
     justifyContent: "space-between",
-    padding: 20,
-    borderBottomWidth: 0.3,
-    borderBottomColor: "#b1b1b1",
-    alignItems: "center",
-    backgroundColor: "white"
   },
-
-  text: {
-    flex: 5,
-  },
-
-  title: {
-    fontWeight: "700",
+  
+  opponenText: {
+    fontFamily: "Manrope",
     fontSize: "20px",
+    paddingVertical: 3
   },
 
-  extraInfo: {
-    color: "grey",
-    paddingTop: 5,
-    fontSize: "15px",
-    fontWeight: "500",
+  placeText: {
+    fontFamily: "Manrope",
+    fontSize: "14px",
+    paddingVertical: 3
   },
 
-  like: {
-    marginRight: 15,
-  },
+  rightWrapper: {
+    alignItems: "flex-end",
+    justifyContent: "center"
+  }
 });

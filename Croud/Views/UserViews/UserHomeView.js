@@ -19,28 +19,41 @@ import * as Location from "expo-location";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import FavGamesView from "./FavGamesView";
 import NearbyGamesView from "./NearbyGamesView";
+import { globalStyles } from "../../Styles/global";
+import { color, withDecay } from "react-native-reanimated";
 
 const UserHomeView = ({ userData, location }) => {
-
   const Tab = createMaterialTopTabNavigator();
 
 
+
   return (
-    <SafeAreaView edges={['top']} style={styles.container}>
-      <Tab.Navigator>
-      <Tab.Screen
-          options={{
-            tabBarActiveBackgroundColor: "#0891B2",
-          }}
+    <SafeAreaView edges={["top"]} style={globalStyles.primaryContainer}>
+      <View style={globalStyles.primaryTopWrapper}>
+        <Text style={globalStyles.primaryTitle}>Evenemang</Text>
+      </View>
+      <Tab.Navigator
+        screenOptions={{
+          tabBarActiveTintColor: globalStyles.primaryBlack,
+          tabBarInactiveTintColor: globalStyles.primaryGreen,
+          tabBarStyle: { backgroundColor: 'rgba(1,1,1, 0)', borderColor: "green", width: "70%" },
+        }}
+        tabBarStyle={{
+          backgroundColor: 'transparent',
+        }}
+      >
+        <Tab.Screen
           name="Favoriter"
           children={() => <FavGamesView userData={userData} />}
         />
-      <Tab.Screen
+        <Tab.Screen
           options={{
             tabBarActiveBackgroundColor: "#0891B2",
           }}
           name="Närheten"
-          children={() => <NearbyGamesView userData={userData} location={location} />}
+          children={() => (
+            <NearbyGamesView userData={userData} location={location} />
+          )}
         />
       </Tab.Navigator>
     </SafeAreaView>
@@ -49,8 +62,4 @@ const UserHomeView = ({ userData, location }) => {
 
 export default UserHomeView;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  }
-});
+const styles = StyleSheet.create({});

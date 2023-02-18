@@ -19,6 +19,7 @@ import {
   getDocs,
   getDoc,
 } from "firebase/firestore";
+import { globalStyles } from "../../Styles/global";
 
 const NearbyGamesView = (route) => {
   const currentDate = new Date();
@@ -127,7 +128,7 @@ const NearbyGamesView = (route) => {
     }
   }
   return (
-    <View style={styles.container}>
+    <View style={globalStyles.primaryContainer}>
       {isLoading ? (
         <View style={styles.loadingIcon}>
           <Text style={styles.waitText}>Vänta lite medans vi hämtar din plats</Text>

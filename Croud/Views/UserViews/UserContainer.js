@@ -10,6 +10,8 @@ import UserSettingsView from "./UserSettingsView";
 import { Feather } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import { useState, useEffect } from "react";
+import { globalStyles } from "../../Styles/global";
+import { Ionicons } from "@expo/vector-icons";
 const UserContainer = ({ route }) => {
   const Tab = createBottomTabNavigator();
 
@@ -18,43 +20,49 @@ const UserContainer = ({ route }) => {
 
   useEffect(() => {
     const getPermissions = async () => {
-      
       let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
         return;
-    }
+      }
       let currentLocation = await Location.getCurrentPositionAsync({});
       setLocation(currentLocation);
-      console.log(currentLocation)
-  };
-  getPermissions();
+      console.log(currentLocation);
+    };
+    getPermissions();
   }, []);
 
   return (
     <View style={styles.container}>
-      <Tab.Navigator
-            initialRouteName="Hemskärm">
+      <Tab.Navigator initialRouteName="Hemskärm">
         <Tab.Screen
           options={{
             headerShown: false,
             tabBarShowLabel: false,
-            tabBarActiveBackgroundColor: "#0891B2",
-            tabBarIcon: ({ color, size }) => (
-              <AntDesign name="home" size={24} color="black" />
+            tabBarIcon: ({ color, size, focused }) => (
+              <Ionicons
+                name={focused ? "md-home" : "md-home-outline"}
+                size={24}
+                color={globalStyles.primaryGreen}
+              />
             ),
           }}
           name="Hemskärm"
-          children={() => <UserHomeView userData={route.params} location={location} />}
+          children={() => (
+            <UserHomeView userData={route.params} location={location} />
+          )}
         />
         <Tab.Screen
           options={{
             headerShown: false,
             tabBarShowLabel: false,
-            tabBarActiveBackgroundColor: "#0891B2",
-            tabBarIcon: ({ color, size }) => (
-              <AntDesign name="search1" size={24} color="black" />
-            ),
+            tabBarIcon: ({ color, size, focused }) => (
+              <Ionicons 
+                name={focused ? "search-sharp" : "search-outline"}
+                size={24}
+                color={globalStyles.primaryGreen}
+              />
+            )
           }}
           name="Sök förening"
           children={() => <SearchView userData={route.params} />}
@@ -63,9 +71,13 @@ const UserContainer = ({ route }) => {
           options={{
             headerShown: false,
             tabBarShowLabel: false,
-            tabBarActiveBackgroundColor: "#0891B2",
-            tabBarIcon: ({ color, size }) => (
-              <MaterialIcons name="favorite-outline" size={24} color="black" />
+            tabBarActiveTintColor: "red",
+            tabBarIcon: ({ color, size, focused }) => (
+              <Ionicons
+                name={focused ? "heart-sharp" : "heart-outline" } 
+                size={24}
+                color={globalStyles.primaryGreen}
+              />
             ),
           }}
           name="Favoriter"
@@ -75,9 +87,13 @@ const UserContainer = ({ route }) => {
           options={{
             headerShown: false,
             tabBarShowLabel: false,
-            tabBarActiveBackgroundColor: "#0891B2",
-            tabBarIcon: ({ color, size }) => (
-              <Feather name="settings" size={24} color="black" />
+            tabBarActiveTintColor: "red",
+            tabBarIcon: ({ color, size, focused }) => (
+              <Ionicons
+                name={focused ? "settings" : "settings-outline" } 
+                size={24}
+                color={globalStyles.primaryGreen}
+              />
             ),
           }}
           name="Iställningar"
