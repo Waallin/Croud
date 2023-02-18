@@ -8,13 +8,13 @@ const OrgComponent = ({ Name, Sport, org, userData, date }) => {
 
   function goToTeamView() {
     navigate.navigate("TeamView", {
-      org: org,
+      org: Name,
       userData: userData,
     });
   }
 
   return (
-    <TouchableOpacity style={styles.wrapper}>
+    <TouchableOpacity style={styles.wrapper} onPress={goToTeamView}>
       <View style={styles.leftWrapper}>
         <Text style={styles.opponenText}>{Name}</Text>
         <Text style={styles.placeText}>{Sport}</Text>

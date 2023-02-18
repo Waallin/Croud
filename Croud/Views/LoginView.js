@@ -32,6 +32,8 @@ const LoginView = () => {
   const navigate = useNavigation();
   const auth = getAuth();
 
+  const [splashScreen, setSplashScreen] = useState(false);
+
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
       if (authUser) {
@@ -201,4 +203,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "column",
   },
+
+  splashScreen: {
+    flex: 1,
+    zIndex: 999,
+    backgroundColor: "green",
+    position: "absolute",
+    height: "100%",
+   width: "100%"
+  }
 });
