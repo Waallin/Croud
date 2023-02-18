@@ -63,7 +63,7 @@ const FavouritesView = ({ userData }) => {
         }
       >
         {favTeams.map((team) => {
-          return <OrgComponent key={team} Name={team}/>;
+          return <OrgComponent key={team} Name={team} userData={userData}/>;
         })}
       </ScrollView>
     </SafeAreaView>

@@ -18,6 +18,7 @@ import {
   getDoc,
 } from "firebase/firestore";
 import GamesComponent from "./UserComponents/GamesComponent";
+import { globalStyles } from "../../Styles/global";
 
 const TeamView = ({ route }) => {
   const [games, setGames] = useState([]);
@@ -26,8 +27,11 @@ const TeamView = ({ route }) => {
   const [favOrNot, setFavOrNot] = useState(false);
   const [userInfo, setUserInfo] = useState([]);
 
+  const userData = route.params.userData;
+  const org = route.params.org;
   useEffect(() => {
-    updateUser();
+    console.log(org)
+    //updateUser();
     getGames(userInfo);
   }, [route.params]);
 
@@ -55,7 +59,7 @@ const TeamView = ({ route }) => {
   async function getGames() {
     const q = query(
       collection(database, "Games"),
-      where("Hometeam", "==", route.params.org.Name)
+      where("Hometeam", "==", org)
     );
     const querySnapshot = await getDocs(q);
     let x = [];
@@ -82,6 +86,7 @@ const TeamView = ({ route }) => {
     setGames(dateFilter);
   }
 
+/*
   //add to favourite or remove if we click again
   async function addOrg() {
     if (userInfo != null && userInfo.Favourites.includes(route.params.org.Name)) {
@@ -100,8 +105,43 @@ const TeamView = ({ route }) => {
       setFavOrNot(false);
     }
   }
+  */
 
   return (
+    <SafeAreaView style={globalStyles.primaryContainer}>
+      <View style={globalStyles.primaryTopWrapper}>
+        <Text style={globalStyles.primaryTitle}>{org}</Text>
+      </View>
+      <ScrollView style={styles.botWrapper}>
+        {games.map((game) => {
+          return (
+            <GamesComponent
+              key={game.id}
+              active={game.active}
+              text={game.text}
+              hometeam={game.hometeam}
+              opponent={game.opponent}
+              day={game.day}
+              time={game.time}
+              location={game.location}
+            />
+          );
+        })}
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+export default TeamView;
+
+const styles = StyleSheet.create({
+
+});
+
+
+
+/*
+
     <SafeAreaView style={styles.container}>
       <View style={styles.topWrapper}>
         <Text style={styles.title}>{route.params.org.Name}</Text>
@@ -133,33 +173,5 @@ const TeamView = ({ route }) => {
         })}
       </ScrollView>
     </SafeAreaView>
-  );
-};
 
-export default TeamView;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-
-  topWrapper: {
-    height: 100,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 20,
-    alignItems: "center",
-  },
-
-  title: {
-    fontSize: "32px",
-    fontWeight: "700",
-  },
-
-  cominggamestext: {
-    width: "100%",
-    textAlign: "center",
-    fontSize: "23px",
-    fontWeight: "600",
-  },
-});
+    */
