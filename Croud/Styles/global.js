@@ -1,3 +1,4 @@
+import { Manrope_700Bold } from "@expo-google-fonts/manrope";
 import { StyleSheet } from "react-native";
 
 export const globalStyles = StyleSheet.create({
@@ -8,7 +9,7 @@ export const globalStyles = StyleSheet.create({
     },
     
     globalContainer: {
-        fontFamily: 'manrope'
+        fontFamily: 'Manrope_500Medium'
     },
 
     primaryInput: {
@@ -54,32 +55,32 @@ export const globalStyles = StyleSheet.create({
     dangerText: {
         color:  "#20C997",
         textAlign: "center",
-        fontFamily: "Manrope",
+        fontFamily: "Manrope_500Medium",
         paddingHorizontal: 12,
         fontSize: "14px",
     },
 
     primaryTitle: {
         color:  "#263238",
-        fontFamily: "Manrope",
+        fontFamily: "Manrope_700Bold",
         fontSize: "24px"
     },
 
     primaryText: {
         color:  "#607D8B",
-        fontFamily: "Manrope",
+        fontFamily: "Manrope_500Medium",
         fontSize: "14px"
     },
 
     darkerText: {
         color:  "#263238",
-        fontFamily: "Manrope",
+        fontFamily: "Manrope_600SemiBold",
         fontSize: "14px"
     },
 
     bigDarkText: {
         color:  "#263238",
-        fontFamily: "Manrope",
+        fontFamily: "Manrope_500Medium",
         fontSize: "20px"
     },
 
@@ -120,7 +121,7 @@ export const globalStyles = StyleSheet.create({
         fontSize: "16px",
         fontWeight: "600",
         lineHeight: "21.86px",
-        fontFamily: 'Manrope',
+        fontFamily: 'Manrope_600SemiBold',
     },
 
     secondaryBtnText: {
@@ -128,7 +129,7 @@ export const globalStyles = StyleSheet.create({
         fontSize: "16px",
         fontWeight: "600",
         lineHeight: "21.86px",
-        fontFamily: 'Manrope',
+        fontFamily: 'Manrope_600SemiBold',
     },
 
 

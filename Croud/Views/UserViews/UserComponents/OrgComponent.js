@@ -16,7 +16,7 @@ const OrgComponent = ({ Name, Sport, org, userData, date }) => {
   return (
     <TouchableOpacity style={styles.wrapper} onPress={goToTeamView}>
       <View style={styles.leftWrapper}>
-        <Text style={styles.opponenText}>{Name}</Text>
+        <Text style={styles.nameText}>{Name}</Text>
         <Text style={styles.placeText}>{Sport}</Text>
       </View>
       <View style={styles.rightWrapper}>
@@ -35,14 +35,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   
-  opponenText: {
-    fontFamily: "Manrope",
+  nameText: {
+    fontFamily: "Manrope_600SemiBold",
     fontSize: "20px",
     paddingVertical: 3
   },
 
   placeText: {
-    fontFamily: "Manrope",
+    fontFamily: "Manrope_500Medium",
     fontSize: "14px",
     paddingVertical: 3
   },

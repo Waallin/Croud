@@ -45,13 +45,13 @@ const styles = StyleSheet.create({
   },
   
   opponenText: {
-    fontFamily: "Manrope",
+    fontFamily: "Manrope_500Medium",
     fontSize: "20px",
     paddingVertical: 3
   },
 
   placeText: {
-    fontFamily: "Manrope",
+    fontFamily: "Manrope_500Medium",
     fontSize: "14px",
     paddingVertical: 3
   },
