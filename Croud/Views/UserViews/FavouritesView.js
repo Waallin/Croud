@@ -16,6 +16,7 @@ import FavouritesComponent from "./UserComponents/FavouritesComponent";
 import OrgComponent from "./UserComponents/OrgComponent";
 import { globalStyles } from "../../Styles/global";
 const FavouritesView = ({ userData }) => {
+
   const [favTeams, setFavTeams] = useState([]);
   //Update db when scroll down
   const [refreshing, setRefreshing] = React.useState(false);
@@ -54,7 +55,7 @@ const FavouritesView = ({ userData }) => {
     <SafeAreaView edges={['top']} style={globalStyles.primaryContainer}>
       <View style={globalStyles.primaryTopWrapper}>
         <Text style={globalStyles.primaryTitle}>
-          Favoriter
+          <Text>hej</Text>
         </Text>
       </View>
       <ScrollView

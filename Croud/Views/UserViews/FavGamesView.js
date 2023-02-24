@@ -84,6 +84,7 @@ const FavGamesView = (route) => {
   return (
     <View style={globalStyles.primaryContainer}>
       <ScrollView
+      showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
