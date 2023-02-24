@@ -24,9 +24,11 @@ import {
   signInWithEmailAndPassword,
   getAuth,
 } from "firebase/auth";
+import SplashScreen from "./SplashScreen";
 
 const LoginView = () => {
   const [email, setEmail] = useState();
+  const [isReady, setReady] = useState(false);
   const [password, setPassword] = useState();
   const [dangerText, setDangerText] = useState();
   const navigate = useNavigation();
