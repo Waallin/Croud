@@ -18,7 +18,9 @@ const UserContainer = ({ route }) => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
 
+  
   useEffect(() => {
+
     const getPermissions = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
@@ -34,6 +36,7 @@ const UserContainer = ({ route }) => {
 
   return (
     <View style={styles.container}>
+      
       <Tab.Navigator initialRouteName="Hemskärm">
         <Tab.Screen
           options={{

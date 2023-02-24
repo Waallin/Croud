@@ -23,6 +23,7 @@ import { Asset } from "expo-asset";
 import AppLoading from "expo-app-loading";
 import { useEffect, useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
+import SplashScreen from "./Views/SplashScreen";
 export default function App() {
   const [isReady, setReady] = useState(false);
 
@@ -47,12 +48,7 @@ export default function App() {
   return (
     <>
       {!isReady ? (
-                <View style={styles.splashScreen}>
-                <Image
-                style={styles.tinyLogo}
-                source={require('./assets/croud.png')}
-              />
-                </View>
+        <SplashScreen />
       ) : (
         null
       )}
@@ -163,21 +159,5 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-
-  splashScreen: {
-    borderWidth: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 99,
-    position: "absolute",
-    backgroundColor: "#F8F8F8",
-    height: "100%",
-    width: "100%",
-  },
-
-  tinyLogo: {
-    width: 400,
-    height: 400,
   },
 });

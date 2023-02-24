@@ -23,7 +23,7 @@ const GamesComponent = ({
   return (
     <TouchableOpacity style={styles.wrapper}>
       <View style={styles.leftWrapper}>
-        <Text style={styles.opponenText}>{hometeam} - {opponent}</Text>
+        <Text style={styles.teamText}>{hometeam} - {opponent}</Text>
         <Text style={styles.placeText}>{location}</Text>
       </View>
       <View style={styles.rightWrapper}>
@@ -43,9 +43,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   
-  opponenText: {
+  teamText: {
     fontFamily: "Manrope_600SemiBold",
-    fontSize: "20px",
+    fontSize: "16px",
     paddingVertical: 3
   },
 

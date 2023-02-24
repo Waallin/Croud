@@ -19,7 +19,8 @@ import {
 } from "firebase/firestore";
 import GamesComponent from "./UserComponents/GamesComponent";
 import { globalStyles } from "../../Styles/global";
-
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 const TeamView = ({ route }) => {
   const [games, setGames] = useState([]);
 
@@ -27,28 +28,23 @@ const TeamView = ({ route }) => {
   const [favOrNot, setFavOrNot] = useState(false);
   const [userInfo, setUserInfo] = useState([]);
 
+  const navigate = useNavigation();
+
   const userData = route.params.userData;
   const org = route.params.org;
   useEffect(() => {
-    console.log(org)
-    //updateUser();
+    console.log(org);
+    updateUser();
     getGames(userInfo);
   }, [route.params]);
 
   async function updateUser() {
-    const docRef = doc(
-      database,
-      "Users",
-      route.params.userData.userData.Email
-    );
+    const docRef = doc(database, "Users", userData.userData.Email);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
       setUserInfo(docSnap.data());
-      if (
-        docSnap.data() &&
-        docSnap.data().Favourites.includes(route.params.org.Name)
-      ) {
+      if (docSnap.data() && docSnap.data().Favourites.includes(org)) {
         setFavOrNot(true);
       } else {
         setFavOrNot(false);
@@ -82,35 +78,48 @@ const TeamView = ({ route }) => {
     let dateFilter = x.sort(function (a, b) {
       return new Date(a.day) - new Date(b.day);
     });
-    console.log(dateFilter)
+    console.log(dateFilter);
     setGames(dateFilter);
   }
 
-/*
+  function navigateBack() {
+    navigate.goBack();
+  }
+
   //add to favourite or remove if we click again
   async function addOrg() {
-    if (userInfo != null && userInfo.Favourites.includes(route.params.org.Name)) {
-    }
+    console.log(userData.userData.Email);
     if (favOrNot == false) {
-      const ref = doc(database, "Users", route.params.userData.userData.Email);
+      console.log(org);
+      const ref = doc(database, "Users", userData.userData.Email);
       await updateDoc(ref, {
-        Favourites: arrayUnion(route.params.org.Name),
+        Favourites: arrayUnion(org),
       });
       setFavOrNot(true);
     } else {
-      const ref = doc(database, "Users", route.params.userData.userData.Email);
+      console.log("test");
+      const ref = doc(database, "Users", userData.userData.Email);
       await updateDoc(ref, {
-        Favourites: arrayRemove(route.params.org.Name),
+        Favourites: arrayRemove(org),
       });
       setFavOrNot(false);
     }
   }
-  */
 
   return (
     <SafeAreaView style={globalStyles.primaryContainer}>
       <View style={globalStyles.primaryTopWrapper}>
+        <TouchableOpacity onPress={navigateBack}>
+          <AntDesign name="left" size={20} color={globalStyles.primaryBlack} />
+        </TouchableOpacity>
         <Text style={globalStyles.primaryTitle}>{org}</Text>
+        <TouchableOpacity onPress={addOrg}>
+          <Ionicons
+            name={favOrNot ? "heart" : "heart-outline"}
+            size={32}
+            color={globalStyles.primaryGreen}
+          />
+        </TouchableOpacity>
       </View>
       <ScrollView style={styles.botWrapper}>
         {games.map((game) => {
@@ -134,11 +143,7 @@ const TeamView = ({ route }) => {
 
 export default TeamView;
 
-const styles = StyleSheet.create({
-
-});
-
-
+const styles = StyleSheet.create({});
 
 /*
 
