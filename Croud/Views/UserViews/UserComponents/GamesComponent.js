@@ -41,11 +41,11 @@ const GamesComponent = ({
         <Text style={styles.teamText}>
           {hometeam} - {opponent}
         </Text>
-        <Text style={styles.placeText}>{location}</Text>
+        <Text style={globalStyles.primaryText}>{location}</Text>
       </View>
       <View style={styles.rightWrapper}>
-        <Text style={globalStyles.darkerText}>{dayText(day)}</Text>
-        <Text style={globalStyles.darkerText}>{time}</Text>
+        <Text style={globalStyles.primaryText}>{dayText(day)}</Text>
+        <Text style={globalStyles.primaryText}>{time}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -58,6 +58,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexDirection: "row",
     justifyContent: "space-between",
+    backgroundColor: "white",
+    padding: 20,
+    shadowColor: '#171717',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.4,
+    shadowRadius: 2,
+    borderRadius: 10
   },
 
   teamText: {

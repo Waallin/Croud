@@ -28,8 +28,21 @@ const FavGamesView = (route) => {
     getGames();
   }, [database]);
 
+
+
   //Update db when scroll down
   const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    getGames();
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
+
+
   async function getGames() {
     setGames([]);
     let favs = "";
@@ -43,17 +56,12 @@ const FavGamesView = (route) => {
       console.log("No such document!");
     }
 
-    favs.forEach((team) => {
-      data(team);
-    });
+    //sorterar bort gamla matcher och sorterar in allt i datumordning. mvh ChatGPT 
+    const allGames = await Promise.all(favs.map(data));
+    const games = allGames.flat();
+    games.sort((a, b) => new Date(a.day) - new Date(b.day));
+    setGames(games);
   }
-
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
-  }, []);
 
   async function data(team) {
     let x = []
@@ -62,6 +70,8 @@ const FavGamesView = (route) => {
       where("Hometeam", "==", team)
     );
     const querySnapshot = await getDocs(q);
+
+    const games = [];
     querySnapshot.forEach((doc) => {
       let obj = {
         id: doc.id,
@@ -76,16 +86,10 @@ const FavGamesView = (route) => {
         location: doc.data().Location,
         sport: doc.data().sport,
       };
-
-      //sorterar bort gamla matcher och sorterar in allt i datumordning. mvh ChatGPT 
       obj.day >= today ? x.push(obj) : null;
-      setGames(oldGames => {
-        const newGames = [...oldGames, obj];
-        newGames.sort((a, b) => a.day - b.day);
-        return newGames;
-      });
+      games.push(obj);
     });
-    console.log(x)
+    return x;
   }
   return (
     <View style={globalStyles.primaryContainer}>

@@ -5,7 +5,8 @@ export const globalStyles = StyleSheet.create({
 
     primaryContainer: {
         flex: 1,
-        paddingHorizontal: 20,
+        paddingHorizontal: 15,
+        backgroundColor: "#F8F8F8"
     },
     
     globalContainer: {
