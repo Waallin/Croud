@@ -24,6 +24,8 @@ import { useNavigation } from "@react-navigation/native";
 const TeamView = ({ route }) => {
   const [games, setGames] = useState([]);
 
+  const currentDate = new Date();
+  let today = currentDate.toISOString().split("T")[0];
   //check if team is in favourites or not
   const [favOrNot, setFavOrNot] = useState(false);
   const [userInfo, setUserInfo] = useState([]);
@@ -72,7 +74,8 @@ const TeamView = ({ route }) => {
         day: doc.data().Day,
         location: doc.data().Location,
       };
-      x.push(obj);
+      obj.day >= today ? x.push(obj) : null;
+      //x.push(obj);
     });
     //filter on dates
     let dateFilter = x.sort(function (a, b) {

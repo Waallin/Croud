@@ -5,12 +5,25 @@ import { useNavigation } from "@react-navigation/native";
 import { globalStyles } from "../../../Styles/global";
 const OrgComponent = ({ Name, Sport, org, userData, date }) => {
   const navigate = useNavigation();
-
   function goToTeamView() {
     navigate.navigate("TeamView", {
       org: Name,
       userData: userData,
     });
+  }
+
+  function dayText(a) {
+    const currentDate = new Date();
+    let today = currentDate.toISOString().split("T")[0];
+    let tomorrow = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000).toISOString().split("T")[0];
+    switch(a) {
+      case today:
+        return "Idag";
+        case tomorrow:
+          return "Imorgon";
+        default: 
+        return a;
+    } 
   }
 
   return (
@@ -20,7 +33,7 @@ const OrgComponent = ({ Name, Sport, org, userData, date }) => {
         <Text style={styles.placeText}>{Sport}</Text>
       </View>
       <View style={styles.rightWrapper}>
-        <Text style={globalStyles.darkerText}>{date}</Text>
+        <Text style={globalStyles.darkerText}>{dayText(date)}</Text>
       </View>
     </TouchableOpacity>
   );

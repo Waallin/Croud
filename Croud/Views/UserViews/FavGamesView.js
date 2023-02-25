@@ -20,7 +20,8 @@ import { globalStyles } from "../../Styles/global";
 const FavGamesView = (route) => {
   const [games, setGames] = useState([]);
   const [filterGames, setFilterGame] = useState([]);
-
+  const currentDate = new Date();
+  let today = currentDate.toISOString().split("T")[0];
   const Tab = createMaterialTopTabNavigator();
 
   useEffect(() => {
@@ -29,7 +30,6 @@ const FavGamesView = (route) => {
 
   //Update db when scroll down
   const [refreshing, setRefreshing] = React.useState(false);
-
   async function getGames() {
     setGames([]);
     let favs = "";
@@ -52,12 +52,11 @@ const FavGamesView = (route) => {
     setRefreshing(true);
     setTimeout(() => {
       setRefreshing(false);
-      getGames();
     }, 2000);
   }, []);
 
   async function data(team) {
-    let x = [];
+    let x = []
     const q = query(
       collection(database, "Games"),
       where("Hometeam", "==", team)
@@ -77,13 +76,21 @@ const FavGamesView = (route) => {
         location: doc.data().Location,
         sport: doc.data().sport,
       };
-      x.push(obj);
-      setGames((oldGames) => [...oldGames, obj]);
+
+      //sorterar bort gamla matcher och sorterar in allt i datumordning. mvh ChatGPT 
+      obj.day >= today ? x.push(obj) : null;
+      setGames(oldGames => {
+        const newGames = [...oldGames, obj];
+        newGames.sort((a, b) => a.day - b.day);
+        return newGames;
+      });
     });
+    console.log(x)
   }
   return (
     <View style={globalStyles.primaryContainer}>
       <ScrollView
+        showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
@@ -110,5 +117,4 @@ const FavGamesView = (route) => {
 
 export default FavGamesView;
 
-const styles = StyleSheet.create({
-});
+const styles = StyleSheet.create({});

@@ -118,15 +118,9 @@ const NearbyGamesView = (route) => {
       });
       setTeams(dateFilter);
     }
+    console.log(teams)
   }
 
-  function todayOrNot() {
-    if (org.Gameday == today) {
-      return "Idag";
-    } else {
-      return;
-    }
-  }
   return (
     <View style={globalStyles.primaryContainer}>
       {isLoading ? (
@@ -148,7 +142,7 @@ const NearbyGamesView = (route) => {
                 Name={org.Name}
                 Sport={org.Sport}
                 org={org}
-                date={org.Gameday == today ? "Idag" : org.Gameday}
+                date={org.Gameday}
                 userData={route.userData}
               />
             );
