@@ -30,10 +30,10 @@ const OrgComponent = ({ Name, Sport, org, userData, date }) => {
     <TouchableOpacity style={styles.wrapper} onPress={goToTeamView}>
       <View style={styles.leftWrapper}>
         <Text style={styles.nameText}>{Name}</Text>
-        <Text style={styles.placeText}>{Sport}</Text>
+        <Text style={globalStyles.primaryText}>{Sport}</Text>
       </View>
       <View style={styles.rightWrapper}>
-        <Text style={globalStyles.darkerText}>{dayText(date)}</Text>
+        <Text style={globalStyles.primaryText}>{dayText(date)}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -46,6 +46,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexDirection: "row",
     justifyContent: "space-between",
+    backgroundColor: "white",
+    padding: 20,
+    shadowColor: '#171717',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.25,
+    shadowRadius: 2,
+    borderRadius: 10
   },
   
   nameText: {
