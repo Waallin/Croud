@@ -38,6 +38,7 @@ const NearbyGamesView = (route) => {
   }, [route.location]);
 
   const [refreshing, setRefreshing] = React.useState(false);
+  
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
