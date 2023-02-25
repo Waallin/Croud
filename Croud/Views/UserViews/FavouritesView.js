@@ -55,7 +55,7 @@ const FavouritesView = ({ userData }) => {
     <SafeAreaView edges={['top']} style={globalStyles.primaryContainer}>
       <View style={globalStyles.primaryTopWrapper}>
         <Text style={globalStyles.primaryTitle}>
-          <Text>hej</Text>
+          Favoriter
         </Text>
       </View>
       <ScrollView
