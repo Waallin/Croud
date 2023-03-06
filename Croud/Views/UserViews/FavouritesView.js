@@ -15,17 +15,18 @@ import { useEffect } from "react";
 import FavouritesComponent from "./UserComponents/FavouritesComponent";
 import OrgComponent from "./UserComponents/OrgComponent";
 import { globalStyles } from "../../Styles/global";
+import { useFocusEffect } from "@react-navigation/native";
 const FavouritesView = ({ userData }) => {
 
   const [favTeams, setFavTeams] = useState([]);
   //Update db when scroll down
   const [refreshing, setRefreshing] = React.useState(false);
 
-  useEffect(() => {
-
-    //get data from firebase
-    getData();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      getData();
+    }, [])
+  );
 
   //get all favteams and putting them in state 'favTeams'
   async function getData() {

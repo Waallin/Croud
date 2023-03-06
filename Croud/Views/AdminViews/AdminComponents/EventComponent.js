@@ -5,24 +5,29 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { globalStyles } from "../../../Styles/global";
 const EventComponent = ({ Opponent, Time, Location, Day, event }) => {
-
-
   const navigate = useNavigation();
 
   function nav() {
+    console.log(event);
     if (event.Active) {
       navigate.navigate("ActiveGame", {
-        event: event
-     });
+        event: event,
+      });
     } else {
       navigate.navigate("StartGame", {
-        event: event
-     });
+        event: event,
+      });
     }
   }
 
   return (
-    <TouchableOpacity style={styles.wrapper}>
+    <TouchableOpacity
+      style={{
+        ...styles.wrapper,
+        backgroundColor: event.Active ? globalStyles.primaryGreen : null,
+      }}
+      onPress={nav}
+    >
       <View style={styles.leftWrapper}>
         <Text style={styles.opponenText}>{Opponent}</Text>
         <Text style={styles.placeText}>{Location}</Text>
@@ -43,27 +48,24 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  
+
   opponenText: {
     fontFamily: "Manrope_500Medium",
     fontSize: "20px",
-    paddingVertical: 3
+    paddingVertical: 3,
   },
 
   placeText: {
     fontFamily: "Manrope_500Medium",
     fontSize: "14px",
-    paddingVertical: 3
+    paddingVertical: 3,
   },
 
   rightWrapper: {
     alignItems: "flex-end",
-    justifyContent: "center"
-  }
-
+    justifyContent: "center",
+  },
 });
-
-
 
 /* 
     <TouchableOpacity onPress={nav} style={event.Active ? styles.activeContainer : styles.container}>

@@ -2,6 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { globalStyles } from "../../../Styles/global";
+import ActiveComponent from "./ActiveComponent";
 const GamesComponent = ({
   opponent,
   time,
@@ -39,7 +40,7 @@ const GamesComponent = ({
     <TouchableOpacity style={styles.wrapper}>
       <View style={styles.leftWrapper}>
         <Text style={styles.teamText}>
-          {hometeam} - {opponent}
+          {hometeam} - {opponent} {active ? <ActiveComponent/> : null}
         </Text>
         <Text style={globalStyles.primaryText}>{location}</Text>
       </View>
@@ -57,14 +58,14 @@ const styles = StyleSheet.create({
   wrapper: {
     marginTop: 10,
     flexDirection: "row",
-    justifyContent: "space-between",
     backgroundColor: "white",
+    justifyContent: "space-between",
     padding: 20,
     shadowColor: '#171717',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.4,
     shadowRadius: 2,
-    borderRadius: 10
+    borderRadius: 10,
   },
 
   teamText: {
