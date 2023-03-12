@@ -4,6 +4,7 @@ import React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { globalStyles } from "../../../Styles/global";
+import ActiveComponent from "../../UserViews/UserComponents/ActiveComponent";
 const EventComponent = ({ Opponent, Time, Location, Day, event }) => {
   const navigate = useNavigation();
 
@@ -21,20 +22,15 @@ const EventComponent = ({ Opponent, Time, Location, Day, event }) => {
   }
 
   return (
-    <TouchableOpacity
-      style={{
-        ...styles.wrapper,
-        backgroundColor: event.Active ? globalStyles.primaryGreen : null,
-      }}
-      onPress={nav}
+    <TouchableOpacity style={styles.wrapper} onPress={nav}
     >
       <View style={styles.leftWrapper}>
-        <Text style={styles.opponenText}>{Opponent}</Text>
-        <Text style={styles.placeText}>{Location}</Text>
+        <Text style={styles.teamText}>{Opponent} {event.Active ? <ActiveComponent /> : null}</Text>
+        <Text style={globalStyles.primaryText}>{Location}</Text>
       </View>
       <View style={styles.rightWrapper}>
-        <Text style={globalStyles.darkerText}>{Day}</Text>
-        <Text style={globalStyles.darkerText}>{Time}</Text>
+        <Text style={globalStyles.primaryText}>{Day}</Text>
+        <Text style={globalStyles.primaryText}>{Time}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -46,12 +42,18 @@ const styles = StyleSheet.create({
   wrapper: {
     marginTop: 10,
     flexDirection: "row",
+    backgroundColor: "white",
     justifyContent: "space-between",
+    padding: 20,
+    shadowColor: '#171717',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.4,
+    shadowRadius: 2,
+    borderRadius: 10,
   },
-
-  opponenText: {
-    fontFamily: "Manrope_500Medium",
-    fontSize: "20px",
+  teamText: {
+    fontFamily: "Manrope_600SemiBold",
+    fontSize: "16px",
     paddingVertical: 3,
   },
 

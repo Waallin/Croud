@@ -2,12 +2,12 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import SearchBar from "react-native-dynamic-search-bar";
 import { globalStyles } from "../../../Styles/global";
-const SearchbarComponent = ({ orgs, setOrgs, setFilteredOrgs }) => {
+const SearchbarComponent = ({ orgs, setFilteredOrgs, setInput }) => {
   function filterOrgs(text) {
     setFilteredOrgs(orgs);
     const result = orgs.filter((word) => word.Name.includes(text));
     setFilteredOrgs(result);
-    console.log(result);
+    text ? setInput(true) : setInput(false)
   }
 
   return (

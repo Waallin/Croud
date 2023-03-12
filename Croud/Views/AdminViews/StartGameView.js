@@ -24,9 +24,8 @@ const StartGameView = (event) => {
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const navigate = useNavigation();
 
-
   async function startEvent() {
-    console.log("här")
+    console.log("här");
     const ref = doc(database, "Games", eventInfo.key);
     await updateDoc(ref, {
       Active: true,
@@ -54,28 +53,22 @@ const StartGameView = (event) => {
         </TouchableOpacity>
       </View>
       <View style={styles.midWrapper}>
-        <View style={styles.gameInfoWrapper}>
-          <Text style={globalStyles.primaryTitle}>{eventInfo.Hometeam}</Text>
-          <Text style={globalStyles.primaryTitle}>{eventInfo.Opponent}</Text>
-          <Text style={globalStyles.primaryTitle}>{eventInfo.Time}</Text>
-          <Text style={globalStyles.primaryGrey}>{eventInfo.Day}</Text>
-        </View>
-        <View style={styles.textWrapper}>
-          <Text style={globalStyles.primaryTitle}>Starta evenemang</Text>
-          <Text style={globalStyles.primaryText}>
-            Lorem ipsum dolor sit amet consectetur. Eu diam gravida eu
-            adipiscing nulla in.
-          </Text>
+        <View style={styles.teamsWrapper}>
+          <View style={styles.homeTeam}>
+            <Text style={globalStyles.smallerTitle}>{eventInfo.Hometeam}</Text>
+          </View>
+          <View style={styles.timeWrapper}>
+            <Text style={globalStyles.primaryTitle}>{eventInfo.Time}</Text>
+            <Text>{eventInfo.Day}</Text>
+          </View>
+          <View style={styles.opponentTeam}>
+            <Text style={globalStyles.smallerTitle}>{eventInfo.Opponent}</Text>
+          </View>
         </View>
         <View style={styles.inputWrapper}>
-          <View style={globalStyles.primaryInput}>
-            <AntDesign
-              name="user"
-              size={20}
-              style={globalStyles.primaryInputIcon}
-            />
+          <View style={globalStyles.primaryBigInput}>
             <TextInput
-              style={globalStyles.primaryTextInput}
+              style={{padding: 15}}
               placeholder={"Skriv en text om matchen"}
               placeholderTextColor={globalStyles.secondaryGrey}
               onChangeText={(text) => setTextInput(text)}
@@ -85,12 +78,13 @@ const StartGameView = (event) => {
         </View>
       </View>
       <View style={styles.botWrapper}>
-        <TouchableOpacity style={globalStyles.primaryGreenBtn}  onPress={startEvent}>
-          <Text style={globalStyles.primaryBtnText}>
-            Starta evenemang
-          </Text>
+        <TouchableOpacity
+          style={globalStyles.primaryGreenBtn}
+          onPress={startEvent}
+        >
+          <Text style={globalStyles.primaryBtnText}>Starta evenemang</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={globalStyles.secondaryGreyBtn}>
+        <TouchableOpacity style={globalStyles.secondaryGreyBtn} onPress={navigateBack}>
           <Text style={globalStyles.secondaryBtnText}>Avbryt</Text>
         </TouchableOpacity>
       </View>
@@ -102,20 +96,41 @@ export default StartGameView;
 
 const styles = StyleSheet.create({
   midWrapper: {
-    flex: 5,
+    flex: 1,
   },
 
-  gameInfoWrapper: {
-    flexDirection: "column",
+  teamsWrapper: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    justifyContent: "space-around",
-    padding: 20,
+    paddingVertical: 20,
+  },
+
+  homeTeam: {
+    width: "30%",
+    alignItems: "flex-start",
+  },
+
+  opponentTeam: {
+    width: "30%",
+
+    alignItems: "flex-end",
+  },
+
+  timeWrapper: {
+    width: "36%",
+    alignItems: "center",
+  },
+
+  infoText: {
+    alignItems: "center",
+    flex: 1,
+    marginTop: 50,
   },
 
   inputWrapper: {
-    marginTop: 60,
     height: "50%",
-    justifyContent: "space-around",
+    justifyContent: "center",
     alignItems: "center",
   },
 

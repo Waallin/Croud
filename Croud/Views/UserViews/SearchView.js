@@ -6,10 +6,14 @@ import { database } from "../../Firebase/firebase";
 import { collection, query, getDocs } from "firebase/firestore";
 import SearchbarComponent from "./UserComponents/SearchbarComponent";
 import { globalStyles } from "../../Styles/global";
+import { Ionicons } from "@expo/vector-icons";
 
 const SearchView = ({ userData, activeTab }) => {
   const [orgs, setOrgs] = useState([]);
   const [filteredOrgs, setFilteredOrgs] = useState([]);
+
+  //sätter false om searchbaren är tom
+  const [input, setInput] = useState(false);
 
   useEffect(() => {
     data();
@@ -42,24 +46,53 @@ const SearchView = ({ userData, activeTab }) => {
       <SearchbarComponent
         orgs={orgs}
         setOrgs={setOrgs}
+        setInput={setInput}
         setFilteredOrgs={setFilteredOrgs}
       />
-      <ScrollView>
-        {filteredOrgs.map((org) => {
-          return (
-            <OrgComponent
-              key={org.Name}
-              Name={org.Name}
-              Sport={org.Sport}
-              org={org}
-              userData={userData}
-            />
-          );
-        })}
-      </ScrollView>
+      {input ? (
+        <ScrollView>
+          {filteredOrgs.map((org) => {
+            return (
+              <OrgComponent
+                key={org.Name}
+                Name={org.Name}
+                Sport={org.Sport}
+                org={org}
+                userData={userData}
+              />
+            );
+          })}
+        </ScrollView>
+      ) : (
+        <View style={styles.container}>
+          <Ionicons
+            name="search-outline"
+            size={52}
+            color={globalStyles.primaryGreen}
+          />
+          <View style={styles.textWrapper}>
+            <Text style={globalStyles.bigDarkText}>Sök efter förening</Text>
+            <Text style={globalStyles.primaryText}>
+              När du söker på något lag så visas det här.
+            </Text>
+          </View>
+        </View>
+      )}
     </SafeAreaView>
   );
 };
 export default SearchView;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  textWrapper: {
+    alignItems: "center",
+    paddingBottom: 30,
+    paddingTop: 10,
+  },
+});

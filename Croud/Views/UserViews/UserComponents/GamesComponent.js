@@ -37,7 +37,7 @@ const GamesComponent = ({
   }
 
   return (
-    <TouchableOpacity style={styles.wrapper}>
+    <TouchableOpacity style={styles.wrapper} onPress={active ? goToTicketView : null}>
       <View style={styles.leftWrapper}>
         <Text style={styles.teamText}>
           {hometeam} - {opponent} {active ? <ActiveComponent/> : null}

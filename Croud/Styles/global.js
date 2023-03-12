@@ -6,7 +6,6 @@ export const globalStyles = StyleSheet.create({
     primaryContainer: {
         flex: 1,
         paddingHorizontal: 15,
-        backgroundColor: "#F8F8F8"
     },
     
     globalContainer: {
@@ -22,6 +21,13 @@ export const globalStyles = StyleSheet.create({
         borderRadius: 10,
         paddingHorizontal: 12,
         paddingVertical: 8,
+    },
+
+    primaryBigInput: {
+        backgroundColor: "#e8e8e8",  //"#ECEFF1",
+        height: 100,
+        width: 355,
+        borderRadius: 10,
     },
 
     primaryTopWrapper: {
@@ -53,6 +59,8 @@ export const globalStyles = StyleSheet.create({
         flex: 1,
     },
 
+    
+
     dangerText: {
         color:  "#20C997",
         textAlign: "center",
@@ -65,6 +73,12 @@ export const globalStyles = StyleSheet.create({
         color:  "#263238",
         fontFamily: "Manrope_700Bold",
         fontSize: "24px"
+    },
+
+    smallerTitle: {
+        color:  "#263238",
+        fontFamily: "Manrope_700Bold",
+        fontSize: "14px"
     },
 
     primaryText: {

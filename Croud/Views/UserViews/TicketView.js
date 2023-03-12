@@ -9,19 +9,25 @@ import { v4 as uuidv4 } from "uuid";
 import { doc, setDoc } from "firebase/firestore";
 import { database } from "../../Firebase/firebase";
 import { TextInput } from "react-native-gesture-handler";
+import { globalStyles } from "../../Styles/global";
+import { Ionicons } from "@expo/vector-icons";
 
 const TicketView = ({ route }) => {
   const navigate = useNavigation();
   const gameInfo = route.params.game;
 
+  
   const [adultTickets, setAdultTickets] = useState();
   const [kidTickets, setKidTickets] = useState();
-
   const [totalPrice, setTotalPrice] = useState(
     adultTickets * gameInfo.adultTicket
   );
+  function navigateBack() {
+    navigate.goBack();
+  }
+  console.log(gameInfo)
 
-
+/*
   function totalTicketPrice() {
     const adult = adultTickets * gameInfo.adultTicket;
     const kid = kidTickets * gameInfo.kidTicket;
@@ -54,48 +60,31 @@ const TicketView = ({ route }) => {
     navigate.navigate("QrCodeView", {
       uuid: uuid,
     });
-  }
+  } */
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.topWrapper}>
-        <Text>
-          {gameInfo.hometeam} - {gameInfo.opponent}
-        </Text>
+    <SafeAreaView style={globalStyles.primaryContainer}>
+      <View style={globalStyles.primaryTopWrapper}>
+      <TouchableOpacity onPress={navigateBack}>
+          <AntDesign name="left" size={20} color={globalStyles.primaryBlack} />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.teamsWrapper}>
+      <View style={styles.homeTeam}>
+        <Text style={globalStyles.smallerTitle}>{gameInfo.hometeam}</Text>
+      </View>
+      <View style={styles.timeWrapper}>
+        <Text style={globalStyles.primaryTitle}>{gameInfo.time}</Text>
         <Text>{gameInfo.day}</Text>
-        <Text>{gameInfo.time}</Text>
-        <Text>{gameInfo.location}</Text>
-      </View>
-      <View style={styles.midWrapper}>
-        <Text>{gameInfo.text}</Text>
-        <View style={styles.ticketWrapper}>
-          <Text>Vuxen: ({gameInfo.adultTicket})</Text>
-          <TextInput
-            style={styles.input}
-            numeric
-            keyboardType={"numeric"}
-            onChangeText={(adultTickets) => setAdultTickets(adultTickets)}
-            value={adultTickets}
-            defaultValue="0"
-          />
         </View>
-        <View style={styles.ticketWrapper}>
-          <Text>Barn/pensionär: ({gameInfo.kidTicket})</Text>
-          <TextInput
-            style={styles.input}
-            numeric
-            keyboardType={"numeric"}
-            onChangeText={(kidTickets) => setKidTickets(kidTickets)}
-            value={kidTickets}
-            defaultValue="0"
-          />
+      <View style={styles.opponentTeam}> 
+        <Text style={globalStyles.smallerTitle}>{gameInfo.opponent}</Text>
+      </View>
+      </View>
+        <View style={styles.infoText}>
+        <Text style={globalStyles.primaryText}>
+          {gameInfo.text}
+        </Text>
         </View>
-      </View>
-      <Text>att betala: {totalTicketPrice()}</Text>
-      <View style={styles.botWrapper}>
-          <TouchableOpacity style={styles.buybtn} onPress={buyTicket}>
-            <Text>Köp</Text>
-          </TouchableOpacity>
-      </View>
     </SafeAreaView>
   );
 };
@@ -103,52 +92,41 @@ const TicketView = ({ route }) => {
 export default TicketView;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  topWrapper: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  botWrapper: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
   midWrapper: {
-    flex: 3,
-    justifyContent: "center",
-    alignItems: "center",
+    flex: 1,
   },
 
-  input: {
-    width: 80,
-    borderBottomWidth: 0.5,
-    textAlign: "center",
-    height: 40,
-  },
-
-  ticketWrapper: {
+  teamsWrapper: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "center",
+    paddingVertical: 20
   },
 
-  buybtn: {
-    borderWidth: 0.5,
-    borderColor: "grey",
-    borderRadius: 5,
-    width: 150,
-    height: 60,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "lightgreen",
+  homeTeam: {
+    width: "30%",
+    alignItems: "flex-start"
   },
+
+  opponentTeam: {
+    width: "30%",
+
+alignItems: "flex-end",    
+  },
+  
+  timeWrapper: {
+
+    width: "36%",
+    alignItems: "center"
+  },
+
+  infoText: {
+    alignItems: "center",
+    flex: 1,
+    marginTop: 50
+  },
+
+
 });
 
 /* 
