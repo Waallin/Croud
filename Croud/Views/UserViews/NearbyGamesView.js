@@ -11,6 +11,7 @@ import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { database } from "../../Firebase/firebase";
 import { Location, Permissions } from "expo";
 import OrgComponent from "./UserComponents/OrgComponent";
+
 import {
   doc,
   query,
@@ -126,8 +127,7 @@ const NearbyGamesView = (route) => {
     <View style={globalStyles.primaryContainer}>
       {isLoading ? (
         <View style={styles.loadingIcon}>
-          <Text style={styles.waitText}>Vänta lite medans vi hämtar din plats</Text>
-          <ActivityIndicator size="large" />
+          <ActivityIndicator size="small" color={globalStyles.primaryGreen} />
         </View>
       ) : (
         <ScrollView
