@@ -35,14 +35,20 @@ export default function App() {
 
   useEffect(() => {
     // Perform some sort of async data or asset fetching.
-
-    setTimeout(() => {
-      setReady(true);
-    }, 4000);
+    setAppReady();
   }, []);
 
   const Stack = createNativeStackNavigator();
 
+  function setAppReady() {
+    setReady(false)
+    console.log(isReady)
+    setTimeout(() => {
+      setReady(true);
+      console.log(isReady)
+    }, 4000); 
+  };
+  
   //Ignore some errors
   LogBox.ignoreLogs(["AsyncStorage has been extracted"]);
   return (
@@ -61,6 +67,7 @@ export default function App() {
               }}
               name="login"
               component={LoginView}
+              initialParams={{ setAppReady }}
             />
             <Stack.Screen
               options={{
@@ -68,6 +75,7 @@ export default function App() {
               }}
               name="CreateAccount"
               component={CreateAccountView}
+              initialParams={{ setAppReady }}
             />
             <Stack.Screen
               options={{
