@@ -1,10 +1,11 @@
 import { StyleSheet, Text, View, Image } from "react-native";
 import React from "react";
+import { globalStyles } from "../Styles/global";
 
 const SplashScreen = () => {
   return (
     <View style={styles.container}>
-      <Image style={styles.logo} source={require("../assets/croud.png")} />
+      <Text style={styles.text}>Croud</Text>
     </View>
   );
 };
@@ -18,13 +19,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     zIndex: 99,
     position: "absolute",
-    backgroundColor: "#F8F8F8",
+    backgroundColor: globalStyles.primaryGreen,
     height: "100%",
     width: "100%",
   },
 
-  logo: {
-    width: 400,
-    height: 400,
+  text: {
+    fontSize: "27px",
+    color: "white",
+    fontStyle: "italic",
+    fontWeight: "800"
   },
 });

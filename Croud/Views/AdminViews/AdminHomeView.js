@@ -70,6 +70,7 @@ const AdminHomeView = ({ orgData, route }) => {
         Hometeam: doc.data().Hometeam,
         Time: doc.data().Time,
         Day: doc.data().Day,
+        Text: doc.data().Text,
         Location: doc.data().Location,
       };
       x.push(obj);
