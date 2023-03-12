@@ -123,7 +123,8 @@ alignItems: "flex-end",
   infoText: {
     alignItems: "center",
     flex: 1,
-    marginTop: 50
+    marginTop: 10,
+    padding: 20
   },
 
 
