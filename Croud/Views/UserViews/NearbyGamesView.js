@@ -120,7 +120,6 @@ const NearbyGamesView = (route) => {
       });
       setTeams(dateFilter);
     }
-    console.log(teams)
   }
 
   return (

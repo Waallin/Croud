@@ -25,7 +25,6 @@ const TicketView = ({ route }) => {
   function navigateBack() {
     navigate.goBack();
   }
-  console.log(gameInfo)
 
 /*
   function totalTicketPrice() {

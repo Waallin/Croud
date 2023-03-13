@@ -19,7 +19,6 @@ import ActiveComponent from "../UserViews/UserComponents/ActiveComponent";
 const ActiveGameView = (event) => {
   const navigate = useNavigation();
   const eventInfo = event.route.params.event;
-  console.log(eventInfo);
   function navigateBack() {
     navigate.goBack();
   }

@@ -42,10 +42,8 @@ export default function App() {
 
   function setAppReady() {
     setReady(false)
-    console.log(isReady)
     setTimeout(() => {
       setReady(true);
-      console.log(isReady)
     }, 4000); 
   };
   

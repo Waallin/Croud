@@ -31,7 +31,6 @@ const FavouritesView = ({ userData }) => {
   );
 
   useEffect(() => {
-    console.log(favTeams);
   }, [favTeams]);
 
 
@@ -59,7 +58,6 @@ const FavouritesView = ({ userData }) => {
     setTimeout(() => {
       setRefreshing(false);
       getData();
-      console.log(favTeams)
     }, 2000);
   }, []);
 

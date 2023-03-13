@@ -29,7 +29,6 @@ const UserContainer = ({ route }) => {
       }
       let currentLocation = await Location.getCurrentPositionAsync({});
       setLocation(currentLocation);
-      console.log(currentLocation);
     };
     getPermissions();
   }, []);

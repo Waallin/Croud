@@ -9,7 +9,6 @@ const EventComponent = ({ Opponent, Time, Location, Day, event }) => {
   const navigate = useNavigation();
 
   function nav() {
-    console.log(event);
     if (event.Active) {
       navigate.navigate("ActiveGame", {
         event: event,
