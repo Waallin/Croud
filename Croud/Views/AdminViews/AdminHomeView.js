@@ -55,7 +55,6 @@ const AdminHomeView = ({ orgData, route }) => {
   const [selectedTime, setSelectedTime] = useState(0);
 
   async function data() {
-    console.log(route.params);
     const q = query(
       collection(database, "Games"),
       where("Hometeam", "==", route.params.orgData.Name)

@@ -29,6 +29,7 @@ import SplashScreen from "./SplashScreen";
 
 const LoginView = (props) => {
   const [email, setEmail] = useState();
+  const [errorMessage, setErrorMessage] = useState();
   const [isReady, setReady] = useState(false);
   const [password, setPassword] = useState();
   const [dangerText, setDangerText] = useState();
@@ -70,13 +71,13 @@ const LoginView = (props) => {
 
   async function login() {
     if (!email || !password) {
+      setErrorMessage("Fel användarnamn eller lösenord. försök igen")
       return;
     }
     const docRef = doc(database, "Organisations", email);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
       if (password === docSnap.data().Password) {
         navigate.replace("AdminContainer", {
           orgData: docSnap.data(),
@@ -147,6 +148,7 @@ const LoginView = (props) => {
             />
           </View>
           <View>
+          <Text style={globalStyles.dangerText}>{errorMessage}</Text>
             <Text style={globalStyles.dangerText}>{dangerText}</Text>
           </View>
           <View

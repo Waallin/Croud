@@ -25,7 +25,6 @@ const StartGameView = (event) => {
   const navigate = useNavigation();
 
   async function startEvent() {
-    console.log("här");
     const ref = doc(database, "Games", eventInfo.key);
     await updateDoc(ref, {
       Active: true,

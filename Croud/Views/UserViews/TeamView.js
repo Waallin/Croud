@@ -35,7 +35,6 @@ const TeamView = ({ route }) => {
   const userData = route.params.userData;
   const org = route.params.org;
   useEffect(() => {
-    console.log(org);
     updateUser();
     getGames(userInfo);
   }, [route.params]);
@@ -81,7 +80,6 @@ const TeamView = ({ route }) => {
     let dateFilter = x.sort(function (a, b) {
       return new Date(a.day) - new Date(b.day);
     });
-    console.log(dateFilter);
     setGames(dateFilter);
   }
 
@@ -91,16 +89,13 @@ const TeamView = ({ route }) => {
 
   //add to favourite or remove if we click again
   async function addOrg() {
-    console.log(userData.userData.Email);
     if (favOrNot == false) {
-      console.log(org);
       const ref = doc(database, "Users", userData.userData.Email);
       await updateDoc(ref, {
         Favourites: arrayUnion(org),
       });
       setFavOrNot(true);
     } else {
-      console.log("test");
       const ref = doc(database, "Users", userData.userData.Email);
       await updateDoc(ref, {
         Favourites: arrayRemove(org),
