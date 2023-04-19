@@ -11,6 +11,7 @@ const GamesComponent = ({
   hometeam,
   game,
   active,
+  user
 }) => {
   
   const navigate = useNavigation();
@@ -33,6 +34,7 @@ const GamesComponent = ({
     navigate.navigate("TicketView", {
       game: game,
       active: active,
+      user: user
     });
   }
 

@@ -15,18 +15,26 @@ import { Ionicons } from "@expo/vector-icons";
 const TicketView = ({ route }) => {
   const navigate = useNavigation();
   const gameInfo = route.params.game;
+  const userInfo = route.params.user;
 
-  
   const [adultTickets, setAdultTickets] = useState();
   const [kidTickets, setKidTickets] = useState();
   const [totalPrice, setTotalPrice] = useState(
     adultTickets * gameInfo.adultTicket
   );
   function navigateBack() {
-    navigate.goBack();
+    console.log(route.params.user)//navigate.goBack();
   }
 
-/*
+  function navigateToSwish() {
+    navigate.navigate("Swish", {
+      game: gameInfo,
+      user: userInfo
+    })
+  }
+
+
+  /*
   function totalTicketPrice() {
     const adult = adultTickets * gameInfo.adultTicket;
     const kid = kidTickets * gameInfo.kidTicket;
@@ -63,27 +71,35 @@ const TicketView = ({ route }) => {
   return (
     <SafeAreaView style={globalStyles.primaryContainer}>
       <View style={globalStyles.primaryTopWrapper}>
-      <TouchableOpacity onPress={navigateBack}>
+        <TouchableOpacity onPress={navigateBack}>
           <AntDesign name="left" size={20} color={globalStyles.primaryBlack} />
         </TouchableOpacity>
       </View>
       <View style={styles.teamsWrapper}>
-      <View style={styles.homeTeam}>
-        <Text style={globalStyles.smallerTitle}>{gameInfo.hometeam}</Text>
-      </View>
-      <View style={styles.timeWrapper}>
-        <Text style={globalStyles.primaryTitle}>{gameInfo.time}</Text>
-        <Text>{gameInfo.day}</Text>
+        <View style={styles.homeTeam}>
+          <Text style={globalStyles.smallerTitle}>{gameInfo.hometeam}</Text>
         </View>
-      <View style={styles.opponentTeam}> 
-        <Text style={globalStyles.smallerTitle}>{gameInfo.opponent}</Text>
-      </View>
-      </View>
-        <View style={styles.infoText}>
-        <Text style={globalStyles.primaryText}>
-          {gameInfo.text}
-        </Text>
+        <View style={styles.timeWrapper}>
+          <Text style={globalStyles.primaryTitle}>{gameInfo.time}</Text>
+          <Text>{gameInfo.day}</Text>
         </View>
+        <View style={styles.opponentTeam}>
+          <Text style={globalStyles.smallerTitle}>{gameInfo.opponent}</Text>
+        </View>
+      </View>
+      <View style={styles.infoText}>
+        <Text style={globalStyles.primaryText}>{gameInfo.text}</Text>
+        <View style={styles.buttonWrapper}>
+          <View>
+            <TouchableOpacity style={globalStyles.primaryGreenBtn} onPress={navigateToSwish}>
+              <Text style={globalStyles.primaryBtnText}>Köp biljett</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={globalStyles.secondaryGreyBtn} onPress={navigateBack}>
+              <Text style={globalStyles.secondaryBtnText}>Tillbaka</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
     </SafeAreaView>
   );
 };
@@ -99,34 +115,38 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 20
+    paddingVertical: 20,
   },
 
   homeTeam: {
     width: "30%",
-    alignItems: "flex-start"
+    alignItems: "flex-start",
   },
 
   opponentTeam: {
     width: "30%",
 
-alignItems: "flex-end",    
+    alignItems: "flex-end",
   },
-  
-  timeWrapper: {
 
+  timeWrapper: {
     width: "36%",
-    alignItems: "center"
+    alignItems: "center",
   },
 
   infoText: {
     alignItems: "center",
     flex: 1,
     marginTop: 10,
-    padding: 20
+    padding: 20,
   },
 
-
+  buttonWrapper: {
+    flex: 1,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center"
+  }
 });
 
 /* 

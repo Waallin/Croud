@@ -18,12 +18,17 @@ import ActiveGameView from "./Views/AdminViews/ActiveGameView";
 import IngameView from "./Views/UserViews/IngameView";
 import { useFonts } from "expo-font";
 import NewPasswordView from "./Views/NewPasswordView";
-import { Manrope_700Bold, Manrope_600SemiBold, Manrope_500Medium } from '@expo-google-fonts/manrope';
+import {
+  Manrope_700Bold,
+  Manrope_600SemiBold,
+  Manrope_500Medium,
+} from "@expo-google-fonts/manrope";
 import { Asset } from "expo-asset";
 import AppLoading from "expo-app-loading";
 import { useEffect, useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import SplashScreen from "./Views/SplashScreen";
+import SwishView from "./Views/UserViews/SwishView";
 export default function App() {
   const [isReady, setReady] = useState(false);
 
@@ -41,21 +46,17 @@ export default function App() {
   const Stack = createNativeStackNavigator();
 
   function setAppReady() {
-    setReady(false)
+    setReady(false);
     setTimeout(() => {
       setReady(true);
-    }, 4000); 
-  };
-  
+    }, 4000);
+  }
+
   //Ignore some errors
   LogBox.ignoreLogs(["AsyncStorage has been extracted"]);
   return (
     <>
-      {!isReady ? (
-        <SplashScreen />
-      ) : (
-        null
-      )}
+      {!isReady ? <SplashScreen /> : null}
       {fontsLoaded ? (
         <NavigationContainer styles={styles.container}>
           <Stack.Navigator>
@@ -152,6 +153,13 @@ export default function App() {
               }}
               name="Ingame"
               component={IngameView}
+            />
+            <Stack.Screen
+              options={{
+                headerShown: false,
+              }}
+              name="Swish"
+              component={SwishView}
             />
           </Stack.Navigator>
         </NavigationContainer>

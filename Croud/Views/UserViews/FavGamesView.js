@@ -20,6 +20,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useLayoutEffect } from "react";
 const FavGamesView = (route) => {
+
+  const user = route.userData.userData;
   const [games, setGames] = useState([]);
   const [favs, setFavs] = useState(false);
   const [filterGames, setFilterGame] = useState([]);
@@ -31,6 +33,7 @@ const FavGamesView = (route) => {
 
 useFocusEffect(
   React.useCallback(() => {
+    console.log(user)
     getGames();
   }, [])
 );
@@ -109,6 +112,7 @@ useFocusEffect(
             return (
               <GamesComponent
                 key={game.id}
+                user={user}
                 game={game}
                 active={game.active}
                 hometeam={game.hometeam}
