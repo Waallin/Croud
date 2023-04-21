@@ -17,57 +17,18 @@ const TicketView = ({ route }) => {
   const gameInfo = route.params.game;
   const userInfo = route.params.user;
 
-  const [adultTickets, setAdultTickets] = useState();
-  const [kidTickets, setKidTickets] = useState();
-  const [totalPrice, setTotalPrice] = useState(
-    adultTickets * gameInfo.adultTicket
-  );
   function navigateBack() {
-    console.log(route.params.user)//navigate.goBack();
+    navigate.goBack();
   }
 
   function navigateToSwish() {
     navigate.navigate("Swish", {
       game: gameInfo,
-      user: userInfo
+      user: userInfo,
+      newTicket: false
     })
   }
 
-
-  /*
-  function totalTicketPrice() {
-    const adult = adultTickets * gameInfo.adultTicket;
-    const kid = kidTickets * gameInfo.kidTicket;
-    const sum = adult + kid;
-    if (sum) {
-      return sum;
-    } else if (adult) {
-      return adult;
-    } else if (kid) {
-      return kid;
-    } else {
-      return 0;
-    }
-  }
-  async function buyTicket() {
-    const uuid = uuidv4();
-    await setDoc(doc(database, "Tickets", uuid), {
-      GameId: route.params.game.id,
-      Hometeam: route.params.game.hometeam,
-      Opponent: route.params.game.opponent,
-      Location: route.params.game.location,
-      Time: route.params.game.time,
-      AdultTickets: adultTickets,
-      KidTickets: kidTickets,
-      TotalPrice: totalTicketPrice(),
-      Scanned: false,
-      //Sport: route.params.game.id,
-    });
-
-    navigate.navigate("QrCodeView", {
-      uuid: uuid,
-    });
-  } */
   return (
     <SafeAreaView style={globalStyles.primaryContainer}>
       <View style={globalStyles.primaryTopWrapper}>

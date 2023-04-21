@@ -151,7 +151,7 @@ export default function App() {
               options={{
                 headerShown: false,
               }}
-              name="Ingame"
+              name="IngameView"
               component={IngameView}
             />
             <Stack.Screen
