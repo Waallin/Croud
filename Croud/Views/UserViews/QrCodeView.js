@@ -19,9 +19,13 @@ const QrCodeView = (route) => {
     }
 });
 
+function asd() {
+  console.log("hej")
+}
+
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={asd}>
         <QRCode
           value={route.route.params.uuid}
           size={100}

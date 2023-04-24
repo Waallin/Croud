@@ -1,36 +1,69 @@
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import { globalStyles } from '../../Styles/global'
 import { useNavigation } from "@react-navigation/native";
-import { setDoc, doc, updateDoc, arrayUnion } from "firebase/firestore";import { database } from "../../Firebase/firebase";
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { useEffect } from 'react';
+import { arrayUnion, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { SafeAreaView, StyleSheet, Text } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import 'react-native-get-random-values';
+import QRCode from "react-native-qrcode-svg";
 import { v4 as uuidv4 } from "uuid";
-const IngameView = ({route}) => {
+import { database } from "../../Firebase/firebase";
+import { globalStyles } from "../../Styles/global";
+const IngameView = ({ route }) => {
   const navigate = useNavigation();
   const gameInfo = route.params.game;
   const userInfo = route.params.user;
   const newTicket = route.params.newTicket;
 
+  const [ticketId, setTicketId] = useState();
+  const uuid = uuidv4();
+
   useEffect(() => {
     if (newTicket) {
-    addTicketToUser();
-    addUserToGame();
-    createQrTicket();
+      addTicketToUser();
+      addUserToGame();
+      createQrTicket();
+    } else {
+      setQrCode()
     }
-  }, [])
+  }, []);
+
+  function setQrCode() {
+
+    let gameId = gameInfo.id;
+    
+    let allTickets = userInfo.Tickets;
+
+    let filtered = allTickets.filter(obj => obj.gameId === gameId);
+    setTicketId(filtered[0].ticketId);
+
+  }
 
   async function addTicketToUser() {
-
     const ref = doc(database, "Users", userInfo.Email);
-    await updateDoc(ref, {
-      Tickets: arrayUnion(gameInfo.id),
-    });
+
+    const userSnapshot = await getDoc(ref);
+    let ticketsArray = userSnapshot.data().Tickets;
+
+    if (!Array.isArray(ticketsArray)) {
+      ticketsArray = [];
+    }
+
+    const newTicket = {
+      ticketId: uuid,
+      gameId: gameInfo.id,
+      hometeam: gameInfo.hometeam,
+      opponent: gameInfo.opponent,
+      time: gameInfo.time,
+      day: gameInfo.day,
+      lot: false
+    };
+
+    ticketsArray.push(newTicket);
+
+    await setDoc(ref, { Tickets: ticketsArray }, { merge: true });
   }
 
   async function addUserToGame() {
-
     const ref = doc(database, "Games", gameInfo.id);
     await updateDoc(ref, {
       Participants: arrayUnion(userInfo.Email),
@@ -38,8 +71,7 @@ const IngameView = ({route}) => {
   }
 
   async function createQrTicket() {
-    console.log("create")
-    const uuid = uuidv4();
+
     await setDoc(doc(database, "Tickets", uuid), {
       GameId: gameInfo.id,
       Hometeam: gameInfo.hometeam,
@@ -49,31 +81,45 @@ const IngameView = ({route}) => {
       Scanned: false,
       //Sport: route.params.game.id,
     });
-    console.log("ticket")
-  } 
+  }
 
- async function buyLot() {
+  async function buyLot() {
     const ref = doc(database, "Games", gameInfo.id);
     await updateDoc(ref, {
       Lots: arrayUnion(userInfo.Email),
     });
   }
+
+
+
   return (
     <SafeAreaView style={styles.container}>
+      <TouchableOpacity style={styles.qrContainer} onPress={(() => {console.log(ticketId)})}>
+        <QRCode value={ticketId} size={200} color="black" />
+      </TouchableOpacity>
       <TouchableOpacity style={globalStyles.primaryGreenBtn} onPress={buyLot}>
         <Text style={globalStyles.primaryBtnText}>Köp lott</Text>
       </TouchableOpacity>
+      <TouchableOpacity style={globalStyles.secondaryGreyBtn} onPress={navigate.goBack}>
+        <Text style={globalStyles.secondaryBtnText}>Tillbaka</Text>
+      </TouchableOpacity>
     </SafeAreaView>
-  )
-}
+  );
+};
 
-export default IngameView
+export default IngameView;
 
 const styles = StyleSheet.create({
-
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
-  }
-})
+    alignItems: "center",
+  },
+
+  qrContainer: {
+    borderWidth: 1,
+    padding: 30,
+    marginBottom: 130,
+    borderRadius: 20,
+  },
+});

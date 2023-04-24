@@ -95,3 +95,30 @@ async function data() {
 
       komma in egen i match-view
     }
+
+
+
+
+      async function addTicketToUser() {
+    const ref = doc(database, "Users", userInfo.Email);
+
+    const userSnapshot = await getDoc(ref);
+    let ticketsArray = userSnapshot.data().Tickets;
+
+    if (!Array.isArray(ticketsArray)) {
+      ticketsArray = [];
+    }
+
+    const newTicket = {
+      ticketId: uuid,
+      gameId: gameInfo.id,
+      hometeam: gameInfo.hometeam,
+      opponent: gameInfo.opponent,
+      time: gameInfo.time,
+      day: gameInfo.day
+    };
+
+    ticketsArray.push(newTicket);
+
+    await setDoc(ref, { Tickets: ticketsArray }, { merge: true });
+  }
