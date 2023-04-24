@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { arrayUnion, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { arrayUnion, doc, getDoc, setDoc, updateDoc, onSnapshot } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, StyleSheet, Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -14,7 +14,9 @@ const IngameView = ({ route }) => {
   const userInfo = route.params.user;
   const newTicket = route.params.newTicket;
 
-  const [ticketId, setTicketId] = useState();
+  const [scanned, setScanned] = useState(false);
+
+  const [ticketId, setTicketId] = useState(null);
   const uuid = uuidv4();
 
   useEffect(() => {
@@ -90,12 +92,22 @@ const IngameView = ({ route }) => {
     });
   }
 
+  useEffect(() => {
 
+    if (ticketId) {
+    const scanned = onSnapshot(doc(database, "Tickets", ticketId), (doc) => {
+      if (doc.data().Scanned == true) {
+        setScanned(true);
+        console.log("weeheeeey");
+      }
+    });
+  }
+  }, [ticketId]);
 
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity style={styles.qrContainer} onPress={(() => {console.log(ticketId)})}>
-        <QRCode value={ticketId} size={200} color="black" />
+        {ticketId ? <QRCode value={ticketId} size={200} backgroundColor={scanned ? globalStyles.primaryGreen : "white"} color="black" /> : null}
       </TouchableOpacity>
       <TouchableOpacity style={globalStyles.primaryGreenBtn} onPress={buyLot}>
         <Text style={globalStyles.primaryBtnText}>Köp lott</Text>
@@ -117,9 +129,8 @@ const styles = StyleSheet.create({
   },
 
   qrContainer: {
-    borderWidth: 1,
+
     padding: 30,
-    marginBottom: 130,
-    borderRadius: 20,
+    
   },
 });

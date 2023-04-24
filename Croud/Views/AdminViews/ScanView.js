@@ -30,17 +30,16 @@ const ScanView = (route) => {
 
   //what happen when we scan barcode
   async function handleBarCodeScanned({ type, data }) {
+    console.log(data)
     //function to set the qr-code to true
     const docRef = doc(database, "Tickets", data);
     const docSnap = await getDoc(docRef);
 
-
-
-    setTest(docSnap.data().TotalPrice);
     //Check if the ticket is on the right organisation.
     const rightOrg = docSnap.data().Hometeam == route.orgData.Name;
-    
+    console.log(docSnap.data().Hometeam)
     if (rightOrg) {
+      console.log("tes")
       //SCAN SUCCESS
       setScanned(false);
       toastFade();
@@ -49,6 +48,8 @@ const ScanView = (route) => {
       await updateDoc(docRef, {
         Scanned: true,
       });
+    } else {
+      console.log("error")
     }
   };
 
