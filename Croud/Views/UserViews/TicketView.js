@@ -22,7 +22,7 @@ const TicketView = ({ route }) => {
   }
 
   function navigateToSwish() {
-    navigate.navigate("Swish", {
+    navigate.replace("Swish", {
       game: gameInfo,
       user: userInfo,
       newTicket: false

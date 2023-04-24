@@ -34,6 +34,7 @@ const GamesComponent = ({
   }
 
   async function goToTicketView() {
+
     const q = query(
       collection(database, "Users"),
       where("Email", "==", user.Email)
@@ -41,10 +42,14 @@ const GamesComponent = ({
 
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
-      let ticket = doc.data().Tickets;
-      
+      let allTickets = doc.data().Tickets;
+
+
+      const mappedTicket = allTickets ?  allTickets.map((obj) => obj.gameId) : [];
+
+      console.log(game.id)
         
-        if (ticket.includes(game.id)) {
+        if (mappedTicket.includes(game.id)) {
           navigate.navigate("IngameView", {
             game: game,
             active: active,

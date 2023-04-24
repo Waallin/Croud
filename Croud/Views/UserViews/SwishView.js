@@ -10,7 +10,7 @@ const SwishView = ({route}) => {
     const userInfo = route.params.user;
 
     function nav() {
-        navigate.navigate("IngameView",{
+        navigate.replace("IngameView",{
           game: gameInfo,
           user: userInfo,
           newTicket: true
