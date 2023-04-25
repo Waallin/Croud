@@ -84,8 +84,8 @@ useFocusEffect(
         id: doc.id,
         hometeam: doc.data().Hometeam,
         text: doc.data().Text,
-        adultTicket: doc.data().AdultTicket,
-        kidTicket: doc.data().KidTicket,
+        maxLots: doc.data().MaxLots,
+        lots: doc.data().Lots,
         active: doc.data().Active,
         opponent: doc.data().Opponent,
         time: doc.data().Time,
@@ -116,6 +116,7 @@ useFocusEffect(
                 game={game}
                 active={game.active}
                 hometeam={game.hometeam}
+                maxLots={game.maxLots}
                 id={game.id}
                 opponent={game.opponent}
                 day={game.day}

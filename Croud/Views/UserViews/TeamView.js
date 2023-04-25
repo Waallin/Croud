@@ -66,8 +66,10 @@ const TeamView = ({ route }) => {
         active: doc.data().Active,
         hometeam: doc.data().Hometeam,
         text: doc.data().Text,
-       // adultTicket: doc.data().adultTicket,
-       // kidTicket: doc.data().kidTicket,
+        // adultTicket: doc.data().adultTicket,
+        // kidTicket: doc.data().kidTicket,
+        lots: doc.data().Lots,
+        maxLots: doc.data().MaxLots,
         opponent: doc.data().Opponent,
         time: doc.data().Time,
         day: doc.data().Day,
@@ -123,15 +125,15 @@ const TeamView = ({ route }) => {
         {games.map((game) => {
           return (
             <GamesComponent
-               key={game.id}
-                game={game}
-                active={game.active}
-                hometeam={game.hometeam}
-                id={game.id}
-                opponent={game.opponent}
-                day={game.day}
-                time={game.time}
-                location={game.location}
+              key={game.id}
+              game={game}
+              active={game.active}
+              hometeam={game.hometeam}
+              id={game.id}
+              opponent={game.opponent}
+              day={game.day}
+              time={game.time}
+              location={game.location}
             />
           );
         })}

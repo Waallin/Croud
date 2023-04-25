@@ -29,6 +29,7 @@ import { useEffect, useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import SplashScreen from "./Views/SplashScreen";
 import SwishView from "./Views/UserViews/SwishView";
+import LotView from "./Views/UserViews/LotView";
 export default function App() {
   const [isReady, setReady] = useState(false);
 
@@ -160,6 +161,14 @@ export default function App() {
               }}
               name="Swish"
               component={SwishView}
+            />
+
+            <Stack.Screen
+              options={{
+                headerShown: false,
+              }}
+              name="LotView"
+              component={LotView}
             />
           </Stack.Navigator>
         </NavigationContainer>

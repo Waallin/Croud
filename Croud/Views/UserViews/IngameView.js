@@ -1,9 +1,16 @@
 import { useNavigation } from "@react-navigation/native";
-import { arrayUnion, doc, getDoc, setDoc, updateDoc, onSnapshot } from "firebase/firestore";
+import {
+  arrayUnion,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  onSnapshot,
+} from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, StyleSheet, Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import 'react-native-get-random-values';
+import "react-native-get-random-values";
 import QRCode from "react-native-qrcode-svg";
 import { v4 as uuidv4 } from "uuid";
 import { database } from "../../Firebase/firebase";
@@ -15,8 +22,9 @@ const IngameView = ({ route }) => {
   const newTicket = route.params.newTicket;
 
   const [scanned, setScanned] = useState(false);
-
   const [ticketId, setTicketId] = useState(null);
+
+  const [myLots, setMyLots] = useState(null);
   const uuid = uuidv4();
 
   useEffect(() => {
@@ -25,19 +33,26 @@ const IngameView = ({ route }) => {
       addUserToGame();
       createQrTicket();
     } else {
-      setQrCode()
+      setQrCode();
+      getLots();
     }
   }, []);
 
   function setQrCode() {
-
     let gameId = gameInfo.id;
-    
+
     let allTickets = userInfo.Tickets;
+    let filtered = allTickets.filter((obj) => obj.gameId === gameId);
 
-    let filtered = allTickets.filter(obj => obj.gameId === gameId);
     setTicketId(filtered[0].ticketId);
+  }
 
+  async function getLots() {
+    let lots = gameInfo.lots;
+    let x = lots.filter((obj) => obj.email === userInfo.Email);
+    if (x.length > 0) {
+      setMyLots(x);
+    }
   }
 
   async function addTicketToUser() {
@@ -57,12 +72,11 @@ const IngameView = ({ route }) => {
       opponent: gameInfo.opponent,
       time: gameInfo.time,
       day: gameInfo.day,
-      lot: false
     };
 
     ticketsArray.push(newTicket);
 
-    await setDoc(ref, { Tickets: ticketsArray }, { merge: true });
+    await updateDoc(ref, { Tickets: ticketsArray }, { merge: true });
   }
 
   async function addUserToGame() {
@@ -73,7 +87,6 @@ const IngameView = ({ route }) => {
   }
 
   async function createQrTicket() {
-
     await setDoc(doc(database, "Tickets", uuid), {
       GameId: gameInfo.id,
       Hometeam: gameInfo.hometeam,
@@ -86,33 +99,48 @@ const IngameView = ({ route }) => {
   }
 
   async function buyLot() {
-    const ref = doc(database, "Games", gameInfo.id);
-    await updateDoc(ref, {
-      Lots: arrayUnion(userInfo.Email),
+    navigate.navigate("LotView", {
+      gameInfo: gameInfo,
+      userInfo: userInfo,
     });
   }
 
   useEffect(() => {
-
     if (ticketId) {
-    const scanned = onSnapshot(doc(database, "Tickets", ticketId), (doc) => {
-      if (doc.data().Scanned == true) {
-        setScanned(true);
-        console.log("weeheeeey");
-      }
-    });
-  }
+      const scanned = onSnapshot(doc(database, "Tickets", ticketId), (doc) => {
+        if (doc.data().Scanned == true) {
+          setScanned(true);
+        }
+      });
+    }
   }, [ticketId]);
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity style={styles.qrContainer} onPress={(() => {console.log(ticketId)})}>
-        {ticketId ? <QRCode value={ticketId} size={200} backgroundColor={scanned ? globalStyles.primaryGreen : "white"} color="black" /> : null}
+      <TouchableOpacity
+        style={styles.qrContainer}
+        onPress={() => {
+          console.log(ticketId);
+        }}
+      >
+        {ticketId ? (
+          <QRCode
+            value={ticketId}
+            size={200}
+            backgroundColor={scanned ? globalStyles.primaryGreen : "white"}
+            color="black"
+          />
+        ) : null}
       </TouchableOpacity>
+
       <TouchableOpacity style={globalStyles.primaryGreenBtn} onPress={buyLot}>
         <Text style={globalStyles.primaryBtnText}>Köp lott</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={globalStyles.secondaryGreyBtn} onPress={navigate.goBack}>
+
+      <TouchableOpacity
+        style={globalStyles.secondaryGreyBtn}
+        onPress={navigate.goBack}
+      >
         <Text style={globalStyles.secondaryBtnText}>Tillbaka</Text>
       </TouchableOpacity>
     </SafeAreaView>
@@ -129,8 +157,6 @@ const styles = StyleSheet.create({
   },
 
   qrContainer: {
-
     padding: 30,
-    
   },
 });
