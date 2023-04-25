@@ -1,5 +1,4 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, ActivityIndicator, Image } from "react-native";
+import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginView from "./Views/LoginView";
@@ -8,12 +7,10 @@ import AdminContainer from "./Views/AdminViews/AdminContainer";
 import UserContainer from "./Views/UserViews/UserContainer";
 import TeamView from "./Views/UserViews/TeamView";
 import TicketView from "./Views/UserViews/TicketView";
-import QrCodeView from "./Views/UserViews/QrCodeView";
 import CreateAccountView from "./Views/CreateAccountView";
 import { LogBox } from "react-native";
 import UserHomeView from "./Views/UserViews/UserHomeView";
 import StartGameView from "./Views/AdminViews/StartGameView";
-import { globalStyles } from "./Styles/global";
 import ActiveGameView from "./Views/AdminViews/ActiveGameView";
 import IngameView from "./Views/UserViews/IngameView";
 import { useFonts } from "expo-font";
@@ -23,12 +20,10 @@ import {
   Manrope_600SemiBold,
   Manrope_500Medium,
 } from "@expo-google-fonts/manrope";
-import { Asset } from "expo-asset";
-import AppLoading from "expo-app-loading";
 import { useEffect, useState } from "react";
-import { FontAwesome } from "@expo/vector-icons";
 import SplashScreen from "./Views/SplashScreen";
 import SwishView from "./Views/UserViews/SwishView";
+import LotView from "./Views/UserViews/LotView";
 export default function App() {
   const [isReady, setReady] = useState(false);
 
@@ -123,13 +118,6 @@ export default function App() {
               options={{
                 headerShown: false,
               }}
-              name="QrCodeView"
-              component={QrCodeView}
-            />
-            <Stack.Screen
-              options={{
-                headerShown: false,
-              }}
               name="UserHome"
               component={UserHomeView}
             />
@@ -160,6 +148,14 @@ export default function App() {
               }}
               name="Swish"
               component={SwishView}
+            />
+
+            <Stack.Screen
+              options={{
+                headerShown: false,
+              }}
+              name="LotView"
+              component={LotView}
             />
           </Stack.Navigator>
         </NavigationContainer>

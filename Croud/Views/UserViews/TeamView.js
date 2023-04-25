@@ -7,7 +7,6 @@ import { AntDesign } from "@expo/vector-icons";
 import { database } from "../../Firebase/firebase";
 import {
   doc,
-  setDoc,
   query,
   collection,
   where,
@@ -66,15 +65,14 @@ const TeamView = ({ route }) => {
         active: doc.data().Active,
         hometeam: doc.data().Hometeam,
         text: doc.data().Text,
-       // adultTicket: doc.data().adultTicket,
-       // kidTicket: doc.data().kidTicket,
+        lots: doc.data().Lots,
+        maxLots: doc.data().MaxLots,
         opponent: doc.data().Opponent,
         time: doc.data().Time,
         day: doc.data().Day,
         location: doc.data().Location,
       };
       obj.day >= today ? x.push(obj) : null;
-      //x.push(obj);
     });
     //filter on dates
     let dateFilter = x.sort(function (a, b) {
@@ -123,15 +121,15 @@ const TeamView = ({ route }) => {
         {games.map((game) => {
           return (
             <GamesComponent
-               key={game.id}
-                game={game}
-                active={game.active}
-                hometeam={game.hometeam}
-                id={game.id}
-                opponent={game.opponent}
-                day={game.day}
-                time={game.time}
-                location={game.location}
+              key={game.id}
+              game={game}
+              active={game.active}
+              hometeam={game.hometeam}
+              id={game.id}
+              opponent={game.opponent}
+              day={game.day}
+              time={game.time}
+              location={game.location}
             />
           );
         })}
@@ -143,39 +141,3 @@ const TeamView = ({ route }) => {
 export default TeamView;
 
 const styles = StyleSheet.create({});
-
-/*
-
-    <SafeAreaView style={styles.container}>
-      <View style={styles.topWrapper}>
-        <Text style={styles.title}>{route.params.org.Name}</Text>
-        <TouchableOpacity style={styles.h} onPress={addOrg}>
-          <AntDesign
-            name={favOrNot ? "heart" : "hearto"}
-            size={32}
-            color="red"
-          />
-        </TouchableOpacity>
-      </View>
-      <View>
-        <Text style={styles.cominggamestext}>Kommande matcher</Text>
-      </View>
-      <ScrollView style={styles.botWrapper}>
-        {games.map((game) => {
-          return (
-            <GamesComponent
-              key={game.id}
-              active={game.active}
-              text={game.text}
-              hometeam={game.hometeam}
-              opponent={game.opponent}
-              day={game.day}
-              time={game.time}
-              location={game.location}
-            />
-          );
-        })}
-      </ScrollView>
-    </SafeAreaView>
-
-    */

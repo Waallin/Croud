@@ -1,16 +1,9 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-import { useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
-import { v4 as uuidv4 } from "uuid";
-import { doc, setDoc } from "firebase/firestore";
-import { database } from "../../Firebase/firebase";
-import { TextInput } from "react-native-gesture-handler";
 import { globalStyles } from "../../Styles/global";
-import { Ionicons } from "@expo/vector-icons";
 
 const TicketView = ({ route }) => {
   const navigate = useNavigation();
@@ -25,8 +18,8 @@ const TicketView = ({ route }) => {
     navigate.replace("Swish", {
       game: gameInfo,
       user: userInfo,
-      newTicket: false
-    })
+      newTicket: false,
+    });
   }
 
   return (
@@ -52,10 +45,16 @@ const TicketView = ({ route }) => {
         <Text style={globalStyles.primaryText}>{gameInfo.text}</Text>
         <View style={styles.buttonWrapper}>
           <View>
-            <TouchableOpacity style={globalStyles.primaryGreenBtn} onPress={navigateToSwish}>
+            <TouchableOpacity
+              style={globalStyles.primaryGreenBtn}
+              onPress={navigateToSwish}
+            >
               <Text style={globalStyles.primaryBtnText}>Köp biljett</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={globalStyles.secondaryGreyBtn} onPress={navigateBack}>
+            <TouchableOpacity
+              style={globalStyles.secondaryGreyBtn}
+              onPress={navigateBack}
+            >
               <Text style={globalStyles.secondaryBtnText}>Tillbaka</Text>
             </TouchableOpacity>
           </View>
@@ -106,17 +105,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     justifyContent: "center",
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });
-
-/* 
-      import QRCode from 'react-native-qrcode-svg';
-      <QRCode
-      value={route.params.id}
-      size={100}
-      color='black'
-      backgroundColor='lightblue'
-      />
-
-*/
