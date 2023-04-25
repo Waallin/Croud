@@ -11,13 +11,12 @@ import { globalStyles } from "../Styles/global";
 import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { database } from "../Firebase/firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
-import { set } from "react-native-reanimated";
 
 const CreateAccountView = () => {
   const [name, setName] = useState();
@@ -77,7 +76,6 @@ const CreateAccountView = () => {
         const errorCode = error.code;
         const errorMessage = error.message;
       });
-
   }
 
   function navigateBack() {
@@ -169,7 +167,10 @@ const CreateAccountView = () => {
         >
           <Text style={globalStyles.primaryBtnText}>Skapa konto</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={globalStyles.secondaryGreyBtn} onPress={navigateBack}>
+        <TouchableOpacity
+          style={globalStyles.secondaryGreyBtn}
+          onPress={navigateBack}
+        >
           <Text style={globalStyles.secondaryBtnText}>Avbryt</Text>
         </TouchableOpacity>
       </View>
@@ -180,8 +181,6 @@ const CreateAccountView = () => {
 export default CreateAccountView;
 
 const styles = StyleSheet.create({
-
-
   midWrapper: {
     flex: 5,
   },

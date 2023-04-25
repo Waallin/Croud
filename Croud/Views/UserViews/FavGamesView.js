@@ -33,9 +33,9 @@ const FavGamesView = (route) => {
 
 useFocusEffect(
   React.useCallback(() => {
-    console.log(user)
+    console.log(route)
     getGames();
-  }, [])
+  }, [route.isFocused])
 );
 
   //Update db when scroll down

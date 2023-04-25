@@ -9,7 +9,7 @@ import { useState } from "react";
 
 const NewPasswordView = () => {
   const navigate = useNavigation();
-  const [email, setEmail] = useState()
+  const [email, setEmail] = useState();
 
   function navigateBack() {
     navigate.navigate("login");
@@ -48,12 +48,13 @@ const NewPasswordView = () => {
         </View>
       </View>
       <View style={styles.botWrapper}>
-        <TouchableOpacity
-          style={globalStyles.primaryGreenBtn}
-        >
+        <TouchableOpacity style={globalStyles.primaryGreenBtn}>
           <Text style={globalStyles.primaryBtnText}>Återställ lösenord</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={globalStyles.secondaryGreyBtn} onPress={navigateBack}>
+        <TouchableOpacity
+          style={globalStyles.secondaryGreyBtn}
+          onPress={navigateBack}
+        >
           <Text style={globalStyles.secondaryBtnText}>Avbryt</Text>
         </TouchableOpacity>
       </View>
@@ -64,19 +65,19 @@ const NewPasswordView = () => {
 export default NewPasswordView;
 
 const styles = StyleSheet.create({
-    midWrapper: {
-        flex: 5,
-      },
+  midWrapper: {
+    flex: 5,
+  },
 
-      inputWrapper: {
-        marginTop: 60,
-        height: "50%",
-        justifyContent: "space-around",
-        alignItems: "center",
-      },
-    
-      botWrapper: {
-        flex: 2,
-        alignItems: "center",
-      },
+  inputWrapper: {
+    marginTop: 60,
+    height: "50%",
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
+
+  botWrapper: {
+    flex: 2,
+    alignItems: "center",
+  },
 });
