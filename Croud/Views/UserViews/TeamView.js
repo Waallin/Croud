@@ -145,39 +145,3 @@ const TeamView = ({ route }) => {
 export default TeamView;
 
 const styles = StyleSheet.create({});
-
-/*
-
-    <SafeAreaView style={styles.container}>
-      <View style={styles.topWrapper}>
-        <Text style={styles.title}>{route.params.org.Name}</Text>
-        <TouchableOpacity style={styles.h} onPress={addOrg}>
-          <AntDesign
-            name={favOrNot ? "heart" : "hearto"}
-            size={32}
-            color="red"
-          />
-        </TouchableOpacity>
-      </View>
-      <View>
-        <Text style={styles.cominggamestext}>Kommande matcher</Text>
-      </View>
-      <ScrollView style={styles.botWrapper}>
-        {games.map((game) => {
-          return (
-            <GamesComponent
-              key={game.id}
-              active={game.active}
-              text={game.text}
-              hometeam={game.hometeam}
-              opponent={game.opponent}
-              day={game.day}
-              time={game.time}
-              location={game.location}
-            />
-          );
-        })}
-      </ScrollView>
-    </SafeAreaView>
-
-    */

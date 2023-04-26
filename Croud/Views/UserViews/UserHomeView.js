@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, RefreshControl } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { database } from "../../Firebase/firebase";
 import { Entypo } from "@expo/vector-icons";
@@ -15,7 +15,7 @@ import {
 } from "firebase/firestore";
 import GamesComponent from "./UserComponents/GamesComponent";
 import * as Location from "expo-location";
-
+import { useFocusEffect } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import FavGamesView from "./FavGamesView";
 import NearbyGamesView from "./NearbyGamesView";
@@ -25,7 +25,14 @@ import { color, withDecay } from "react-native-reanimated";
 const UserHomeView = ({ userData, location }) => {
   const Tab = createMaterialTopTabNavigator();
 
+  const [isFocused, setIsFocused] = useState(false);
 
+  useFocusEffect(
+    useCallback(() => {
+      setIsFocused(true);
+      return () => setIsFocused(false);
+    }, [])
+  );
 
   return (
     <SafeAreaView edges={["top"]} style={globalStyles.primaryContainer}>
@@ -44,7 +51,7 @@ const UserHomeView = ({ userData, location }) => {
       >
         <Tab.Screen
           name="Favoriter"
-          children={() => <FavGamesView userData={userData} />}
+          children={() => <FavGamesView isFocused={isFocused} userData={userData} />}
         />
         <Tab.Screen
           options={{

@@ -7,8 +7,9 @@ import {
   updateDoc,
   onSnapshot,
 } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { SafeAreaView, StyleSheet, Text } from "react-native";
+import { useFocusEffect } from '@react-navigation/native';
 import { TouchableOpacity } from "react-native-gesture-handler";
 import "react-native-get-random-values";
 import QRCode from "react-native-qrcode-svg";
@@ -21,22 +22,39 @@ const IngameView = ({ route }) => {
   const userInfo = route.params.user;
   const newTicket = route.params.newTicket;
 
+
   const [scanned, setScanned] = useState(false);
   const [ticketId, setTicketId] = useState(null);
 
+  const [allLots, setAllLots] = useState(null);
   const [myLots, setMyLots] = useState(null);
   const uuid = uuidv4();
 
+
+  useFocusEffect(
+    useCallback(() => {
+      if (newTicket) {
+        getGame();
+        addTicketToUser();
+        addUserToGame();
+        createQrTicket();
+      } else {
+        setQrCode();
+      }
+    }, [])
+  );
+
+/*
   useEffect(() => {
-    if (newTicket) {
-      addTicketToUser();
-      addUserToGame();
-      createQrTicket();
-    } else {
-      setQrCode();
-      getLots();
+     {
+      const scanned = onSnapshot(doc(database, "Games", gameInfo.id), (doc) => {
+        
+        console.log(doc.data)
+      });
     }
-  }, []);
+  }, []); */
+
+
 
   function setQrCode() {
     let gameId = gameInfo.id;
@@ -47,14 +65,11 @@ const IngameView = ({ route }) => {
     setTicketId(filtered[0].ticketId);
   }
 
-  async function getLots() {
-    let lots = gameInfo.lots;
-    let x = lots.filter((obj) => obj.email === userInfo.Email);
-    if (x.length > 0) {
-      setMyLots(x);
-    }
-  }
 
+
+  async function getGame() {
+
+  }
   async function addTicketToUser() {
     const ref = doc(database, "Users", userInfo.Email);
 
@@ -104,6 +119,8 @@ const IngameView = ({ route }) => {
       userInfo: userInfo,
     });
   }
+
+  
 
   useEffect(() => {
     if (ticketId) {
