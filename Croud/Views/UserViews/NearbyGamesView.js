@@ -1,33 +1,22 @@
 import {
   StyleSheet,
-  Text,
   View,
   RefreshControl,
   ActivityIndicator,
 } from "react-native";
 import React from "react";
 import { useEffect, useState } from "react";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 import { database } from "../../Firebase/firebase";
-import { Location, Permissions } from "expo";
 import OrgComponent from "./UserComponents/OrgComponent";
 
-import {
-  doc,
-  query,
-  collection,
-  where,
-  getDocs,
-  getDoc,
-} from "firebase/firestore";
+import { query, collection, getDocs } from "firebase/firestore";
 import { globalStyles } from "../../Styles/global";
 
 const NearbyGamesView = (route) => {
   const currentDate = new Date();
   //while get your location we show a spinner
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState();
-  const [response, setResponse] = useState();
   let today = currentDate.toISOString().split("T")[0];
 
   const [teams, setTeams] = useState([]);
@@ -39,7 +28,7 @@ const NearbyGamesView = (route) => {
   }, [route.location]);
 
   const [refreshing, setRefreshing] = React.useState(false);
-  
+
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
@@ -90,7 +79,7 @@ const NearbyGamesView = (route) => {
 
           //vallvägen:
           latitude: 61.71954853271528,
-          longitude: 17.09635300806849
+          longitude: 17.09635300806849,
 
           //latitude: route.location.coords.latitude,
           //longitude: route.location.coords.longitude,
@@ -168,12 +157,12 @@ const styles = StyleSheet.create({
   loadingIcon: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
 
   waitText: {
     fontSize: "24px",
     fontWeight: "500",
-    marginBottom: 30
-  }
+    marginBottom: 30,
+  },
 });

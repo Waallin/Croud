@@ -31,11 +31,12 @@ const FavGamesView = (route) => {
   const navigate = useNavigation();
 
 
-useEffect(() => {
-  getGames();
-},[route.isFocused])
-
-
+useFocusEffect(
+  React.useCallback(() => {
+    console.log(route)
+    getGames();
+  }, [route.isFocused])
+);
 
   //Update db when scroll down
   const [refreshing, setRefreshing] = React.useState(false);

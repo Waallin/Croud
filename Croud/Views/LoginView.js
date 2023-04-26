@@ -14,8 +14,7 @@ import { globalStyles } from "../Styles/global";
 import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { auth, database } from "../Firebase/firebase";
-import { doc, getDoc, setDoc, docSnap } from "firebase/firestore";
-import { AntDesign } from "@expo/vector-icons";
+import { doc, getDoc } from "firebase/firestore";
 import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -30,7 +29,6 @@ import SplashScreen from "./SplashScreen";
 const LoginView = (props) => {
   const [email, setEmail] = useState();
   const [errorMessage, setErrorMessage] = useState();
-  const [isReady, setReady] = useState(false);
   const [password, setPassword] = useState();
   const [dangerText, setDangerText] = useState();
   const navigate = useNavigation();
@@ -38,11 +36,10 @@ const LoginView = (props) => {
 
   const route = useRoute();
 
-  const [splashScreen, setSplashScreen] = useState(false);
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
       if (authUser) {
-        route.params.setAppReady()
+        route.params.setAppReady();
         autoLogin(authUser);
       }
     });
@@ -71,7 +68,7 @@ const LoginView = (props) => {
 
   async function login() {
     if (!email || !password) {
-      setErrorMessage("Fel användarnamn eller lösenord. försök igen")
+      setErrorMessage("Fel användarnamn eller lösenord. försök igen");
       return;
     }
     const docRef = doc(database, "Organisations", email);
@@ -148,7 +145,7 @@ const LoginView = (props) => {
             />
           </View>
           <View>
-          <Text style={globalStyles.dangerText}>{errorMessage}</Text>
+            <Text style={globalStyles.dangerText}>{errorMessage}</Text>
             <Text style={globalStyles.dangerText}>{dangerText}</Text>
           </View>
           <View

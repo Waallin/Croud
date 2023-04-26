@@ -1,13 +1,10 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { AntDesign } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
 import FavouritesView from "./FavouritesView";
 import SearchView from "./SearchView";
 import UserHomeView from "./UserHomeView";
 import UserSettingsView from "./UserSettingsView";
-import { Feather } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import { useState, useEffect } from "react";
 import { globalStyles } from "../../Styles/global";
@@ -18,9 +15,7 @@ const UserContainer = ({ route }) => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
 
-  
   useEffect(() => {
-
     const getPermissions = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
@@ -35,7 +30,6 @@ const UserContainer = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      
       <Tab.Navigator initialRouteName="Hemskärm">
         <Tab.Screen
           options={{
@@ -59,12 +53,12 @@ const UserContainer = ({ route }) => {
             headerShown: false,
             tabBarShowLabel: false,
             tabBarIcon: ({ color, size, focused }) => (
-              <Ionicons 
+              <Ionicons
                 name={focused ? "search-sharp" : "search-outline"}
                 size={24}
                 color={globalStyles.primaryGreen}
               />
-            )
+            ),
           }}
           name="Sök förening"
           children={() => <SearchView userData={route.params} />}
@@ -76,7 +70,7 @@ const UserContainer = ({ route }) => {
             tabBarActiveTintColor: "red",
             tabBarIcon: ({ color, size, focused }) => (
               <Ionicons
-                name={focused ? "heart-sharp" : "heart-outline" } 
+                name={focused ? "heart-sharp" : "heart-outline"}
                 size={24}
                 color={globalStyles.primaryGreen}
               />
@@ -92,7 +86,7 @@ const UserContainer = ({ route }) => {
             tabBarActiveTintColor: "red",
             tabBarIcon: ({ color, size, focused }) => (
               <Ionicons
-                name={focused ? "settings" : "settings-outline" } 
+                name={focused ? "settings" : "settings-outline"}
                 size={24}
                 color={globalStyles.primaryGreen}
               />

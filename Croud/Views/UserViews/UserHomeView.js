@@ -1,30 +1,14 @@
 import { StyleSheet, Text, View, RefreshControl } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useEffect, useState, useCallback } from "react";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import { database } from "../../Firebase/firebase";
-import { Entypo } from "@expo/vector-icons";
-import {
-  doc,
-  query,
-  collection,
-  where,
-  getDocs,
-  getDoc,
-} from "firebase/firestore";
-import GamesComponent from "./UserComponents/GamesComponent";
-import * as Location from "expo-location";
-import { useFocusEffect } from '@react-navigation/native';
+import { useState, useCallback } from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import FavGamesView from "./FavGamesView";
 import NearbyGamesView from "./NearbyGamesView";
 import { globalStyles } from "../../Styles/global";
-import { color, withDecay } from "react-native-reanimated";
+import { useFocusEffect } from "@react-navigation/native";
 
 const UserHomeView = ({ userData, location }) => {
-  const Tab = createMaterialTopTabNavigator();
-
   const [isFocused, setIsFocused] = useState(false);
 
   useFocusEffect(
@@ -33,6 +17,8 @@ const UserHomeView = ({ userData, location }) => {
       return () => setIsFocused(false);
     }, [])
   );
+
+  const Tab = createMaterialTopTabNavigator();
 
   return (
     <SafeAreaView edges={["top"]} style={globalStyles.primaryContainer}>
@@ -43,15 +29,21 @@ const UserHomeView = ({ userData, location }) => {
         screenOptions={{
           tabBarActiveTintColor: globalStyles.primaryBlack,
           tabBarInactiveTintColor: globalStyles.primaryGreen,
-          tabBarStyle: { backgroundColor: 'rgba(1,1,1, 0)', borderColor: "green", width: "70%" },
+          tabBarStyle: {
+            backgroundColor: "rgba(1,1,1, 0)",
+            borderColor: "green",
+            width: "70%",
+          },
         }}
         tabBarStyle={{
-          backgroundColor: 'transparent',
+          backgroundColor: "transparent",
         }}
       >
         <Tab.Screen
           name="Favoriter"
-          children={() => <FavGamesView isFocused={isFocused} userData={userData} />}
+          children={() => (
+            <FavGamesView isFocused={isFocused} userData={userData} />
+          )}
         />
         <Tab.Screen
           options={{

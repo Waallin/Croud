@@ -7,7 +7,6 @@ import { AntDesign } from "@expo/vector-icons";
 import { database } from "../../Firebase/firebase";
 import {
   doc,
-  setDoc,
   query,
   collection,
   where,
@@ -66,8 +65,6 @@ const TeamView = ({ route }) => {
         active: doc.data().Active,
         hometeam: doc.data().Hometeam,
         text: doc.data().Text,
-        // adultTicket: doc.data().adultTicket,
-        // kidTicket: doc.data().kidTicket,
         lots: doc.data().Lots,
         maxLots: doc.data().MaxLots,
         opponent: doc.data().Opponent,
@@ -76,7 +73,6 @@ const TeamView = ({ route }) => {
         location: doc.data().Location,
       };
       obj.day >= today ? x.push(obj) : null;
-      //x.push(obj);
     });
     //filter on dates
     let dateFilter = x.sort(function (a, b) {
