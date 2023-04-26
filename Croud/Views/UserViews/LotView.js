@@ -57,6 +57,7 @@ export default function LotView({ route }) {
       <View style={styles.boxContainer}>
         {lots.map((number) => (
           <TouchableOpacity
+          key={number}
             style={styles.box}
             onPress={() => {
               chooseNumber(number);

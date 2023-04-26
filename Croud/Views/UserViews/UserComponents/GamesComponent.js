@@ -54,12 +54,14 @@ const GamesComponent = ({
             game: game,
             active: active,
             user: user,
+            ticket: true
           });
         } else {
-          navigate.navigate("TicketView", {
+          navigate.navigate("IngameView", {
             game: game,
             active: active,
             user: user,
+            ticket: false
           });
         }
 
