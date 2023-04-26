@@ -24,6 +24,8 @@ import { useEffect, useState } from "react";
 import SplashScreen from "./Views/SplashScreen";
 import SwishView from "./Views/UserViews/SwishView";
 import LotView from "./Views/UserViews/LotView";
+import ThanksPurchaseView from "./Views/UserViews/ThanksPurchaseView";
+
 export default function App() {
   const [isReady, setReady] = useState(false);
 
@@ -156,6 +158,13 @@ export default function App() {
               }}
               name="LotView"
               component={LotView}
+            />
+            <Stack.Screen
+              options={{
+                headerShown: false,
+              }}
+              name="ThanksPurchaseView"
+              component={ThanksPurchaseView}
             />
           </Stack.Navigator>
         </NavigationContainer>
