@@ -4,7 +4,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect,  useState } from "react";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { database } from "../../Firebase/firebase";
-import { Entypo } from "@expo/vector-icons";
 import {
   doc,
   query,
@@ -19,6 +18,7 @@ import { globalStyles } from "../../Styles/global";
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useLayoutEffect } from "react";
+
 const FavGamesView = (route) => {
 
   const user = route.userData.userData;
