@@ -25,6 +25,7 @@ import SplashScreen from "./Views/SplashScreen";
 import SwishView from "./Views/UserViews/SwishView";
 import LotView from "./Views/UserViews/LotView";
 import ThanksPurchaseView from "./Views/UserViews/ThanksPurchaseView";
+import FavGamesView from "./Views/UserViews/FavGamesView";
 
 export default function App() {
   const [isReady, setReady] = useState(false);
@@ -122,6 +123,13 @@ export default function App() {
               }}
               name="UserHome"
               component={UserHomeView}
+            />
+            <Stack.Screen
+              options={{
+                headerShown: false,
+              }}
+              name="favGamesView"
+              component={FavGamesView}
             />
             <Stack.Screen
               options={{
