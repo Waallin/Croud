@@ -9,13 +9,47 @@ import * as Location from "expo-location";
 import { useState, useEffect } from "react";
 import { globalStyles } from "../../Styles/global";
 import { Ionicons } from "@expo/vector-icons";
+import { database
+ } from "../../Firebase/firebase";
+ import {
+  arrayUnion,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  onSnapshot,
+} from "firebase/firestore";
+
 const UserContainer = ({ route }) => {
   const Tab = createBottomTabNavigator();
 
+
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  
+  const [userData, setUserData] = useState(route.params.userData);
 
   useEffect(() => {
+    // prenumerera på förändringar i Firestore-databasen
+    const userDocRef = doc(database, "Users", userData.Email);
+    const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
+      if (docSnapshot.exists()) {
+        const newUserData = docSnapshot.data();
+        setUserData(newUserData);
+        console.log(newUserData)
+      }
+    });
+
+    // avsluta prenumerationen när komponenten avmonteras
+    return () => {
+      unsubscribe();
+    };
+  }, [userData.Email]);
+
+
+
+  useEffect(() => {
+    
     const getPermissions = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
@@ -45,7 +79,7 @@ const UserContainer = ({ route }) => {
           }}
           name="Hemskärm"
           children={() => (
-            <UserHomeView userData={route.params} location={location} />
+            <UserHomeView userData={userData} location={location} />
           )}
         />
         <Tab.Screen
@@ -61,7 +95,7 @@ const UserContainer = ({ route }) => {
             ),
           }}
           name="Sök förening"
-          children={() => <SearchView userData={route.params} />}
+          children={() => <SearchView userData={userData} />}
         />
         <Tab.Screen
           options={{
@@ -77,7 +111,7 @@ const UserContainer = ({ route }) => {
             ),
           }}
           name="Favoriter"
-          children={() => <FavouritesView userData={route.params} />}
+          children={() => <FavouritesView userData={userData} />}
         />
         <Tab.Screen
           options={{

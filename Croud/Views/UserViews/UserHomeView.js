@@ -7,9 +7,13 @@ import FavGamesView from "./FavGamesView";
 import NearbyGamesView from "./NearbyGamesView";
 import { globalStyles } from "../../Styles/global";
 import { useFocusEffect } from "@react-navigation/native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+
 
 const UserHomeView = ({ userData, location }) => {
   const [isFocused, setIsFocused] = useState(false);
+
+
 
   useFocusEffect(
     useCallback(() => {
@@ -18,10 +22,17 @@ const UserHomeView = ({ userData, location }) => {
     }, [])
   );
 
+function test() {
+  console.log(userData)
+}
+
   const Tab = createMaterialTopTabNavigator();
 
   return (
     <SafeAreaView edges={["top"]} style={globalStyles.primaryContainer}>
+      <TouchableOpacity onPress={test}>
+        <Text>heeeej</Text>
+      </TouchableOpacity>
       <View style={globalStyles.primaryTopWrapper}>
         <Text style={globalStyles.primaryTitle}>Evenemang</Text>
       </View>

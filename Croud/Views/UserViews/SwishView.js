@@ -32,10 +32,12 @@ const SwishView = ({ route }) => {
     addTicketToUser();
     addUserToGame();
     createQrTicket();
-    navigate.replace("ThanksPurchaseView", {
+    navigate.replace("IngameView", {
       qrCode: uuid,
       game: gameInfo,
       user: userInfo,
+      ticket: true,
+      swish: true
     });
      /*navigate.replace("IngameView", {
       game: gameInfo,
