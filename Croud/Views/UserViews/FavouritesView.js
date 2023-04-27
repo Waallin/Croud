@@ -36,7 +36,7 @@ const FavouritesView = ({ userData }) => {
 
   //get all favteams and putting them in state 'favTeams'
   async function getData() {
-    const docRef = doc(database, "Users", userData.userData.Email);
+    const docRef = doc(database, "Users", userData.Email);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {

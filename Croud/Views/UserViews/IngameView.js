@@ -18,12 +18,16 @@ import { database } from "../../Firebase/firebase";
 import { globalStyles } from "../../Styles/global";
 import { AntDesign } from "@expo/vector-icons";
 import { FontAwesome } from '@expo/vector-icons'; 
+import { MaterialCommunityIcons } from '@expo/vector-icons'; 
+import TicketStatusComponent from "./UserComponents/TicketStatusComponent";
 
 const IngameView = ({ route }) => {
   const navigate = useNavigation();
   const gameInfo = route.params.game;
   const userInfo = route.params.user;
   const qrCode = route.params.qrCode;
+
+  const swish = route.params.swish;
 
   //check if the user has a ticket or not
   const ticket = route.params.ticket;
@@ -35,6 +39,8 @@ const IngameView = ({ route }) => {
 
   const [allLots, setAllLots] = useState(null);
   const [myLots, setMyLots] = useState(null);
+
+
   const uuid = uuidv4();
 
   function navigateBack() {
@@ -55,6 +61,10 @@ const IngameView = ({ route }) => {
 
   useFocusEffect(
     useCallback(() => {
+
+      if (swish) {
+        updateUser();
+      }
       if (!route.params.ticket) {
         getGame();
 
@@ -64,6 +74,9 @@ const IngameView = ({ route }) => {
     }, [])
   );
 
+  async function updateUser() {
+    console.log("kmr från")
+  }
   /*
   useEffect(() => {
      {
@@ -76,6 +89,7 @@ const IngameView = ({ route }) => {
 
   function setQrCode() {
     if (qrCode) {
+      console.log("hej")
       setTicketId(qrCode)
       console.log("asd")
     } else 
@@ -161,9 +175,6 @@ const IngameView = ({ route }) => {
         <TouchableOpacity onPress={navigateBack}>
           <AntDesign name="left" size={20} color={globalStyles.primaryBlack} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={showQrCode}>
-          <FontAwesome name="qrcode" size={20} color={globalStyles.primaryBlack} />
-        </TouchableOpacity>
       </View>
       <View style={{...styles.teamsWrapper, paddingHorizontal: 15}}>
         <View style={styles.homeTeam}>
@@ -183,41 +194,36 @@ const IngameView = ({ route }) => {
         {route.params.ticket ? (
           <View style={styles.ticketWrapper}>
             {ticketId ? (
-              !scanned ? 
+              <View style={styles.qrWrapper}>
+                <Text style={globalStyles.darkerText}>Din biljett</Text>
               <QRCode
                 value={ticketId}
-                size={200}
+                size={100}
                 color="black"
-              /> : 
-              <View>
-              <AntDesign name="checkcircleo" size={200} color={globalStyles.primaryGreen} />
-              </View>
+              />
+              
+              <TicketStatusComponent text={scanned ? "INPASSERAD" : "EJ INPASSERAD"} bg={scanned ? globalStyles.primaryGreen : "#78909C"} />
+              </View> 
             ) : null}
             <TouchableOpacity style={globalStyles.primaryGreenBtn} onPress={buyLot}>
               <Text style={globalStyles.primaryBtnText}>Köp lott</Text>
             </TouchableOpacity>
           </View>
         ) : (
-          <View>
-            <Text>du har ingen biljett</Text>
+          <View style={styles.noTicketWrapper}>
+            <View style={styles.textWrapper}>
+            <MaterialCommunityIcons name="ticket-outline" size={52} color={globalStyles.primaryGrey} />
+            <Text style={{...globalStyles.primaryTitle, fontSize: "17px"}}>Ingen biljett köpt än</Text>
+            <Text style={globalStyles.darkerText}>Köp din biljett via knappen nedan</Text>
+            </View>
             <TouchableOpacity
-              style={globalStyles.primaryGreenBtn}
+              style={{...globalStyles.primaryGreenBtn, marginTop: 20}}
               onPress={navigateToSwish}
             >
               <Text style={globalStyles.primaryBtnText}>Köp biljett</Text>
             </TouchableOpacity>
           </View>
         )}
-        <View style={styles.buttonWrapper}>
-          <View>
-            <TouchableOpacity
-              style={globalStyles.secondaryGreyBtn}
-              onPress={navigateBack}
-            >
-              <Text style={globalStyles.secondaryBtnText}>Tillbaka</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
       </View>
       {showQr ? 
       <View style={styles.showQrContainer}>
@@ -244,8 +250,7 @@ const styles = StyleSheet.create({
   ticketWrapper: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "space-between",
-    marginTop: 20
+    paddingTop: 80,
   },
 
 
@@ -279,15 +284,20 @@ const styles = StyleSheet.create({
     padding: 20,
   },
 
-  showQrContainer: {
-    flex: 1,
-    zIndex: 99,
-    position: "absolute",
-    backgroundColor: "rgba(1, 1, 1, 0.6)",
-    width: "100%",
-    height: "110%",
-    alignItems: "center",
-    justifyContent: "center"
-  }
 
+  textWrapper: {
+    marginTop: 100,
+    height: 150,
+    justifyContent: "center",
+    alignItems: "center",
+    justifyContent: "space-around"
+  },
+
+  qrWrapper: {
+
+    alignItems: "center",
+    height: "35%",
+    justifyContent: "space-around",
+    marginBottom: 30,
+  }
 });

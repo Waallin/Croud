@@ -39,7 +39,7 @@ const TeamView = ({ route }) => {
   }, [route.params]);
 
   async function updateUser() {
-    const docRef = doc(database, "Users", userData.userData.Email);
+    const docRef = doc(database, "Users", userData.Email);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
@@ -88,13 +88,13 @@ const TeamView = ({ route }) => {
   //add to favourite or remove if we click again
   async function addOrg() {
     if (favOrNot == false) {
-      const ref = doc(database, "Users", userData.userData.Email);
+      const ref = doc(database, "Users", userData.Email);
       await updateDoc(ref, {
         Favourites: arrayUnion(org),
       });
       setFavOrNot(true);
     } else {
-      const ref = doc(database, "Users", userData.userData.Email);
+      const ref = doc(database, "Users", userData.Email);
       await updateDoc(ref, {
         Favourites: arrayRemove(org),
       });

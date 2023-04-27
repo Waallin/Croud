@@ -21,7 +21,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useLayoutEffect } from "react";
 const FavGamesView = (route) => {
 
-  const user = route.userData.userData;
+  const user = route.userData;
   const [games, setGames] = useState([]);
   const [favs, setFavs] = useState(false);
   const [filterGames, setFilterGame] = useState([]);
@@ -48,7 +48,7 @@ useEffect(() => {
   async function getGames() {
     setGames([]);
     let favs;
-    const docRef = doc(database, "Users", route.userData.userData.Email);
+    const docRef = doc(database, "Users", route.userData.Email);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
