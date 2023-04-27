@@ -118,22 +118,24 @@ const TeamView = ({ route }) => {
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.botWrapper}>
-        {games.map((game) => {
-          return (
-            <GamesComponent
-              key={game.id}
-              game={game}
-              active={game.active}
-              hometeam={game.hometeam}
-              id={game.id}
-              opponent={game.opponent}
-              day={game.day}
-              time={game.time}
-              location={game.location}
-            />
-          );
-        })}
-      </ScrollView>
+          {games.map((game) => {
+            return (
+              <GamesComponent
+                key={game.id}
+                user={userData}
+                game={game}
+                active={game.active}
+                hometeam={game.hometeam}
+                maxLots={game.maxLots}
+                id={game.id}
+                opponent={game.opponent}
+                day={game.day}
+                time={game.time}
+                location={game.location}
+              />
+            );
+          })}
+        </ScrollView>
     </SafeAreaView>
   );
 };
