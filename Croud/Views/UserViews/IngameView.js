@@ -27,6 +27,8 @@ const IngameView = ({ route }) => {
   const userInfo = route.params.user;
   const qrCode = route.params.qrCode;
 
+  const [newGameInfo, setNewGameInfo] = useState()
+
   const swish = route.params.swish;
 
   //check if the user has a ticket or not
@@ -99,6 +101,8 @@ const IngameView = ({ route }) => {
     const docRef = doc(database, "Games", gameInfo.id);
     const docSnap = await getDoc(docRef);
     console.log(docSnap.data());
+
+    setNewGameInfo(docSnap.data());
   }
   async function addTicketToUser() {
     const ref = doc(database, "Users", userInfo.Email);
@@ -146,6 +150,7 @@ const IngameView = ({ route }) => {
   async function buyLot() {
     navigate.navigate("LotView", {
       gameInfo: gameInfo,
+      newGameInfo: newGameInfo,
       userInfo: userInfo,
     });
   }
