@@ -19,6 +19,8 @@ const AdminContainer = ({ route }) => {
     setOrgData(route.params.orgData);
   }, [route.params]);
 
+  
+
   return (
     <View style={styles.container}>
       <Tab.Navigator>

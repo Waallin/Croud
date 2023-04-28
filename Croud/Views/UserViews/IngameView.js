@@ -48,7 +48,7 @@ const IngameView = ({ route }) => {
   }
 
   useEffect(() => {
-    console.log(route.params);
+    console.log(route.params.userInfo);
   }, []);
 
   function navigateToSwish() {
@@ -98,7 +98,6 @@ const IngameView = ({ route }) => {
 
     let allTickets = userInfo.Tickets;
     let filtered = allTickets.filter((obj) => obj.gameId === gameId);
-
     setTicketId(filtered[0].ticketId);
     }
   }
@@ -131,7 +130,7 @@ const IngameView = ({ route }) => {
   async function addUserToGame() {
     const ref = doc(database, "Games", gameInfo.id);
     await updateDoc(ref, {
-      Participants: arrayUnion(userInfo.Email),
+      Tickets: arrayUnion(userInfo.Email),
     });
   }
 

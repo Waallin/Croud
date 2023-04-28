@@ -6,7 +6,7 @@ import { database } from "../../Firebase/firebase";
 import { Ionicons } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
 
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, collection, query, where, getDocs, arrayUnion } from "firebase/firestore";
 
 const ScanView = (route) => {
   const isFocused = useIsFocused();
@@ -30,16 +30,17 @@ const ScanView = (route) => {
 
   //what happen when we scan barcode
   async function handleBarCodeScanned({ type, data }) {
-    console.log(data)
-    //function to set the qr-code to true
+    //function to set the qr-code to true in tickets
     const docRef = doc(database, "Tickets", data);
     const docSnap = await getDoc(docRef);
 
+    const gameId = docSnap.data().GameId;
+        
+
+  
     //Check if the ticket is on the right organisation.
     const rightOrg = docSnap.data().Hometeam == route.orgData.Name;
-    console.log(docSnap.data().Hometeam)
     if (rightOrg) {
-      console.log("tes")
       //SCAN SUCCESS
       setScanned(false);
       toastFade();
@@ -48,9 +49,18 @@ const ScanView = (route) => {
       await updateDoc(docRef, {
         Scanned: true,
       });
+
+      // add to inchecked in the game-document
+      const ref = doc(database, "Games", gameId);
+      await updateDoc(ref, {
+        CheckedIn: arrayUnion(data),
+      });
+
+
     } else {
       console.log("error")
     }
+    
   };
 
 
@@ -61,6 +71,10 @@ const ScanView = (route) => {
     setTimeout(() => {
       setShowToats(false);
     }, 2500);
+  }
+
+  function asd() {
+    console.log("test")
   }
 
   //check permission and return the screen

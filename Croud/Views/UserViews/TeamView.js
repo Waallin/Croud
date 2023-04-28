@@ -21,6 +21,7 @@ import { globalStyles } from "../../Styles/global";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 const TeamView = ({ route }) => {
+  
   const [games, setGames] = useState([]);
 
   const currentDate = new Date();
@@ -100,6 +101,10 @@ const TeamView = ({ route }) => {
       });
       setFavOrNot(false);
     }
+  }
+  
+  function test() {
+    console.log(route.params.userData)
   }
 
   return (

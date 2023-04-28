@@ -6,10 +6,11 @@ import { globalStyles } from "../../../Styles/global";
 const OrgComponent = ({ Name, Sport, org, userData, date }) => {
   const navigate = useNavigation();
   function goToTeamView() {
+    console.log(userData);
     navigate.navigate("TeamView", {
       org: Name,
       userData: userData,
-    });
+    }); 
   }
 
   function dayText(a) {
@@ -25,6 +26,8 @@ const OrgComponent = ({ Name, Sport, org, userData, date }) => {
         return a;
     } 
   }
+
+
 
   return (
     <TouchableOpacity style={styles.wrapper} onPress={goToTeamView}>
