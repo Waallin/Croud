@@ -27,6 +27,8 @@ const IngameView = ({ route }) => {
   const userInfo = route.params.user;
   const qrCode = route.params.qrCode;
 
+  const [newGameInfo, setNewGameInfo] = useState()
+
   const swish = route.params.swish;
 
   //check if the user has a ticket or not
@@ -48,7 +50,6 @@ const IngameView = ({ route }) => {
   }
 
   useEffect(() => {
-    console.log(route.params.userInfo);
   }, []);
 
   function navigateToSwish() {
@@ -61,7 +62,7 @@ const IngameView = ({ route }) => {
 
   useFocusEffect(
     useCallback(() => {
-
+      getData()
       if (swish) {
         updateUser();
       }
@@ -74,18 +75,12 @@ const IngameView = ({ route }) => {
     }, [])
   );
 
-  async function updateUser() {
-    console.log("kmr från")
+  async function getData() {
+    const docRef = doc(database, "Games", gameInfo.id);
+    const docSnap = await getDoc(docRef);
+    console.log(docSnap.data());
   }
-  /*
-  useEffect(() => {
-     {
-      const scanned = onSnapshot(doc(database, "Games", gameInfo.id), (doc) => {
-        
-        console.log(doc.data)
-      });
-    }
-  }, []); */
+
 
   function setQrCode() {
     if (qrCode) {
@@ -102,7 +97,13 @@ const IngameView = ({ route }) => {
     }
   }
 
-  async function getGame() {}
+  async function getData() {
+    const docRef = doc(database, "Games", gameInfo.id);
+    const docSnap = await getDoc(docRef);
+    console.log(docSnap.data());
+
+    setNewGameInfo(docSnap.data());
+  }
   async function addTicketToUser() {
     const ref = doc(database, "Users", userInfo.Email);
 
@@ -149,6 +150,7 @@ const IngameView = ({ route }) => {
   async function buyLot() {
     navigate.navigate("LotView", {
       gameInfo: gameInfo,
+      newGameInfo: newGameInfo,
       userInfo: userInfo,
     });
   }
