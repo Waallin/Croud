@@ -45,6 +45,9 @@ useEffect(() => {
     }, 2000);
   }, []);
 
+  function test() {
+    console.log(user)
+  }
   async function getGames() {
     setGames([]);
     let favs;

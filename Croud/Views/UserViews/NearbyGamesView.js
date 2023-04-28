@@ -3,6 +3,7 @@ import {
   View,
   RefreshControl,
   ActivityIndicator,
+  Text
 } from "react-native";
 import React from "react";
 import { useEffect, useState } from "react";
@@ -12,6 +13,7 @@ import OrgComponent from "./UserComponents/OrgComponent";
 
 import { query, collection, getDocs } from "firebase/firestore";
 import { globalStyles } from "../../Styles/global";
+import { TouchableOpacity } from "@gorhom/bottom-sheet";
 
 const NearbyGamesView = (route) => {
   const currentDate = new Date();
@@ -111,8 +113,13 @@ const NearbyGamesView = (route) => {
     }
   }
 
+  function test() {
+    console.log(route.userData)
+  }
+
   return (
     <View style={globalStyles.primaryContainer}>
+
       {isLoading ? (
         <View style={styles.loadingIcon}>
           <ActivityIndicator size="small" color={globalStyles.primaryGreen} />

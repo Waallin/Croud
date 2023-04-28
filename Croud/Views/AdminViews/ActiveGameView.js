@@ -11,16 +11,43 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { useState } from "react";
 import { database } from "../../Firebase/firebase";
-import { doc, updateDoc } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import { globalStyles } from "../../Styles/global";
 import { AntDesign } from "@expo/vector-icons";
 import ActiveComponent from "../UserViews/UserComponents/ActiveComponent";
+import { MaterialCommunityIcons } from '@expo/vector-icons'; 
+import {
+  arrayUnion,
+  doc,
+  getDoc,
+  setDoc,
+  query,
+  collection,
+  where,
+  getDocs,
+  updateDoc,
+  onSnapshot,
+} from "firebase/firestore";
+import { useEffect } from "react";
 const ActiveGameView = (event) => {
+  const [gameInfo, setGameInfo] = useState([]);
   const navigate = useNavigation();
   const eventInfo = event.route.params.event;
+  const [tickets, setTickets] = useState()
+
   function navigateBack() {
     navigate.goBack();
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  async function getData() {
+    const docRef = doc(database, "Games", eventInfo.key);
+    const docSnap = await getDoc(docRef);
+
+    setGameInfo(docSnap.data());
   }
 
   return (
@@ -46,16 +73,25 @@ const ActiveGameView = (event) => {
             <Text style={globalStyles.smallerTitle}>{eventInfo.Opponent}</Text>
           </View>
         </View>
-        <Text style={{...globalStyles.primaryText, padding: 15}}>{eventInfo.Text}</Text>
+        <Text style={{ ...globalStyles.primaryText, padding: 15 }}>
+          {eventInfo.Text}
+        </Text>
+        <View style={styles.gameInfoWrapper}>
+          <View style={{flexDirection: "row", alignItems: "center"}}>
+          <MaterialCommunityIcons name="ticket-outline" size={24} color="black" />
+                <Text style={{...globalStyles.primaryText, paddingLeft: 10}}>{gameInfo.Tickets ? gameInfo.Tickets.length : 0} sålda biljetter </Text>
+                </View>
+                <View style={{flexDirection: "row", alignItems: "center", marginTop: 10}}>
+                <MaterialCommunityIcons name="ticket" size={24} color={globalStyles.primaryGreen} />
+                <Text style={{...globalStyles.primaryText, paddingLeft: 10}}>{gameInfo.CheckedIn ? gameInfo.CheckedIn.length : 0} inpasserade</Text>
+                </View>
+              </View>
       </View>
       <View style={styles.botWrapper}>
         <TouchableOpacity style={globalStyles.secondaryGreyBtn}>
           <Text style={globalStyles.secondaryBtnText}>Avsluta evenemang</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={globalStyles.secondaryGreyBtn}
-          onPress={navigateBack}
-        >
+        <TouchableOpacity style={globalStyles.secondaryGreyBtn} onPress={navigateBack}>
           <Text style={globalStyles.secondaryBtnText}>Avbryt</Text>
         </TouchableOpacity>
       </View>
@@ -109,4 +145,8 @@ const styles = StyleSheet.create({
     flex: 2,
     alignItems: "center",
   },
+
+  gameInfoWrapper: {
+    padding: 15
+  }
 });

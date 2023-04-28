@@ -73,10 +73,14 @@ const SwishView = ({ route }) => {
   }
 
   async function addUserToGame() {
+    
+    const newTicket = {
+      ticketId: uuid,
+      email: userInfo.Email,
+      scanned: false
+    }
     const ref = doc(database, "Games", gameInfo.id);
-    await updateDoc(ref, {
-      Participants: arrayUnion(userInfo.Email),
-    });
+    await updateDoc(ref, { Tickets: arrayUnion(newTicket) }, { merge: true });
 
     console.log("addUserToGame check")
   }
