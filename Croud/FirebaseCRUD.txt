@@ -12,6 +12,13 @@ PUSH TO DB//////////
     });
   }
 
+  async function getData() {
+    const docRef = doc(database, "Games", gameInfo.id);
+    const docSnap = await getDoc(docRef);
+    console.log(docSnap.data());
+  }
+
+  
 
 import { useNavigation } from "@react-navigation/native";
   const navigate = useNavigation();

@@ -48,7 +48,6 @@ const IngameView = ({ route }) => {
   }
 
   useEffect(() => {
-    console.log(route.params.userInfo);
   }, []);
 
   function navigateToSwish() {
@@ -61,7 +60,7 @@ const IngameView = ({ route }) => {
 
   useFocusEffect(
     useCallback(() => {
-
+      getData()
       if (swish) {
         updateUser();
       }
@@ -74,18 +73,12 @@ const IngameView = ({ route }) => {
     }, [])
   );
 
-  async function updateUser() {
-    console.log("kmr från")
+  async function getData() {
+    const docRef = doc(database, "Games", gameInfo.id);
+    const docSnap = await getDoc(docRef);
+    console.log(docSnap.data());
   }
-  /*
-  useEffect(() => {
-     {
-      const scanned = onSnapshot(doc(database, "Games", gameInfo.id), (doc) => {
-        
-        console.log(doc.data)
-      });
-    }
-  }, []); */
+
 
   function setQrCode() {
     if (qrCode) {
@@ -102,7 +95,11 @@ const IngameView = ({ route }) => {
     }
   }
 
-  async function getGame() {}
+  async function getData() {
+    const docRef = doc(database, "Games", gameInfo.id);
+    const docSnap = await getDoc(docRef);
+    console.log(docSnap.data());
+  }
   async function addTicketToUser() {
     const ref = doc(database, "Users", userInfo.Email);
 

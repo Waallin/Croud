@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { globalStyles } from "../../Styles/global";
 import { database } from "../../Firebase/firebase";
 import { useNavigation } from "@react-navigation/native";
+import { Picker, DatePicker } from "react-native-wheel-pick";
 export default function LotView({ route }) {
   const gameInfo = route.params.gameInfo;
   const userInfo = route.params.userInfo;
@@ -14,16 +15,17 @@ export default function LotView({ route }) {
   const [choosenLot, setChoosenLot] = useState(null);
 
   useEffect(() => {
+    console.log(gameInfo)
     const numbers = [];
     let takenLots = gameInfo.lots;
 
     let mappedTaken = takenLots.map((x) => x.lotNumber);
-    console.log(mappedTaken);
     for (let i = 1; i < gameInfo.maxLots; i++) {
       if (!mappedTaken.includes(i)) {
         numbers.push(i);
       }
     }
+    //console.log(numbers)
     setLots(numbers);
   }, []);
 
@@ -44,36 +46,35 @@ export default function LotView({ route }) {
       array = [];
     }
     const newLot = {
-      lotNumber: choosenLot,
+      lotNumber: parseInt(choosenLot),
       name: userInfo.Name,
       email: userInfo.Email,
     };
     array.push(newLot);
     await updateDoc(ref, { Lots: array });
-    navigate.goBack();
   }
+
+
   return (
     <SafeAreaView style={globalStyles.primaryContainer}>
-      <View style={styles.boxContainer}>
-        {lots.map((number) => (
-          <TouchableOpacity
-          key={number}
-            style={styles.box}
-            onPress={() => {
-              chooseNumber(number);
-            }}
-          >
-            <Text style={{ color: "white" }}>{number}</Text>
-          </TouchableOpacity>
-        ))}
-        {choosenLot ? (
+      <View style={styles.wrapper}>
+      <Picker
+                        style={{
+                          backgroundColor: "rgba(255, 255, 255, 0.01)",
+                          width: 300,
+                          height: 215,
+                        }}
+                        selectedValue={"16"}
+                        pickerData={lots}
+                        onValueChange={(value) => {setChoosenLot(value)}}
+                        itemSpace={30} // this only support in android
+                      />
           <TouchableOpacity
             style={{ ...globalStyles.primaryGreenBtn, marginTop: 50 }}
             onPress={buyLot}
           >
-            <Text style={globalStyles.primaryBtnText}>Köp nr {choosenLot}</Text>
+            <Text style={globalStyles.primaryBtnText}>Köp</Text>
           </TouchableOpacity>
-        ) : null}
         <TouchableOpacity
           style={globalStyles.secondaryGreyBtn}
           onPress={goBack}
@@ -86,20 +87,9 @@ export default function LotView({ route }) {
 }
 
 const styles = StyleSheet.create({
-  boxContainer: {
+  wrapper: {
     flex: 1,
-    marginTop: 50,
-    flexDirection: "row",
-    flexWrap: "wrap",
     justifyContent: "center",
-  },
-
-  box: {
-    height: 50,
-    width: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: globalStyles.primaryGreen,
-    margin: 5,
-  },
+    alignItems: "center"
+  }
 });
