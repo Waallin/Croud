@@ -15,7 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import { globalStyles } from "../../Styles/global";
 import { AntDesign } from "@expo/vector-icons";
 import ActiveComponent from "../UserViews/UserComponents/ActiveComponent";
-import { MaterialCommunityIcons } from '@expo/vector-icons'; 
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   arrayUnion,
   doc,
@@ -33,7 +33,9 @@ const ActiveGameView = (event) => {
   const [gameInfo, setGameInfo] = useState([]);
   const navigate = useNavigation();
   const eventInfo = event.route.params.event;
-  const [tickets, setTickets] = useState()
+  const [tickets, setTickets] = useState();
+
+  const [lotWinner, setLotWinner] = useState(null);
 
   function navigateBack() {
     navigate.goBack();
@@ -48,6 +50,20 @@ const ActiveGameView = (event) => {
     const docSnap = await getDoc(docRef);
 
     setGameInfo(docSnap.data());
+  }
+
+  useEffect(() => {
+    setLotWinner(gameInfo.LotWinner);
+  }, [gameInfo]);
+
+  async function makeLotWinner() {
+    const lots = gameInfo.Lots;
+    let random = Math.floor(Math.random() * lots.length);
+    const winner = lots[random];
+    setLotWinner(winner);
+
+    const ref = doc(database, "Games", eventInfo.key);
+    await updateDoc(ref, { LotWinner: arrayUnion(winner) }, { merge: true });
   }
 
   return (
@@ -77,21 +93,69 @@ const ActiveGameView = (event) => {
           {eventInfo.Text}
         </Text>
         <View style={styles.gameInfoWrapper}>
-          <View style={{flexDirection: "row", alignItems: "center"}}>
-          <MaterialCommunityIcons name="ticket-outline" size={24} color="black" />
-                <Text style={{...globalStyles.primaryText, paddingLeft: 10}}>{gameInfo.Tickets ? gameInfo.Tickets.length : 0} sålda biljetter </Text>
-                </View>
-                <View style={{flexDirection: "row", alignItems: "center", marginTop: 10}}>
-                <MaterialCommunityIcons name="ticket" size={24} color={globalStyles.primaryGreen} />
-                <Text style={{...globalStyles.primaryText, paddingLeft: 10}}>{gameInfo.CheckedIn ? gameInfo.CheckedIn.length : 0} inpasserade</Text>
-                </View>
-              </View>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <MaterialCommunityIcons
+              name="ticket-outline"
+              size={24}
+              color="black"
+            />
+            <Text style={{ ...globalStyles.primaryText, paddingLeft: 10 }}>
+              {gameInfo.Tickets ? gameInfo.Tickets.length : 0} sålda biljetter{" "}
+            </Text>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginTop: 10,
+            }}
+          >
+            <MaterialCommunityIcons
+              name="ticket"
+              size={24}
+              color={globalStyles.primaryGreen}
+            />
+            <Text style={{ ...globalStyles.primaryText, paddingLeft: 10 }}>
+              {gameInfo.CheckedIn ? gameInfo.CheckedIn.length : 0} inpasserade
+            </Text>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginTop: 10,
+            }}
+          >
+            <MaterialCommunityIcons
+              name="ticket-confirmation"
+              size={24}
+              color={globalStyles.primaryGreen}
+            />
+            <Text style={{ ...globalStyles.primaryText, paddingLeft: 10 }}>
+              {gameInfo.Lots ? gameInfo.Lots.length : 0} sålda lotter
+            </Text>
+          </View>
+        </View>
       </View>
       <View style={styles.botWrapper}>
+        <TouchableOpacity
+          style={globalStyles.primaryGreenBtn}
+          onPress={makeLotWinner}
+          disabled={lotWinner ? true : false}
+        >
+          <Text style={globalStyles.primaryBtnText}>
+            {lotWinner
+              ? "Vinnare dragen. syns på firebase"
+              : "Dra lott-vinnare"}
+          </Text>
+        </TouchableOpacity>
         <TouchableOpacity style={globalStyles.secondaryGreyBtn}>
           <Text style={globalStyles.secondaryBtnText}>Avsluta evenemang</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={globalStyles.secondaryGreyBtn} onPress={navigateBack}>
+        <TouchableOpacity
+          style={globalStyles.secondaryGreyBtn}
+          onPress={navigateBack}
+        >
           <Text style={globalStyles.secondaryBtnText}>Avbryt</Text>
         </TouchableOpacity>
       </View>
@@ -144,9 +208,10 @@ const styles = StyleSheet.create({
   botWrapper: {
     flex: 2,
     alignItems: "center",
+    marginTop: 50,
   },
 
   gameInfoWrapper: {
-    padding: 15
-  }
+    padding: 15,
+  },
 });

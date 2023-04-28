@@ -42,6 +42,8 @@ const IngameView = ({ route }) => {
   const [allLots, setAllLots] = useState(null);
   const [myLots, setMyLots] = useState(null);
 
+  const [lotWinner, setLotWinner] = useState();
+
 
   const uuid = uuidv4();
 
@@ -63,13 +65,7 @@ const IngameView = ({ route }) => {
   useFocusEffect(
     useCallback(() => {
       getData()
-      if (swish) {
-        updateUser();
-      }
-      if (!route.params.ticket) {
-        getGame();
-
-      } else {
+      if (route.params.ticket) {
         setQrCode();
       }
     }, [])
@@ -84,9 +80,7 @@ const IngameView = ({ route }) => {
 
   function setQrCode() {
     if (qrCode) {
-      console.log("hej")
       setTicketId(qrCode)
-      console.log("asd")
     } else 
     {
     let gameId = gameInfo.id;
@@ -104,6 +98,24 @@ const IngameView = ({ route }) => {
 
     setNewGameInfo(docSnap.data());
   }
+
+  useEffect(() => {
+    // prenumerera på förändringar i Firestore-databasen
+    const userDocRef = doc(database, "Games", gameInfo.id);
+    const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
+      if (docSnapshot.exists()) {
+        const newUserData = docSnapshot.data();
+        const lotWinner = newUserData.LotWinner;
+        console.log(lotWinner)
+        setLotWinner(lotWinner)
+      }
+    });
+
+    // avsluta prenumerationen när komponenten avmonteras
+    return () => {
+      unsubscribe();
+    };
+  }, [gameInfo.id]);
   async function addTicketToUser() {
     const ref = doc(database, "Users", userInfo.Email);
 
@@ -206,10 +218,12 @@ const IngameView = ({ route }) => {
               <TicketStatusComponent text={scanned ? "INPASSERAD" : "EJ INPASSERAD"} bg={scanned ? globalStyles.primaryGreen : "#78909C"} />
               </View> 
             ) : null}
-            <TouchableOpacity style={globalStyles.primaryGreenBtn} onPress={buyLot}>
-              <Text style={globalStyles.primaryBtnText}>Köp lott</Text>
+            <TouchableOpacity style={globalStyles.primaryGreenBtn} onPress={buyLot} disabled={lotWinner ? true : false}>
+              <Text style={globalStyles.primaryBtnText}>köp lott</Text>
             </TouchableOpacity>
+            {lotWinner ? <Text style={{...globalStyles.primaryText, marginTop: 30}}>Lott-vinnare: {lotWinner[0].name} med nr {lotWinner[0].lotNumber}</Text> : null}
           </View>
+          
         ) : (
           <View style={styles.noTicketWrapper}>
             <View style={styles.textWrapper}>
