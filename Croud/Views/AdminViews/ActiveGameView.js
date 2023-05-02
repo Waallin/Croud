@@ -28,17 +28,39 @@ import {
   updateDoc,
   onSnapshot,
 } from "firebase/firestore";
-import { useEffect } from "react";
+import {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+} from "@gorhom/bottom-sheet";
+import { useEffect, useRef } from "react";
 const ActiveGameView = (event) => {
   const [gameInfo, setGameInfo] = useState([]);
   const navigate = useNavigation();
-  const eventInfo = event.route.params.event;
-  const [tickets, setTickets] = useState();
+  //const eventInfo = event.route.params.event;
 
-  const [lotWinner, setLotWinner] = useState(null);
+  const [eventInfo, setEventInfo] = useState(event.route.params.event);
+  const [key, setKey] = useState(event.route.params.event.key);
+
+  const [lotPrice, setLotPrice] = useState(
+    eventInfo.LotPrice ? eventInfo.LotPrice : 0
+  );
+  const [maxLots, setMaxLots] = useState(
+    eventInfo.MaxLots ? eventInfo.MaxLots : 0
+  );
+
+  let bottomSheetModalRef = useRef(null);
+  function handlePresentModal() {
+    bottomSheetModalRef.current?.present();
+  }
 
   function navigateBack() {
+
     navigate.goBack();
+  }
+
+  //close bottomsheetmodal
+  function closeModal() {
+    bottomSheetModalRef.current?.close();
   }
 
   useEffect(() => {
@@ -46,15 +68,14 @@ const ActiveGameView = (event) => {
   }, []);
 
   async function getData() {
+    if (eventInfo && eventInfo.key) {
     const docRef = doc(database, "Games", eventInfo.key);
     const docSnap = await getDoc(docRef);
 
     setGameInfo(docSnap.data());
+    }
   }
 
-  useEffect(() => {
-    setLotWinner(gameInfo.LotWinner);
-  }, [gameInfo]);
 
   async function makeLotWinner() {
     const lots = gameInfo.Lots;
@@ -62,9 +83,47 @@ const ActiveGameView = (event) => {
     const winner = lots[random];
     setLotWinner(winner);
 
-    const ref = doc(database, "Games", eventInfo.key);
+    const ref = doc(database, "Games", key);
     await updateDoc(ref, { LotWinner: arrayUnion(winner) }, { merge: true });
   }
+
+  async function startSellingLots() {
+
+    //function to set the qr-code to true in tickets
+    const docRef = doc(database, "Games", key);
+    const docSnap = await getDoc(docRef);
+
+      // Set the "capital" field of the city 'DC'
+      await updateDoc(docRef, {
+        SellingLots: true,
+        MaxLots: maxLots,
+        LotPrice: lotPrice
+      });
+
+      closeModal();
+    
+  }
+
+  useEffect(() => {
+    // prenumerera på förändringar i Firestore-databasen
+    const userDocRef = doc(database, "Games", key);
+    const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
+      if (docSnapshot.exists()) {
+        const newGameInfo = docSnapshot.data();
+        
+        const newTickets = docSnapshot.data().Tickets;
+        console.log(newTickets)
+        console.log(newGameInfo)
+
+        setEventInfo(newGameInfo)
+      }
+    });
+
+    // avsluta prenumerationen när komponenten avmonteras
+    return () => {
+      unsubscribe();
+    };
+  }, [gameInfo.id]);
 
   return (
     <SafeAreaView style={globalStyles.primaryContainer}>
@@ -94,11 +153,11 @@ const ActiveGameView = (event) => {
         </Text>
         <View style={styles.gameInfoWrapper}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <MaterialCommunityIcons
-              name="ticket-outline"
-              size={24}
-              color="black"
-            />
+          <MaterialCommunityIcons
+                name="ticket-confirmation"
+                size={24}
+                color={globalStyles.primaryGreen}
+              />
             <Text style={{ ...globalStyles.primaryText, paddingLeft: 10 }}>
               {gameInfo.Tickets ? gameInfo.Tickets.length : 0} sålda biljetter{" "}
             </Text>
@@ -110,45 +169,74 @@ const ActiveGameView = (event) => {
               marginTop: 10,
             }}
           >
-            <MaterialCommunityIcons
-              name="ticket"
-              size={24}
-              color={globalStyles.primaryGreen}
-            />
+              <MaterialCommunityIcons
+                name="ticket-confirmation"
+                size={24}
+                color={globalStyles.primaryGreen}
+              />
             <Text style={{ ...globalStyles.primaryText, paddingLeft: 10 }}>
               {gameInfo.CheckedIn ? gameInfo.CheckedIn.length : 0} inpasserade
             </Text>
           </View>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              marginTop: 10,
-            }}
-          >
-            <MaterialCommunityIcons
-              name="ticket-confirmation"
-              size={24}
-              color={globalStyles.primaryGreen}
-            />
-            <Text style={{ ...globalStyles.primaryText, paddingLeft: 10 }}>
-              {gameInfo.Lots ? gameInfo.Lots.length : 0} sålda lotter
-            </Text>
-          </View>
+          {eventInfo.SellingLots ? (
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginTop: 10,
+              }}
+            >
+              <MaterialCommunityIcons
+                name="ticket-confirmation"
+                size={24}
+                color={globalStyles.primaryGreen}
+              />
+              <Text style={{ ...globalStyles.primaryText, paddingLeft: 10 }}>
+                {gameInfo.Lots ? gameInfo.Lots.length : 0} sålda lotter
+              </Text>
+            </View>
+          ) : null}
+              {eventInfo.LotWinner ? (
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginTop: 10,
+              }}
+            >
+              <MaterialCommunityIcons
+                name="ticket-confirmation"
+                size={24}
+                color={globalStyles.primaryGreen}
+              />
+              <Text style={{ ...globalStyles.primaryText, paddingLeft: 10 }}>
+                Lottvinnare: #{eventInfo.LotWinner[0].lotNumber} {eventInfo.LotWinner[0].name}
+              </Text>
+            </View>
+          ) : null}
         </View>
       </View>
       <View style={styles.botWrapper}>
-        <TouchableOpacity
-          style={globalStyles.primaryGreenBtn}
-          onPress={makeLotWinner}
-          disabled={lotWinner ? true : false}
-        >
-          <Text style={globalStyles.primaryBtnText}>
-            {lotWinner
-              ? "Vinnare dragen. syns på firebase"
-              : "Dra lott-vinnare"}
-          </Text>
-        </TouchableOpacity>
+        {eventInfo.SellingLots ? (
+          !eventInfo.LotWinner ? 
+          <TouchableOpacity
+            style={globalStyles.primaryGreenBtn}
+            onPress={makeLotWinner}
+          >
+            <Text style={globalStyles.primaryBtnText}>Dra lottvinnare</Text>
+          </TouchableOpacity>
+           : null
+        ) : (
+          <TouchableOpacity
+            style={globalStyles.primaryGreenBtn}
+            onPress={handlePresentModal}
+          >
+            <Text style={globalStyles.primaryBtnText}>
+              Starta lottförsäljning
+            </Text>
+          </TouchableOpacity>
+        )}
+
         <TouchableOpacity style={globalStyles.secondaryGreyBtn}>
           <Text style={globalStyles.secondaryBtnText}>Avsluta evenemang</Text>
         </TouchableOpacity>
@@ -159,6 +247,72 @@ const ActiveGameView = (event) => {
           <Text style={globalStyles.secondaryBtnText}>Avbryt</Text>
         </TouchableOpacity>
       </View>
+
+      <BottomSheetModalProvider>
+        <BottomSheetModal
+          ref={bottomSheetModalRef}
+          index={0}
+          snapPoints={["30%"]}
+          backgroundStyle={{ borderRadius: 30 }}
+        >
+          <View style={{ padding: 10, alignItems: "center" }}>
+            <View style={{ alignItems: "center" }}>
+              <Text style={{ ...globalStyles.primaryTitle, fontSize: "20px" }}>
+                Starta lottförsäljning
+              </Text>
+            </View>
+            <View style={{ flexDirection: "row", paddingVertical: 20 }}>
+              <View style={{ width: "50%" }}>
+                <Text style={{ ...globalStyles.primaryText, marginBottom: 10 }}>
+                  Antal lotter
+                </Text>
+                <TouchableOpacity>
+                  <View style={globalStyles.secondaryInput}>
+                    <AntDesign
+                      name="clockcircleo"
+                      size={20}
+                      style={globalStyles.primaryInputIcon}
+                    />
+                    <Text
+                      style={{
+                        ...globalStyles.primaryText,
+                        paddingHorizontal: 5,
+                      }}
+                    >
+                      {maxLots} st
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View style>
+                <Text style={{ ...globalStyles.primaryText, marginBottom: 10 }}>
+                  Pris per lott
+                </Text>
+                <TouchableOpacity>
+                  <View style={globalStyles.secondaryInput}>
+                    <AntDesign
+                      name="clockcircleo"
+                      size={20}
+                      style={globalStyles.primaryInputIcon}
+                    />
+                    <Text
+                      style={{
+                        ...globalStyles.primaryText,
+                        paddingHorizontal: 5,
+                      }}
+                    >
+                      {lotPrice} kr
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </View>
+            <TouchableOpacity style={{...globalStyles.primaryGreenBtn}} onPress={startSellingLots}>
+              <Text style={globalStyles.primaryBtnText}>Starta</Text>
+            </TouchableOpacity>
+          </View>
+        </BottomSheetModal>
+      </BottomSheetModalProvider>
     </SafeAreaView>
   );
 };
@@ -209,6 +363,7 @@ const styles = StyleSheet.create({
     flex: 2,
     alignItems: "center",
     marginTop: 50,
+    justifyContent: "center"
   },
 
   gameInfoWrapper: {
