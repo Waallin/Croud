@@ -36,6 +36,7 @@ import { useEffect, useRef } from "react";
 const ActiveGameView = (event) => {
   const [gameInfo, setGameInfo] = useState([]);
   const navigate = useNavigation();
+  const [lotWinner, setLotWinner] = useState(null);
   //const eventInfo = event.route.params.event;
 
   const [eventInfo, setEventInfo] = useState(event.route.params.event);
