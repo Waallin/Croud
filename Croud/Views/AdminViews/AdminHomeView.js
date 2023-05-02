@@ -71,6 +71,10 @@ const AdminHomeView = ({ orgData, route }) => {
         Day: doc.data().Day,
         Text: doc.data().Text,
         Location: doc.data().Location,
+        SellingLots: doc.data().SellingLots,
+        LotPrice: doc.data().LotPrice,
+        MaxLots: doc.data().MaxLots,
+        LotWinner: doc.data().LotWinner
       };
       x.push(obj);
     });
@@ -185,6 +189,10 @@ const AdminHomeView = ({ orgData, route }) => {
                 Time={event.Time}
                 Day={event.Day}
                 Location={event.Location}
+                SetllingLots={event.SellingLots}
+                LotPrice={event.LotPrice}
+                MaxLots={event.MaxLots}
+                LotWinner={event.LotWinner}
               />
             );
           })}
