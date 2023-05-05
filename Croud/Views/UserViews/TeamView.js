@@ -93,11 +93,21 @@ const TeamView = ({ route }) => {
       await updateDoc(ref, {
         Favourites: arrayUnion(org),
       });
+
+      const ref2 = doc(database, "Organisations", org);
+      await updateDoc(ref2, {
+        Fans: arrayUnion(userData.Email),
+      });
       setFavOrNot(true);
+
     } else {
       const ref = doc(database, "Users", userData.Email);
       await updateDoc(ref, {
         Favourites: arrayRemove(org),
+      });
+      const ref2 = doc(database, "Organisations", org);
+      await updateDoc(ref2, {
+        Fans: arrayRemove(userData.Email),
       });
       setFavOrNot(false);
     }

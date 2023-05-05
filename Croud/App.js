@@ -54,6 +54,8 @@ export default function App() {
   LogBox.ignoreLogs(["AsyncStorage has been extracted"]);
   LogBox.ignoreLogs(['expo-app-loading is deprecated']);
   LogBox.ignoreLogs(['Non-serializable values were found in the navigation state']);
+  LogBox.ignoreLogs(['DevTools failed to load source map: ']);
+  LogBox.ignoreLogs(['mote debugger is in a background tab which may cause apps to perform slowly.']);
   return (
     <>
       {!isReady ? <SplashScreen /> : null}

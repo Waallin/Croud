@@ -8,7 +8,7 @@ import { globalStyles } from "../../Styles/global";
 import AdminHomeView from "./AdminHomeView";
 import ScanView from "./ScanView";
 import { Ionicons } from '@expo/vector-icons'; 
-import SettingsView from "./SettingsView";
+import ProfileView from "./ProfileView";
 
 const AdminContainer = ({ route }) => {
   const Tab = createBottomTabNavigator();
@@ -67,8 +67,8 @@ const AdminContainer = ({ route }) => {
               />
             ),
           }}
-          name="Inställningar"
-          children={() => <SettingsView orgData={orgData} />}
+          name="Profil"
+          children={() => <ProfileView orgData={orgData} />}
         />
       </Tab.Navigator>
     </View>
