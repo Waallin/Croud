@@ -21,13 +21,13 @@ import { globalStyles } from "../../Styles/global";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 const TeamView = ({ route }) => {
-  
   const [games, setGames] = useState([]);
 
   const currentDate = new Date();
   let today = currentDate.toISOString().split("T")[0];
   //check if team is in favourites or not
   const [favOrNot, setFavOrNot] = useState(false);
+  const [notifOrNot, setNotifOrNot] = useState(false);
   const [userInfo, setUserInfo] = useState([]);
 
   const navigate = useNavigation();
@@ -50,6 +50,13 @@ const TeamView = ({ route }) => {
       } else {
         setFavOrNot(false);
       }
+      
+      if (docSnap.data().Notifications && docSnap.data().Notifications.includes(org)) {
+        setNotifOrNot(true);
+      } else {
+        setNotifOrNot(false);
+      }
+    
     }
   }
 
@@ -92,29 +99,64 @@ const TeamView = ({ route }) => {
       const ref = doc(database, "Users", userData.Email);
       await updateDoc(ref, {
         Favourites: arrayUnion(org),
+        Notifications: arrayUnion(org)
       });
 
       const ref2 = doc(database, "Organisations", org);
       await updateDoc(ref2, {
         Fans: arrayUnion(userData.Email),
+        Notifications: arrayUnion(userData.Email)
       });
       setFavOrNot(true);
-
+      setNotifOrNot(true);
     } else {
       const ref = doc(database, "Users", userData.Email);
       await updateDoc(ref, {
         Favourites: arrayRemove(org),
+        Notifications: arrayRemove(org),
       });
       const ref2 = doc(database, "Organisations", org);
       await updateDoc(ref2, {
         Fans: arrayRemove(userData.Email),
+        Notifications: arrayRemove(userData.Email)
       });
       setFavOrNot(false);
+      setNotifOrNot(false);
     }
   }
-  
+
+  async function addNotification() {
+    if (notifOrNot == false) {
+
+      const ref = doc(database, "Users", userData.Email);
+      await updateDoc(ref, {
+        Notifications: arrayUnion(org)
+      });
+
+      const ref2 = doc(database, "Organisations", org);
+      await updateDoc(ref2, {
+        Notifications: arrayUnion(userData.Email),
+      });
+      setNotifOrNot(true);
+    } else {
+
+      const ref = doc(database, "Users", userData.Email);
+      await updateDoc(ref, {
+        Notifications: arrayRemove(org),
+      });
+
+      const ref2 = doc(database, "Organisations", org);
+      await updateDoc(ref2, {
+        Notifications: arrayRemove(userData.Email),
+      });
+      setNotifOrNot(false);
+    }
+  }
+
+
+
   function test() {
-    console.log(route.params.userData)
+    console.log(route.params.userData);
   }
 
   return (
@@ -124,33 +166,42 @@ const TeamView = ({ route }) => {
           <AntDesign name="left" size={20} color={globalStyles.primaryBlack} />
         </TouchableOpacity>
         <Text style={globalStyles.primaryTitle}>{org}</Text>
-        <TouchableOpacity onPress={addOrg}>
-          <Ionicons
-            name={favOrNot ? "heart" : "heart-outline"}
-            size={32}
-            color={globalStyles.primaryGreen}
-          />
-        </TouchableOpacity>
+        <View style={{ flexDirection: "row" }}>
+          <TouchableOpacity onPress={addNotification} style={{ marginRight: 10 }}>
+            <Ionicons
+              name={notifOrNot ? "notifications-sharp" : "notifications-outline"}
+              size={32}
+              color={globalStyles.primaryGreen}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={addOrg}>
+            <Ionicons
+              name={favOrNot ? "heart" : "heart-outline"}
+              size={32}
+              color={globalStyles.primaryGreen}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
       <ScrollView style={styles.botWrapper}>
-          {games.map((game) => {
-            return (
-              <GamesComponent
-                key={game.id}
-                user={userData}
-                game={game}
-                active={game.active}
-                hometeam={game.hometeam}
-                maxLots={game.maxLots}
-                id={game.id}
-                opponent={game.opponent}
-                day={game.day}
-                time={game.time}
-                location={game.location}
-              />
-            );
-          })}
-        </ScrollView>
+        {games.map((game) => {
+          return (
+            <GamesComponent
+              key={game.id}
+              user={userData}
+              game={game}
+              active={game.active}
+              hometeam={game.hometeam}
+              maxLots={game.maxLots}
+              id={game.id}
+              opponent={game.opponent}
+              day={game.day}
+              time={game.time}
+              location={game.location}
+            />
+          );
+        })}
+      </ScrollView>
     </SafeAreaView>
   );
 };
