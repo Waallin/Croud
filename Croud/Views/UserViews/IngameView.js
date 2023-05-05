@@ -8,7 +8,7 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import React, { useEffect, useState, useCallback } from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import "react-native-get-random-values";
@@ -20,6 +20,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import TicketStatusComponent from "./UserComponents/TicketStatusComponent";
+import AppLoading from "expo-app-loading";
 
 const IngameView = ({ route }) => {
   const navigate = useNavigation();
@@ -36,13 +37,10 @@ const IngameView = ({ route }) => {
 
   const [scanned, setScanned] = useState();
   const [ticketId, setTicketId] = useState(null);
-
   const [showQr, setShowQr] = useState(false);
-
   const [myLots, setMyLots] = useState(null);
-
   const [lotWinner, setLotWinner] = useState();
-
+  const [loading, setLoading] = useState(true);
   const uuid = uuidv4();
 
   function navigateBack() {
@@ -110,6 +108,8 @@ const IngameView = ({ route }) => {
         }
 
         setLotWinner(lotWinner);
+        setLoading(false);
+        
       }
       }
     });
@@ -164,7 +164,6 @@ const IngameView = ({ route }) => {
       </View>
       <View style={styles.infoText}>
         <Text style={globalStyles.primaryText}>{gameInfo.text}</Text>
-
         {route.params.ticket ? (
           <View style={styles.ticketWrapper}>
             {ticketId ? (
@@ -178,7 +177,8 @@ const IngameView = ({ route }) => {
                 />
               </View>
             ) : null}
-            {lotWinner ? (
+            {loading ? <ActivityIndicator  /> : 
+            <>{lotWinner ? (
               <View>
                 <View style={{ alignItems: "center" }}>
                   <Text
@@ -210,7 +210,7 @@ const IngameView = ({ route }) => {
                     style={{
                       flexDirection: "row",
                       alignItems: "center",
-                      marginTop: 30,
+                      marginTop: 10,
                     }}
                   >
                     <MaterialCommunityIcons
@@ -269,7 +269,8 @@ const IngameView = ({ route }) => {
                   </View>
                 ) : null}
               </>
-            )}
+            )}</>}
+          
           </View>
         ) : (
           <View style={styles.noTicketWrapper}>
