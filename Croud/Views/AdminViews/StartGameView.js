@@ -28,6 +28,7 @@ const StartGameView = (event) => {
     const ref = doc(database, "Games", eventInfo.key);
     await updateDoc(ref, {
       Active: true,
+      SellingLots: false, 
       Text: textInput ? textInput : "",
       //AdultTicket: parseInt(adultTicket),
       //KidTicket: parseInt(kidTicket)
@@ -35,7 +36,7 @@ const StartGameView = (event) => {
     if (isEnabled) {
       //send notifications to organisations fans
     }
-    navigate.navigate("ActiveGame", {
+    navigate.replace("ActiveGame", {
       event: eventInfo,
     });
   }

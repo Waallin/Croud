@@ -28,7 +28,8 @@ const SwishView = ({ route }) => {
   const uuid = uuidv4();
 
   function nav() {
-
+    addTicketToOrg();
+    
     addTicketToUser();
     addUserToGame();
     createQrTicket();
@@ -97,6 +98,17 @@ const SwishView = ({ route }) => {
     });
 
     console.log("createQrTicket check")
+  }
+
+  async function addTicketToOrg() {
+    const newTicket = {
+      ticketId: uuid,
+    }
+    const ref = doc(database, "Organisations", gameInfo.hometeam);
+    await updateDoc(ref, { Tickets: arrayUnion(uuid) }, { merge: true });
+
+    console.log("addTicketToOrg check")
+
   }
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
