@@ -8,7 +8,13 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import React, { useEffect, useState, useCallback } from "react";
-import { ActivityIndicator, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import "react-native-get-random-values";
@@ -41,11 +47,11 @@ const IngameView = ({ route }) => {
   const [myLots, setMyLots] = useState(null);
   const [lotWinner, setLotWinner] = useState();
   const [loading, setLoading] = useState(true);
+  const [showLotBtn, setShowLotBtn] = useState(false);
   const uuid = uuidv4();
 
   function navigateBack() {
-
-    navigate.goBack();
+     navigate.goBack();
   }
 
   function navigateToSwish() {
@@ -99,19 +105,23 @@ const IngameView = ({ route }) => {
 
         const allLots = docSnapshot.data().Lots;
         if (allLots) {
-        const myLots = allLots.filter((x) => x.email === userInfo.Email);
-        
-        if (!myLots.length == 0) {
-          const mappedMyLots = myLots.map((x) => x.lotNumber); 
-          
-          setMyLots(mappedMyLots)
-        }
+          const myLots = allLots.filter((x) => x.email === userInfo.Email);
 
-        setLotWinner(lotWinner);
-        setLoading(false);
-        
+          if (!myLots.length == 0) {
+            const mappedMyLots = myLots.map((x) => x.lotNumber);
+
+            setMyLots(mappedMyLots);
+            setLoading(false);
+          }
+
+          setLotWinner(lotWinner);
+          setLoading(false);
+        }
+        const maxLots = docSnapshot.data().MaxLots;
+        const sellingLots = docSnapshot.data().SellingLots;
+        setShowLotBtn(sellingLots);
       }
-      }
+      setLoading(false);
     });
 
     // avsluta prenumerationen när komponenten avmonteras
@@ -177,100 +187,118 @@ const IngameView = ({ route }) => {
                 />
               </View>
             ) : null}
-            {loading ? <ActivityIndicator  /> : 
-            <>{lotWinner ? (
-              <View>
-                <View style={{ alignItems: "center" }}>
-                  <Text
-                    style={{ ...globalStyles.primaryTitle, fontSize: "18px" }}
-                  >
-                    Dina lotter
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    marginTop: 30,
-                  }}
-                >
-                  <MaterialCommunityIcons
-                    name="ticket-confirmation"
-                    size={24}
-                    color={globalStyles.primaryGreen}
-                  />
-                  <Text
-                    style={{ ...globalStyles.primaryText, paddingLeft: 10 }}
-                  >
-                    Lottvinnare: #{lotWinner[0].lotNumber} {lotWinner[0].name}
-                  </Text>
-                </View>
-                {myLots ? (
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginTop: 10,
-                    }}
-                  >
-                    <MaterialCommunityIcons
-                      name="ticket-confirmation"
-                      size={24}
-                      color={globalStyles.primaryGreen}
-                    />
-                    <Text
-                      style={{ ...globalStyles.primaryText, paddingLeft: 10 }}
-                    >
-                      Mina lotter:{" "}
-                    </Text>
-                    <Text style={globalStyles.primaryText}>
-                      {myLots
-                        ? myLots.map((x) => {
-                            return <Text key={x}>#{x} </Text>;
-                          })
-                        : null}
-                    </Text>
-                  </View>
-                ) : null}
-              </View>
+            {loading ? (
+              <ActivityIndicator />
             ) : (
               <>
-                <TouchableOpacity
-                  style={globalStyles.primaryGreenBtn}
-                  onPress={buyLot}
-                >
-                  <Text style={globalStyles.primaryBtnText}>köp lott</Text>
-                </TouchableOpacity>
-                {myLots ? (
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginTop: 30,
-                    }}
-                  >
-                    <MaterialCommunityIcons
-                      name="ticket-confirmation"
-                      size={24}
-                      color={globalStyles.primaryGreen}
-                    />
-                    <Text
-                      style={{ ...globalStyles.primaryText, paddingLeft: 10 }}
+                {lotWinner ? (
+                  <View>
+                    <View style={{ alignItems: "center" }}>
+                      <Text
+                        style={{
+                          ...globalStyles.primaryTitle,
+                          fontSize: "18px",
+                        }}
+                      >
+                        Dina lotter
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        marginTop: 30,
+                      }}
                     >
-                      Mina lotter:{" "}
-                    </Text>
-                    <Text style={globalStyles.primaryText}>
-                      {myLots
-                        ? myLots.map((x) => {
-                            return <Text key={x}>#{x} </Text>;
-                          })
-                        : null}
-                    </Text>
+                      <MaterialCommunityIcons
+                        name="ticket-confirmation"
+                        size={24}
+                        color={globalStyles.primaryGreen}
+                      />
+                      <Text
+                        style={{ ...globalStyles.primaryText, paddingLeft: 10 }}
+                      >
+                        Lottvinnare: #{lotWinner[0].lotNumber}{" "}
+                        {lotWinner[0].name}
+                      </Text>
+                    </View>
+                    {myLots ? (
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginTop: 10,
+                        }}
+                      >
+                        <MaterialCommunityIcons
+                          name="ticket-confirmation"
+                          size={24}
+                          color={globalStyles.primaryGreen}
+                        />
+                        <Text
+                          style={{
+                            ...globalStyles.primaryText,
+                            paddingLeft: 10,
+                          }}
+                        >
+                          Mina lotter:{" "}
+                        </Text>
+                        <Text style={globalStyles.primaryText}>
+                          {myLots
+                            ? myLots.map((x) => {
+                                return <Text key={x}>#{x} </Text>;
+                              })
+                            : null}
+                        </Text>
+                      </View>
+                    ) : null}
                   </View>
-                ) : null}
+                ) : (
+                  <>
+                    {showLotBtn ? (
+                      <TouchableOpacity
+                        style={globalStyles.primaryGreenBtn}
+                        onPress={buyLot}
+                      >
+                        <Text style={globalStyles.primaryBtnText}>
+                          köp lott
+                        </Text>
+                      </TouchableOpacity>
+                    ) : null}
+                    {myLots ? (
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginTop: 30,
+                        }}
+                      >
+                        <MaterialCommunityIcons
+                          name="ticket-confirmation"
+                          size={24}
+                          color={globalStyles.primaryGreen}
+                        />
+                        <Text
+                          style={{
+                            ...globalStyles.primaryText,
+                            paddingLeft: 10,
+                          }}
+                        >
+                          Mina lotter:{" "}
+                        </Text>
+                        <Text style={globalStyles.primaryText}>
+                          {myLots
+                            ? myLots.map((x) => {
+                                return <Text key={x}>#{x} </Text>;
+                              })
+                            : null}
+                        </Text>
+                      </View>
+                    ) : null}
+                  </>
+                )}
               </>
-            )}</>}
-          
+            )}
           </View>
         ) : (
           <View style={styles.noTicketWrapper}>
