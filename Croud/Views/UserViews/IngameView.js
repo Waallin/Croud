@@ -35,6 +35,7 @@ const IngameView = ({ route }) => {
   const qrCode = route.params.qrCode;
 
   const [newGameInfo, setNewGameInfo] = useState();
+  const [newUserInfo, setNewUserInfo] = useState();
 
   const swish = route.params.swish;
 
@@ -48,6 +49,7 @@ const IngameView = ({ route }) => {
   const [lotWinner, setLotWinner] = useState();
   const [loading, setLoading] = useState(true);
   const [showLotBtn, setShowLotBtn] = useState(false);
+
   const uuid = uuidv4();
 
   function navigateBack() {
@@ -65,33 +67,27 @@ const IngameView = ({ route }) => {
   useFocusEffect(
     useCallback(() => {
       getData();
-      if (route.params.ticket) {
-        setQrCode();
-      }
     }, [])
   );
 
-  async function getData() {
-    const docRef = doc(database, "Games", gameInfo.id);
-    const docSnap = await getDoc(docRef);
-  }
-
-  function setQrCode() {
-    if (qrCode) {
-      setTicketId(qrCode);
-    } else {
-      let gameId = gameInfo.id;
-
-      let allTickets = userInfo.Tickets;
-      let filtered = allTickets.filter((obj) => obj.gameId === gameId);
-      setTicketId(filtered[0].ticketId);
-    }
-  }
 
   async function getData() {
     const docRef = doc(database, "Games", gameInfo.id);
     const docSnap = await getDoc(docRef);
+    let gameId = gameInfo.id;
     setNewGameInfo(docSnap.data());
+
+    const docRef2 = doc(database, "Users", userInfo.Email);
+    const docSnap2 = await getDoc(docRef2);
+    const data2 = docSnap2.data()
+  
+
+    if (data2.Tickets) {
+    let allTickets = data2.Tickets;
+    let filtered = allTickets.filter((obj) => obj.gameId === gameId);
+    
+    setTicketId(filtered[0] ? filtered[0].ticketId : null);
+    }
   }
 
   useEffect(() => {
