@@ -50,6 +50,7 @@ const IngameView = ({ route }) => {
   const [loading, setLoading] = useState(true);
   const [showLotBtn, setShowLotBtn] = useState(false);
 
+
   const uuid = uuidv4();
 
   function navigateBack() {
@@ -113,7 +114,6 @@ const IngameView = ({ route }) => {
           setLotWinner(lotWinner);
           setLoading(false);
         }
-        const maxLots = docSnapshot.data().MaxLots;
         const sellingLots = docSnapshot.data().SellingLots;
         setShowLotBtn(sellingLots);
       }
@@ -127,6 +127,10 @@ const IngameView = ({ route }) => {
   }, [gameInfo.id]);
 
   async function buyLot() {
+
+    console.log(gameInfo);
+    console.log(newGameInfo);
+
     navigate.navigate("LotView", {
       gameInfo: gameInfo,
       newGameInfo: newGameInfo,
