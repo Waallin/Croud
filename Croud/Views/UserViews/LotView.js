@@ -13,7 +13,7 @@ export default function LotView({ route }) {
   const navigate = useNavigation();
 
   const [lots, setLots] = useState([]);
-  const [choosenLot, setChoosenLot] = useState(null);
+  const [choosenLot, setChoosenLot] = useState("1");
 
   const [error, setError] = useState("");
 
@@ -64,8 +64,6 @@ export default function LotView({ route }) {
   }
 
   async function buyLot() {
-    console.log(choosenLot)
-
 
     let x = updatedLots.includes(parseInt(choosenLot));
 
@@ -88,7 +86,7 @@ export default function LotView({ route }) {
     };
     array.push(newLot);
     await updateDoc(ref, { Lots: array });
-    navigate.goBack();
+    navigate.goBack(); 
   }
 
 
@@ -101,7 +99,7 @@ export default function LotView({ route }) {
             width: 300,
             height: 215,
           }}
-          selectedValue={"16"}
+          selectedValue={"1"}
           pickerData={lots}
           onValueChange={(value) => {
             setChoosenLot(value);
