@@ -50,6 +50,10 @@ const IngameView = ({ route }) => {
   const [loading, setLoading] = useState(true);
   const [showLotBtn, setShowLotBtn] = useState(false);
 
+  const [lotQuantity, setLotQuantity] = useState(null);
+  const [lotPrice, setLotPrice] = useState(null);
+
+
 
   const uuid = uuidv4();
 
@@ -116,6 +120,7 @@ const IngameView = ({ route }) => {
         }
         const sellingLots = docSnapshot.data().SellingLots;
         setShowLotBtn(sellingLots);
+        setNewGameInfo(newUserData);
       }
       setLoading(false);
     });
@@ -135,7 +140,7 @@ const IngameView = ({ route }) => {
       gameInfo: gameInfo,
       newGameInfo: newGameInfo,
       userInfo: userInfo,
-    });
+    }); 
   }
 
   function showQrCode() {
