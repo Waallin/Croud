@@ -68,6 +68,7 @@ const CreateAccountView = () => {
           Email: user.email,
           UserName: name,
           Name: name,
+          Distance: 5,
           Favourites: [],
         });
         // ...

@@ -30,7 +30,7 @@ function test() {
 
   return (
     <SafeAreaView edges={["top"]} style={globalStyles.primaryContainer}>
-      <TouchableOpacity onPress={test}> 
+      <TouchableOpacity onPress={test}>
       </TouchableOpacity>
       <View style={globalStyles.primaryTopWrapper}>
         <Text style={globalStyles.primaryTitle}>Evenemang</Text>

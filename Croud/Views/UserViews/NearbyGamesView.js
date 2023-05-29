@@ -16,6 +16,7 @@ import { globalStyles } from "../../Styles/global";
 import { TouchableOpacity } from "@gorhom/bottom-sheet";
 
 const NearbyGamesView = (route) => {
+  const userData = route.userData;
   const currentDate = new Date();
   //while get your location we show a spinner
   const [isLoading, setIsLoading] = useState(true);
@@ -27,11 +28,12 @@ const NearbyGamesView = (route) => {
       getData();
       setIsLoading(false);
     }
-  }, [route.location]);
+  }, [route.location, userData]);
 
   const [refreshing, setRefreshing] = React.useState(false);
 
   const onRefresh = React.useCallback(() => {
+    getData()
     setRefreshing(true);
     setTimeout(() => {
       setRefreshing(false);
@@ -40,6 +42,7 @@ const NearbyGamesView = (route) => {
 
   //function from gpt to get the distance between two points with the Haversine-formel
   async function getData() {
+    console.log(route.userData)
     // const point1 = { latitude: location.coords.latitude, longitude: location.coords.longitude};
     ///////
     //function to filter out the nearest game
@@ -102,7 +105,7 @@ const NearbyGamesView = (route) => {
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         const distance = R * c;
         //console.log(distance);
-        if (distance < 50) {
+        if (distance < route.userData.Distance * 10) {
           nTeams.push(team);
         }
       });
@@ -113,13 +116,8 @@ const NearbyGamesView = (route) => {
     }
   }
 
-  function test() {
-    console.log(route.userData)
-  }
-
   return (
     <View style={globalStyles.primaryContainer}>
-
       {isLoading ? (
         <View style={styles.loadingIcon}>
           <ActivityIndicator size="small" color={globalStyles.primaryGreen} />
