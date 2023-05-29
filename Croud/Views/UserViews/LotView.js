@@ -53,6 +53,7 @@ export default function LotView({ route }) {
     
     const numbers = [];
     let takenLots = newGameInfo.Lots;
+    console.log(newGameInfo)
     let mappedTaken = takenLots ? takenLots.map((x) => x.lotNumber) : [];
     for (let i = 1; i < newGameInfo.MaxLots; i++) {
       if (!mappedTaken.includes(i)) {
