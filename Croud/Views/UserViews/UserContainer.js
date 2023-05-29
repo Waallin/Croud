@@ -127,7 +127,7 @@ const UserContainer = ({ route }) => {
             ),
           }}
           name="Iställningar"
-          children={() => <UserSettingsView />}
+          children={() => <UserSettingsView userData={userData} />}
         />
       </Tab.Navigator>
     </View>
