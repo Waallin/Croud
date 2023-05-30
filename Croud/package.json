@@ -43,6 +43,7 @@
     "react-native-font": "^1.0.2",
     "react-native-gesture-handler": "~2.8.0",
     "react-native-get-random-values": "^1.8.0",
+    "react-native-modal": "^13.0.1",
     "react-native-modal-datetime-picker": "^14.0.1",
     "react-native-qrcode": "^0.2.7",
     "react-native-qrcode-svg": "^6.2.0",
