@@ -3,13 +3,15 @@ import {
   View,
   RefreshControl,
   ActivityIndicator,
-  Text
+  Text,
 } from "react-native";
 import React from "react";
 import { useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { database } from "../../Firebase/firebase";
+import { Ionicons } from "@expo/vector-icons";
 import OrgComponent from "./UserComponents/OrgComponent";
+import Modal from "react-native-modal";
 
 import { query, collection, getDocs } from "firebase/firestore";
 import { globalStyles } from "../../Styles/global";
@@ -23,6 +25,10 @@ const NearbyGamesView = (route) => {
   let today = currentDate.toISOString().split("T")[0];
 
   const [teams, setTeams] = useState([]);
+  const [sortedTeams, setSortedTeams] = useState([]);
+  const [sortedSports, setSortedSports] = useState("Fotboll");
+  const [isModalVisible, setModalVisible] = useState(false);
+
   useEffect(() => {
     if (route.location) {
       getData();
@@ -33,7 +39,7 @@ const NearbyGamesView = (route) => {
   const [refreshing, setRefreshing] = React.useState(false);
 
   const onRefresh = React.useCallback(() => {
-    getData()
+    getData();
     setRefreshing(true);
     setTimeout(() => {
       setRefreshing(false);
@@ -42,7 +48,7 @@ const NearbyGamesView = (route) => {
 
   //function from gpt to get the distance between two points with the Haversine-formel
   async function getData() {
-    console.log(route.userData)
+    console.log(route.userData);
     // const point1 = { latitude: location.coords.latitude, longitude: location.coords.longitude};
     ///////
     //function to filter out the nearest game
@@ -113,6 +119,18 @@ const NearbyGamesView = (route) => {
         return new Date(a.Gameday) - new Date(b.Gameday);
       });
       setTeams(dateFilter);
+      setSortedTeams(dateFilter);
+    }
+  }
+
+  function sortbysport(a) {
+    if (a == "none") {
+      setSortedTeams(teams);
+      setModalVisible(!isModalVisible);
+    } else {
+      let x = teams.filter((i) => i.Sport == a);
+      setSortedTeams(x);
+      setModalVisible(!isModalVisible);
     }
   }
 
@@ -129,7 +147,7 @@ const NearbyGamesView = (route) => {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
         >
-          {teams.map((org) => {
+          {sortedTeams.map((org) => {
             return (
               <OrgComponent
                 key={org.Name}
@@ -143,6 +161,112 @@ const NearbyGamesView = (route) => {
           })}
         </ScrollView>
       )}
+      <View style={{ alignItems: "flex-end" }}>
+        <TouchableOpacity>
+          <Ionicons
+            name="football"
+            size={40}
+            color="#20C997"
+            style={{ padding: 10 }}
+            onPress={() => setModalVisible(!isModalVisible)}
+          />
+        </TouchableOpacity>
+      </View>
+
+      <Modal isVisible={isModalVisible}>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <TouchableOpacity
+            onPress={() => sortbysport("Fotboll")}
+            style={{
+              borderWidth: 1,
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+              borderWidth: 1,
+              borderColor: "white",
+              borderRadius: 10,
+            }}
+          >
+            <Ionicons
+              name="football"
+              size={40}
+              color="#20C997"
+              style={{ padding: 10 }}
+            />
+            <Text
+              style={{
+                ...globalStyles.primaryBtnText,
+                fontSize: "20px",
+                paddingRight: 15,
+              }}
+            >
+              Fotboll
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => sortbysport("Innebandy")}
+            style={{
+              borderWidth: 1,
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+              borderWidth: 1,
+              borderColor: "white",
+              borderRadius: 10,
+              marginTop: 20,
+            }}
+          >
+            <Ionicons
+              name="football"
+              size={40}
+              color="#20C997"
+              style={{ padding: 10 }}
+            />
+            <Text
+              style={{
+                ...globalStyles.primaryBtnText,
+                fontSize: "20px",
+                paddingRight: 15,
+              }}
+            >
+              Innebandy
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => sortbysport("none")}
+            style={{
+              borderWidth: 1,
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+              borderWidth: 1,
+              borderColor: "white",
+              borderRadius: 10,
+              marginTop: 20,
+            }}
+          >
+            <Ionicons
+              name="football"
+              size={40}
+              color="#20C997"
+              style={{ padding: 10 }}
+            />
+            <Text
+              style={{
+                ...globalStyles.primaryBtnText,
+                fontSize: "20px",
+                paddingRight: 15,
+              }}
+            >
+              Alla
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 };
