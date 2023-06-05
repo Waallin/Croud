@@ -5,17 +5,19 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { globalStyles } from "../../../Styles/global";
 import ActiveComponent from "../../UserViews/UserComponents/ActiveComponent";
-const EventComponent = ({ Opponent, Time, Location, Day, event }) => {
+const EventComponent = ({ Opponent, Time, Location, Day, event, orgData }) => {
   const navigate = useNavigation();
 
   function nav() {
     if (event.Active) {
       navigate.navigate("ActiveGame", {
         event: event,
+        orgData: orgData
       });
     } else {
       navigate.navigate("StartGame", {
         event: event,
+        orgData: orgData
       });
     }
   }

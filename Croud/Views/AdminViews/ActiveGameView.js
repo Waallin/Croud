@@ -1,11 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Switch,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
@@ -20,11 +13,6 @@ import {
   arrayUnion,
   doc,
   getDoc,
-  setDoc,
-  query,
-  collection,
-  where,
-  getDocs,
   updateDoc,
   onSnapshot,
 } from "firebase/firestore";
@@ -32,20 +20,23 @@ import {
   BottomSheetModal,
   BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
+import Modal from "react-native-modal";
 import { useEffect, useRef } from "react";
 const ActiveGameView = (event) => {
   const [gameInfo, setGameInfo] = useState([]);
   const navigate = useNavigation();
   const [lotWinner, setLotWinner] = useState(null);
+  const orgData = event.route.params.orgData;
   //const eventInfo = event.route.params.event;
 
   const [eventInfo, setEventInfo] = useState(event.route.params.event);
   const [key, setKey] = useState(event.route.params.event.key);
-
   const [snapPoints, setSnapPoints] = useState(["65"]);
-
   const [lotPrice, setLotPrice] = useState(20);
   const [maxLots, setMaxLots] = useState(200);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [mvps, setMvps] = useState([]);
+  const [squad, setSquad] = useState([]);
 
   let bottomSheetModalRef = useRef(null);
   function handlePresentModal() {
@@ -53,8 +44,8 @@ const ActiveGameView = (event) => {
   }
 
   function navigateBack() {
-
-    navigate.goBack();
+    console.log(orgData);
+    // navigate.goBack();
   }
 
   //close bottomsheetmodal
@@ -121,10 +112,26 @@ const ActiveGameView = (event) => {
     };
   }, [gameInfo.id]);
 
-  function setLots() {
-    console.log("aps");
+  async function addToMvp(i) {
+    console.log(i);
+
+    let obj = {
+      name: i.name,
+      number: i.number,
+      votes: 0,
+    };
+    setMvps([...mvps, obj]);
+    console.log(mvps);
   }
 
+  async function pushMvps() {
+    const gameId = event.route.params.event.key;
+    const ref = doc(database, "Games", gameId);
+    await updateDoc(ref, {
+      Mvps: arrayUnion(...mvps),
+    });
+    setModalVisible(!isModalVisible);
+  }
   return (
     <SafeAreaView style={globalStyles.primaryContainer}>
       <View style={globalStyles.primaryTopWrapper}>
@@ -215,6 +222,10 @@ const ActiveGameView = (event) => {
               </Text>
             </View>
           ) : null}
+          {eventInfo.Mvps ? 
+          <View>
+            <Text>hej</Text>
+          </View> : null}
         </View>
       </View>
       <View style={styles.botWrapper}>
@@ -237,7 +248,16 @@ const ActiveGameView = (event) => {
             </Text>
           </TouchableOpacity>
         )}
-
+        {eventInfo.Mvps ? null : (
+          <TouchableOpacity
+            style={globalStyles.primaryGreenBtn}
+            onPress={() => setModalVisible(!isModalVisible)}
+          >
+            <Text style={globalStyles.primaryBtnText}>
+              Rösta fram matchens lirare
+            </Text>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity style={globalStyles.secondaryGreyBtn}>
           <Text style={globalStyles.secondaryBtnText}>Avsluta evenemang</Text>
         </TouchableOpacity>
@@ -267,23 +287,23 @@ const ActiveGameView = (event) => {
                 <Text style={{ ...globalStyles.primaryText, marginBottom: 10 }}>
                   Antal lotter
                 </Text>
-                  <View style={globalStyles.secondaryInput}>
-                    <AntDesign
-                      name="clockcircleo"
-                      size={20}
-                      style={globalStyles.primaryInputIcon}
-                    />
-                    <TextInput
+                <View style={globalStyles.secondaryInput}>
+                  <AntDesign
+                    name="clockcircleo"
+                    size={20}
+                    style={globalStyles.primaryInputIcon}
+                  />
+                  <TextInput
                     placeholder={maxLots.toString()}
                     value={maxLots}
-                      setSnapPoints={["50%"]}
-                      placeholderTextColor="#60605e"
-                      numeric
-                      keyboardType={"numeric"}
-                      returnKeyType={"done"}
-                      style={{width: "80%", height: "100%"}}
-                    />
-                  </View>
+                    setSnapPoints={["50%"]}
+                    placeholderTextColor="#60605e"
+                    numeric
+                    keyboardType={"numeric"}
+                    returnKeyType={"done"}
+                    style={{ width: "80%", height: "100%" }}
+                  />
+                </View>
               </View>
               <View style>
                 <Text style={{ ...globalStyles.primaryText, marginBottom: 10 }}>
@@ -297,15 +317,15 @@ const ActiveGameView = (event) => {
                       style={globalStyles.primaryInputIcon}
                     />
                     <TextInput
-                    placeholder={lotPrice.toString()}
-                    value={lotPrice}
+                      placeholder={lotPrice.toString()}
+                      value={lotPrice}
                       setSnapPoints={["50%"]}
                       placeholderTextColor="#60605e"
                       onChangeText={(value) => setLotPrice(value)}
                       numeric
                       keyboardType={"numeric"}
                       returnKeyType={"done"}
-                      style={{width: "80%", height: "100%"}}
+                      style={{ width: "80%", height: "100%" }}
                     />
                   </View>
                 </TouchableOpacity>
@@ -320,6 +340,63 @@ const ActiveGameView = (event) => {
           </View>
         </BottomSheetModal>
       </BottomSheetModalProvider>
+      <Modal isVisible={isModalVisible}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "space-around",
+            alignItems: "center",
+          }}
+        >
+          <View style={{ alignItems: "center" }}>
+            <Text style={{ ...globalStyles.primaryText, fontSize: "32px" }}>
+              {mvps.length}
+            </Text>
+            {orgData.Squad.map((i) => {
+              return (
+                <View
+                  style={{
+                    flexDirection: "row",
+                    borderBottomWidth: 1,
+                    borderBottomColor: globalStyles.primaryGreen,
+                    padding: 20,
+                    width: 200,
+                    alignItems: "center",
+                  }}
+                  key={i.index}
+                >
+                  <Text style={{ ...globalStyles.primaryText, flex: 1 }}>
+                    {i.name}
+                  </Text>
+                  <Text style={{ ...globalStyles.primaryText, flex: 1 }}>
+                    nr {i.number}
+                  </Text>
+                  <TouchableOpacity onPress={() => addToMvp(i)}>
+                    <AntDesign
+                      name="adduser"
+                      size={20}
+                      color={globalStyles.primaryGreen}
+                    />
+                  </TouchableOpacity>
+                </View>
+              );
+            })}
+
+            <TouchableOpacity
+              style={globalStyles.primaryGreenBtn}
+              onPress={pushMvps}
+            >
+              <Text style={globalStyles.primaryBtnText}>logga</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{ ...globalStyles.primaryGreenBtn, marginTop: 20 }}
+              onPress={() => setModalVisible(!isModalVisible)}
+            >
+              <Text style={globalStyles.primaryBtnText}>Klar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
