@@ -183,6 +183,7 @@ const AdminHomeView = ({ orgData, route }) => {
             return (
               <EventComponent
                 key={event.key}
+                orgData={orgData}
                 event={event}
                 Opponent={event.Opponent}
                 Hometeam={event.Hometeam}
